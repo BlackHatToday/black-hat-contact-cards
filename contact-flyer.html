@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Flyer</title>
+
+<!--
+  ============================================================
+  HOW TO REUSE THIS FOR EACH PERSON
+  ============================================================
+  1. Edit FLYER_DATA in the <script> near the bottom.
+  2. Put a photo named to match PHOTO_FILE next to this file,
+     or change PHOTO_FILE to a full URL.
+  3. Open in a browser and print (Ctrl/Cmd+P) — sized for a
+     standard Letter page, one flyer per sheet.
+  ============================================================
+-->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --ink:        #14171c;
+    --surface:    #1c2129;
+    --surface-2:  #242a34;
+    --copper:     #b8763f;
+    --copper-soft:#c98549;
+    --parchment:  #ede6d6;
+    --muted:      #8b93a1;
+    --line:       #2e3542;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  html, body{
+    background: #0e1014;
+    color: var(--parchment);
+    font-family:'IBM Plex Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  body{
+    display:flex;
+    justify-content:center;
+    padding: 30px 16px;
+  }
+
+  /* ---- flyer sheet: Letter-ratio ---- */
+  .flyer{
+    width: 100%;
+    max-width: 612px;   /* 8.5in @ 72dpi */
+    aspect-ratio: 8.5 / 11;
+    background: radial-gradient(circle at 50% 8%, #1a1f27 0%, var(--ink) 55%);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 48px 44px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* faint radial ring texture in the background, echoing the tap signal */
+  .flyer::before{
+    content:'';
+    position:absolute;
+    top:-120px; right:-120px;
+    width:340px; height:340px;
+    border-radius:50%;
+    border:1px solid var(--line);
+  }
+  .flyer::after{
+    content:'';
+    position:absolute;
+    top:-70px; right:-70px;
+    width:240px; height:240px;
+    border-radius:50%;
+    border:1px solid var(--line);
+  }
+
+  .kicker{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--copper);
+    text-align:center;
+  }
+
+  .headline{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 1.05;
+    text-align:center;
+    letter-spacing: -0.01em;
+    margin-top: 10px;
+  }
+
+  .headline span{ color: var(--copper); }
+
+  .sub{
+    text-align:center;
+    color: var(--muted);
+    font-size: 14px;
+    margin-top: 10px;
+    max-width: 380px;
+    margin-left:auto; margin-right:auto;
+  }
+
+  /* ---- identity block ---- */
+  .identity{
+    display:flex;
+    align-items:center;
+    gap: 20px;
+    margin: 36px auto 0;
+    padding: 20px 22px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    max-width: 460px;
+    width: 100%;
+  }
+
+  .avatar{
+    width: 76px; height: 76px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--copper);
+    flex-shrink:0;
+  }
+  .avatar-fallback{
+    width: 76px; height: 76px;
+    border-radius: 50%;
+    border: 2px solid var(--copper);
+    background: var(--surface-2);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600; font-size:26px;
+    color: var(--copper);
+    flex-shrink:0;
+  }
+
+  .identity .info{ min-width:0; }
+  .identity .name{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:21px;
+  }
+  .identity .role{
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 3px;
+  }
+  .identity .role .org{ color: var(--copper); }
+
+  /* ---- steps ---- */
+  .steps{
+    display:flex;
+    justify-content:center;
+    gap: 20px;
+    margin: 36px auto 0;
+    max-width: 480px;
+  }
+
+  .step{
+    flex:1;
+    text-align:center;
+  }
+
+  .step .num{
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: var(--copper);
+    color: var(--ink);
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size: 15px;
+    display:flex; align-items:center; justify-content:center;
+    margin: 0 auto 10px;
+  }
+
+  .step p{
+    font-size: 12px;
+    color: var(--parchment);
+    line-height: 1.45;
+  }
+
+  /* ---- QR + link block ---- */
+  .fallback{
+    margin: 38px auto 0;
+    display:flex;
+    align-items:center;
+    gap: 22px;
+    padding: 20px 24px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    max-width: 460px;
+    width: 100%;
+  }
+
+  #qrcode{
+    flex-shrink:0;
+    width: 92px; height: 92px;
+    background: var(--parchment);
+    border-radius: 10px;
+    padding: 8px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  #qrcode img{ display:block; width:100%; height:100%; }
+
+  .fallback .text{ min-width:0; }
+  .fallback .label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .fallback .url{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 14px;
+    color: var(--copper-soft);
+    word-break: break-all;
+    line-height: 1.4;
+  }
+  .fallback .caption{
+    font-size: 11.5px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  /* ---- footer ---- */
+  .flyer-footer{
+    margin-top: auto;
+    padding-top: 30px;
+    text-align:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #4a5262;
+  }
+
+  .print-hint{
+    text-align:center;
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 18px;
+    font-family:'IBM Plex Mono', monospace;
+  }
+
+  @media print{
+    html, body{ background:#fff; padding:0; }
+    .print-hint{ display:none; }
+    .flyer{
+      max-width:none;
+      width: 8.5in;
+      height: 11in;
+      aspect-ratio: unset;
+      border:none;
+      border-radius:0;
+      margin:0;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    @page{ size: letter; margin:0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="flyer">
+  <div class="kicker">No app to install</div>
+  <h1 class="headline">Tap to save<br><span>my contact</span></h1>
+  <p class="sub" id="subText"></p>
+
+  <div class="identity">
+    <img id="avatarImg" class="avatar" style="display:none;" alt="">
+    <div id="avatarFallback" class="avatar-fallback"></div>
+    <div class="info">
+      <div class="name" id="nameEl"></div>
+      <div class="role" id="roleEl"></div>
+    </div>
+  </div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="num">1</div>
+      <p>Hold your phone near the card</p>
+    </div>
+    <div class="step">
+      <div class="num">2</div>
+      <p>A prompt appears on screen</p>
+    </div>
+    <div class="step">
+      <div class="num">3</div>
+      <p>Tap to save — done</p>
+    </div>
+  </div>
+
+  <div class="fallback">
+    <div id="qrcode"></div>
+    <div class="text">
+      <div class="label">No NFC? Scan or visit</div>
+      <div class="url" id="urlText"></div>
+      <div class="caption">Works with any phone camera</div>
+    </div>
+  </div>
+
+  <div class="flyer-footer">Tap · Connect</div>
+</div>
+
+<p class="print-hint">Press Ctrl / Cmd + P to print — sized for one Letter page.</p>
+
+<script>
+  /* ============================================================
+     EDIT THIS BLOCK PER PERSON
+     ============================================================ */
+  const FLYER_DATA = {
+    firstName: "Jane",
+    lastName:  "Doe",
+    title:     "Marketing Director",
+    org:       "Acme Co",
+    contactUrl: "https://yourproject.vercel.app/jane-doe/"
+  };
+
+  const PHOTO_FILE = "photo.jpg";
+  /* ============================================================ */
+
+  const fullName = `${FLYER_DATA.firstName} ${FLYER_DATA.lastName}`.trim();
+  document.title = `${fullName} — Contact Flyer`;
+  document.getElementById('nameEl').textContent = fullName;
+
+  const roleEl = document.getElementById('roleEl');
+  if (FLYER_DATA.title && FLYER_DATA.org){
+    roleEl.innerHTML = `${FLYER_DATA.title} · <span class="org">${FLYER_DATA.org}</span>`;
+  } else if (FLYER_DATA.org){
+    roleEl.innerHTML = `<span class="org">${FLYER_DATA.org}</span>`;
+  } else {
+    roleEl.textContent = FLYER_DATA.title || '';
+  }
+
+  document.getElementById('subText').textContent =
+    `${FLYER_DATA.firstName}'s contact card is built into this card — just tap your phone to it.`;
+
+  document.getElementById('urlText').textContent = FLYER_DATA.contactUrl.replace(/^https?:\/\//,'');
+
+  // Avatar or initials fallback (trailing-slash-safe path resolution)
+  const initials = (FLYER_DATA.firstName[0] || '') + (FLYER_DATA.lastName[0] || '');
+  const avatarImg = document.getElementById('avatarImg');
+  const avatarFallback = document.getElementById('avatarFallback');
+  if (PHOTO_FILE){
+    const isFullUrl = /^https?:\/\//i.test(PHOTO_FILE);
+    const basePath = window.location.pathname.endsWith('/')
+      ? window.location.pathname
+      : window.location.pathname + '/';
+    avatarImg.src = isFullUrl ? PHOTO_FILE : basePath + PHOTO_FILE;
+    avatarImg.alt = fullName;
+    avatarImg.style.display = 'block';
+    avatarFallback.style.display = 'none';
+    avatarImg.onerror = () => { avatarImg.style.display='none'; avatarFallback.style.display='flex'; avatarFallback.textContent = initials.toUpperCase(); };
+  } else {
+    avatarFallback.textContent = initials.toUpperCase();
+  }
+
+  // Render QR code
+  new QRCode(document.getElementById("qrcode"), {
+    text: FLYER_DATA.contactUrl,
+    width: 200,
+    height: 200,
+    colorDark: "#14171c",
+    colorLight: "#ede6d6",
+    correctLevel: QRCode.CorrectLevel.M
+  });
+</script>
+
+</body>
+</html>

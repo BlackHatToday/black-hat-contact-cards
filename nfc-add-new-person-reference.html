@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adding a New Person to Your NFC Contact Card Site</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --ink:        #14171c;
+    --surface:    #1c2129;
+    --surface-2:  #242a34;
+    --copper:     #b8763f;
+    --copper-soft:#c98549;
+    --parchment:  #ede6d6;
+    --muted:      #8b93a1;
+    --line:       #2e3542;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  body{
+    background: radial-gradient(circle at 50% 0%, #1a1f27 0%, var(--ink) 60%);
+    color: var(--parchment);
+    font-family:'IBM Plex Sans', sans-serif;
+    padding: 40px 32px;
+  }
+
+  .sheet{ max-width: 900px; margin: 0 auto; }
+
+  header{ text-align:center; margin-bottom: 34px; }
+
+  .kicker{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--copper);
+    margin-bottom: 10px;
+  }
+
+  h1{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 30px;
+    letter-spacing: -0.01em;
+  }
+
+  .sub{ color: var(--muted); font-size: 14.5px; margin-top: 8px; }
+
+  /* ---- pipeline flow ---- */
+  .pipeline{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap: 8px;
+    margin: 30px 0 8px;
+    flex-wrap: wrap;
+  }
+  .pipe-node{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    color: var(--parchment);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    padding: 8px 14px;
+    border-radius: 999px;
+  }
+  .pipe-arrow{ color: var(--copper); font-size: 14px; }
+
+  .phase-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--copper);
+    margin: 30px 0 12px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .phase-label::after{
+    content:'';
+    flex:1;
+    height:1px;
+    background: var(--line);
+  }
+
+  .steps{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  .step{
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 18px 18px;
+  }
+
+  .step .num{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--ink);
+    background: var(--copper);
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom: 12px;
+  }
+
+  .step h3{
+    font-family:'Space Grotesk', sans-serif;
+    font-size: 14.5px;
+    font-weight: 600;
+    margin-bottom: 7px;
+    line-height: 1.3;
+  }
+
+  .step p{
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  .step code{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11px;
+    background: var(--surface-2);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--copper-soft);
+  }
+
+  .panel{
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 20px 22px;
+    margin-top: 30px;
+  }
+
+  .panel h4{
+    font-family:'Space Grotesk', sans-serif;
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+
+  .panel ul{ list-style:none; }
+  .panel li{
+    font-size: 12.5px;
+    color: var(--parchment);
+    line-height: 1.7;
+    padding-left: 16px;
+    position: relative;
+    margin-bottom: 6px;
+  }
+  .panel li::before{
+    content:'—';
+    position:absolute;
+    left:0;
+    color: var(--copper);
+  }
+  .panel li code{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    background: var(--surface-2);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--copper-soft);
+  }
+
+  footer{
+    text-align:center;
+    margin-top: 30px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #525a68;
+  }
+
+  @media (max-width: 720px){
+    .steps{ grid-template-columns: 1fr; }
+    .pipeline{ flex-direction: column; }
+    .pipe-arrow{ transform: rotate(90deg); }
+  }
+
+  @media print{
+    body{ background: var(--ink); padding: 20px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+  <header>
+    <div class="kicker">NFC Contact Cards · Quick Reference</div>
+    <h1>Adding a New Person</h1>
+    <p class="sub">Folder → GitHub → Vercel → NFC tag, for each new friend you add</p>
+  </header>
+
+  <div class="pipeline">
+    <div class="pipe-node">New folder</div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-node">Edit index.html</div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-node">git push</div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-node">Vercel auto-deploys</div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-node">Write tag</div>
+  </div>
+
+  <div class="phase-label">On your computer</div>
+  <div class="steps">
+    <div class="step">
+      <div class="num">1</div>
+      <h3>Create a new subfolder</h3>
+      <p>Inside your project folder, add one new folder named after the person — lowercase, hyphens not spaces (e.g. <code>sam-lee</code>).</p>
+    </div>
+    <div class="step">
+      <div class="num">2</div>
+      <h3>Copy in the template</h3>
+      <p>Copy your existing <code>index.html</code> from any finished folder into the new one, keeping the filename lowercase.</p>
+    </div>
+    <div class="step">
+      <div class="num">3</div>
+      <h3>Edit CARD_DATA</h3>
+      <p>Open it, update name, phone, email, org, and <code>photoUrl</code> in the <code>CARD_DATA</code> block. Save.</p>
+    </div>
+  </div>
+
+  <div class="phase-label">Publish it</div>
+  <div class="steps">
+    <div class="step">
+      <div class="num">4</div>
+      <h3>git add &amp; commit</h3>
+      <p>In Git Bash, from your project folder: <code>git add .</code> then <code>git commit -m "add sam"</code>.</p>
+    </div>
+    <div class="step">
+      <div class="num">5</div>
+      <h3>git push</h3>
+      <p>Run <code>git push</code>. Vercel notices the new commit and redeploys automatically — no dashboard clicks needed.</p>
+    </div>
+    <div class="step">
+      <div class="num">6</div>
+      <h3>Test the live page</h3>
+      <p>Visit <code>yourproject.vercel.app/sam-lee</code> on your phone. Confirm photo, animation, and Save Contact button work.</p>
+    </div>
+  </div>
+
+  <div class="phase-label">Write the tag</div>
+  <div class="steps" style="grid-template-columns: 1fr;">
+    <div class="step">
+      <div class="num">7</div>
+      <h3>Write the URL record</h3>
+      <p>Open NFC Tools → Write → Add a record → <b>URL</b> (not vCard, since this is a link this time). Paste the person's live page URL, e.g. <code>yourproject.vercel.app/sam-lee</code>. Hold a blank tag to your phone to write, then tap it once more to confirm it opens the right page.</p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h4>Reminders</h4>
+    <ul>
+      <li>Folder and file names must stay <b>all lowercase</b> — <code>Index.html</code> or <code>Jane-Doe</code> will 404</li>
+      <li>Don't lock the tag until you've tapped it yourself and confirmed the page loads correctly</li>
+      <li>A photo needs to already be hosted somewhere — pushing it into an <code>images</code> folder in the same repo works well</li>
+    </ul>
+  </div>
+
+  <footer>NFC Contact Cards Project · Quick Reference Sheet</footer>
+</div>
+
+</body>
+</html>

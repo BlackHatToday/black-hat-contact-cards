@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact</title>
+
+<!--
+  ============================================================
+  HOW TO REUSE THIS FOR EACH PERSON
+  ============================================================
+  1. Edit the CARD_DATA object in the <script> near the bottom.
+  2. Put a photo named exactly like PHOTO_FILE next to this HTML
+     file (same folder), or change PHOTO_FILE to point elsewhere.
+  3. Add/remove phones, emails, or social links freely — the
+     arrays render automatically, no extra HTML editing needed.
+  4. Save as a new file per person and deploy to its own URL
+     (e.g. yoursite.com/jane).
+  ============================================================
+-->
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --ink:        #14171c;
+    --surface:    #1c2129;
+    --surface-2:  #242a34;
+    --copper:     #b8763f;
+    --copper-soft:#8a5a30;
+    --parchment:  #ede6d6;
+    --muted:      #8b93a1;
+    --line:       #2e3542;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  html, body{
+    min-height:100%;
+    background: radial-gradient(circle at 50% 0%, #1a1f27 0%, var(--ink) 55%);
+    color:var(--parchment);
+    font-family:'IBM Plex Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  body{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:32px 20px;
+  }
+
+  .card{ width:100%; max-width:400px; position:relative; }
+
+  /* ---- signal / ripple signature ---- */
+  .signal{
+    position:relative;
+    width:140px; height:140px;
+    margin:0 auto 24px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .ring{ position:absolute; border-radius:50%; border:1px solid var(--copper); opacity:0; }
+  @keyframes pulse{
+    0%   { transform:scale(0.4); opacity:0; }
+    12%  { opacity:0.55; }
+    100% { transform:scale(1.9); opacity:0; }
+  }
+  .ring{ animation:pulse 2.6s cubic-bezier(.2,.6,.3,1) 1; }
+  .ring:nth-child(1){ width:140px; height:140px; animation-delay:.15s; }
+  .ring:nth-child(2){ width:140px; height:140px; animation-delay:.65s; }
+  .ring:nth-child(3){ width:140px; height:140px; animation-delay:1.15s; }
+
+  .avatar{
+    position:relative; z-index:2;
+    width:104px; height:104px;
+    border-radius:50%;
+    object-fit:cover;
+    border:2px solid var(--copper);
+    background:var(--surface-2);
+  }
+  .avatar-fallback{
+    position:relative; z-index:2;
+    width:104px; height:104px;
+    border-radius:50%;
+    border:2px solid var(--copper);
+    background:var(--surface-2);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600; font-size:34px;
+    color:var(--copper);
+  }
+
+  /* ---- identity ---- */
+  .name{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:29px;
+    line-height:1.15;
+    text-align:center;
+    letter-spacing:-0.01em;
+  }
+  .title-line{
+    text-align:center;
+    color:var(--parchment);
+    font-size:14.5px;
+    margin-top:6px;
+  }
+  .org-line{
+    text-align:center;
+    color:var(--copper);
+    font-size:14px;
+    margin-top:2px;
+  }
+
+  /* ---- divider ---- */
+  .eyebrow{ display:flex; align-items:center; gap:10px; margin:28px 0 12px; }
+  .eyebrow::before, .eyebrow::after{ content:''; flex:1; height:1px; background:var(--line); }
+  .eyebrow span{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted);
+  }
+
+  /* ---- data rows ---- */
+  .fields{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:14px;
+    overflow:hidden;
+  }
+  .field{
+    display:flex; align-items:center; gap:14px;
+    padding:13px 18px;
+    text-decoration:none; color:inherit;
+    border-bottom:1px solid var(--line);
+    transition:background .15s ease;
+  }
+  .field:last-child{ border-bottom:none; }
+  .field:hover{ background:var(--surface-2); }
+  .field .icon{ width:17px; flex-shrink:0; color:var(--copper); }
+  .field .meta{ min-width:0; flex:1; }
+  .field .label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:9.5px; letter-spacing:0.1em; text-transform:uppercase;
+    color:var(--muted); margin-bottom:2px;
+  }
+  .field .value{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:14px; color:var(--parchment);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+
+  /* ---- social row (icon strip, different treatment) ---- */
+  .social-row{
+    display:flex;
+    gap:10px;
+    justify-content:center;
+    margin-top:16px;
+    flex-wrap:wrap;
+  }
+  .social-pill{
+    display:flex; align-items:center; gap:7px;
+    padding:9px 14px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:999px;
+    text-decoration:none;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--parchment);
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .social-pill:hover{ border-color:var(--copper); background:var(--surface-2); }
+  .social-pill svg{ width:14px; height:14px; color:var(--copper); }
+
+  /* ---- notes ---- */
+  .notes{
+    margin-top:20px;
+    padding:16px 18px;
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-left:2px solid var(--copper);
+    border-radius:10px;
+    font-size:13px;
+    line-height:1.55;
+    color:var(--parchment);
+  }
+
+  /* ---- save button ---- */
+  .save-btn{
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    width:100%;
+    margin-top:22px;
+    padding:16px 20px;
+    background:var(--copper);
+    color:var(--ink);
+    border:none; border-radius:14px;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:600; font-size:16px;
+    cursor:pointer;
+    transition:background .15s ease, transform .1s ease;
+  }
+  .save-btn:hover{ background:#c98549; }
+  .save-btn:active{ transform:scale(0.98); }
+  .save-btn svg{ width:19px; height:19px; }
+
+  .status{
+    text-align:center;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:12px;
+    color:var(--muted);
+    margin-top:12px;
+    min-height:16px;
+  }
+
+  footer{
+    text-align:center; margin-top:34px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10px; letter-spacing:0.08em; text-transform:uppercase;
+    color:#525a68;
+  }
+
+  @media (prefers-reduced-motion: reduce){ .ring{ animation:none; opacity:0; } }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="signal">
+    <div class="ring"></div>
+    <div class="ring"></div>
+    <div class="ring"></div>
+    <img id="avatarImg" class="avatar" style="display:none;" alt="">
+    <div id="avatarFallback" class="avatar-fallback"></div>
+  </div>
+
+  <h1 class="name" id="nameEl"></h1>
+  <p class="title-line" id="titleEl" style="display:none;"></p>
+  <p class="org-line" id="orgEl" style="display:none;"></p>
+
+  <div class="eyebrow"><span>Contact</span></div>
+  <div class="fields" id="fieldsEl"></div>
+
+  <div class="social-row" id="socialEl"></div>
+
+  <div class="notes" id="notesEl" style="display:none;"></div>
+
+  <button class="save-btn" id="saveBtn">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/>
+      <path d="M17 21v-8H7v8"/>
+      <path d="M7 3v5h8"/>
+    </svg>
+    Save Contact
+  </button>
+  <p class="status" id="statusEl"></p>
+
+  <footer>Tap · Connect</footer>
+</div>
+
+<script>
+  /* ============================================================
+     EDIT THIS BLOCK PER PERSON — everything else reads from it
+     ============================================================ */
+  const CARD_DATA = {
+    prefix:    "",              // e.g. "Dr." — optional
+    firstName: "Monica",
+    lastName:  "Lacey",
+    title:     "Marketing Director",
+    org:       "Mo Tea",
+
+    // Add, remove, or reorder freely — each renders as its own row.
+    // type is just a label; use whatever makes sense (Mobile, Work, Home, Fax...)
+    phones: [
+      { type: "Cell",   number: "484.366.1818" }
+    ],
+    emails: [
+      { type: "Email", address: "Monica@MoTeaJar.com" }
+    ],
+    website: "https://www.https://moteajar.com/",
+
+    // Optional — leave the array empty to hide this row entirely
+    social: [
+      // { platform: "LinkedIn", url: "https://linkedin.com/in/janedoe" },
+      // { platform: "Instagram", url: "https://instagram.com/moteajar" }
+    ],
+
+    // Optional freeform line — leave "" to hide
+    notes: "",
+
+    // Photo: put an image file next to this HTML file and name it
+    // to match PHOTO_FILE below, or set PHOTO_FILE to a full URL.
+    // Leave PHOTO_FILE as "" to show initials instead.
+  };
+
+  const PHOTO_FILE = "photo.jpg";
+  /* ============================================================ */
+
+  const fullName = [CARD_DATA.prefix, CARD_DATA.firstName, CARD_DATA.lastName].filter(Boolean).join(' ');
+  document.title = `${CARD_DATA.firstName} ${CARD_DATA.lastName} — Contact`;
+  document.getElementById('nameEl').textContent = fullName;
+
+  if (CARD_DATA.title){
+    const t = document.getElementById('titleEl');
+    t.textContent = CARD_DATA.title;
+    t.style.display = 'block';
+  }
+  if (CARD_DATA.org){
+    const o = document.getElementById('orgEl');
+    o.textContent = CARD_DATA.org;
+    o.style.display = 'block';
+  }
+
+  // Avatar or initials fallback
+  const initials = (CARD_DATA.firstName[0] || '') + (CARD_DATA.lastName[0] || '');
+  const avatarImg = document.getElementById('avatarImg');
+  const avatarFallback = document.getElementById('avatarFallback');
+  if (PHOTO_FILE){
+    // Resolve relative to the current folder regardless of whether the
+    // visited URL ends in a trailing slash (fixes photos not loading on
+    // some hosts when a tag/link omits the trailing slash).
+    const isFullUrl = /^https?:\/\//i.test(PHOTO_FILE);
+    const basePath = window.location.pathname.endsWith('/')
+      ? window.location.pathname
+      : window.location.pathname + '/';
+    avatarImg.src = isFullUrl ? PHOTO_FILE : basePath + PHOTO_FILE;
+    avatarImg.alt = fullName;
+    avatarImg.style.display = 'block';
+    avatarFallback.style.display = 'none';
+    avatarImg.onerror = () => { avatarImg.style.display='none'; avatarFallback.style.display='flex'; avatarFallback.textContent = initials.toUpperCase(); };
+  } else {
+    avatarFallback.textContent = initials.toUpperCase();
+  }
+
+  const ICONS = {
+    phone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
+    email: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 6 12 13 2 6"/><path d="M2 6h20v12H2z"/></svg>',
+    website: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg>',
+    link: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>'
+  };
+
+  const rows = [];
+  CARD_DATA.phones.forEach(p => rows.push({
+    icon: 'phone', label: p.type || 'Phone', value: p.number,
+    href: `tel:${p.number.replace(/[^+\d]/g,'')}`
+  }));
+  CARD_DATA.emails.forEach(e => rows.push({
+    icon: 'email', label: e.type || 'Email', value: e.address,
+    href: `mailto:${e.address}`
+  }));
+  if (CARD_DATA.website) rows.push({
+    icon: 'website', label: 'Website', value: CARD_DATA.website.replace(/^https?:\/\//,''),
+    href: CARD_DATA.website
+  });
+
+  document.getElementById('fieldsEl').innerHTML = rows.map(r => `
+    <a class="field" href="${r.href}" target="_blank" rel="noopener">
+      <span class="icon">${ICONS[r.icon]}</span>
+      <span class="meta">
+        <div class="label">${r.label}</div>
+        <div class="value">${r.value}</div>
+      </span>
+    </a>
+  `).join('');
+
+  // Social pills
+  const socialEl = document.getElementById('socialEl');
+  if (CARD_DATA.social && CARD_DATA.social.length){
+    socialEl.innerHTML = CARD_DATA.social.map(s => `
+      <a class="social-pill" href="${s.url}" target="_blank" rel="noopener">
+        ${ICONS.link}${s.platform}
+      </a>
+    `).join('');
+  }
+
+  // Notes
+  if (CARD_DATA.notes){
+    const n = document.getElementById('notesEl');
+    n.textContent = CARD_DATA.notes;
+    n.style.display = 'block';
+  }
+
+  // Build and download the vCard
+  function buildVCard(d){
+    const lines = ['BEGIN:VCARD', 'VERSION:3.0'];
+    lines.push(`N:${d.lastName};${d.firstName};;${d.prefix || ''};`);
+    lines.push(`FN:${[d.prefix, d.firstName, d.lastName].filter(Boolean).join(' ')}`);
+    if (d.org) lines.push(`ORG:${d.org}`);
+    if (d.title) lines.push(`TITLE:${d.title}`);
+    d.phones.forEach(p => {
+      const type = (p.type || 'CELL').toUpperCase();
+      lines.push(`TEL;TYPE=${type}:${p.number}`);
+    });
+    d.emails.forEach(e => lines.push(`EMAIL:${e.address}`));
+    if (d.website) lines.push(`URL:${d.website}`);
+    if (d.notes) lines.push(`NOTE:${d.notes.replace(/\n/g,'\\n')}`);
+    lines.push('END:VCARD');
+    return lines.join('\r\n');
+  }
+
+  document.getElementById('saveBtn').addEventListener('click', () => {
+    const vcard = buildVCard(CARD_DATA);
+    const blob = new Blob([vcard], { type: 'text/vcard' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${CARD_DATA.firstName}_${CARD_DATA.lastName}.vcf`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    document.getElementById('statusEl').textContent = 'Contact file downloaded — open it to save.';
+  });
+</script>
+
+</body>
+</html>
