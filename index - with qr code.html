@@ -146,10 +146,12 @@
     background: var(--surface);
     border: 1px solid var(--line);
     border-radius: 14px;
+    flex-wrap: wrap;
   }
   #qrcode{
     flex-shrink:0;
-    width: 84px; height: 84px;
+    width: clamp(72px, 22vw, 92px);
+    height: clamp(72px, 22vw, 92px);
     background: var(--parchment);
     border-radius: 8px;
     padding: 7px;
@@ -157,7 +159,12 @@
     align-items:center;
     justify-content:center;
   }
-  #qrcode img{ display:block; width:100%; height:100%; }
+  #qrcode canvas, #qrcode img{
+    display:block;
+    width:100% !important;
+    height:100% !important;
+    max-width:100%;
+  }
   .qr-block .text{ min-width:0; }
   .qr-block .label{
     font-family:'IBM Plex Mono', monospace;
@@ -370,7 +377,7 @@
 
     // This page's own live URL, once deployed — used to generate the
     // QR code below. Leave "" to hide the QR section entirely.
-    contactUrl: "https://black-hat-contacts-cards.vercel.app/jane-doe/"
+    contactUrl: "https://yourproject.vercel.app/jane-doe/"
   };
 
   const PHOTO_FILE = "photo.jpg";
@@ -422,8 +429,8 @@
     document.getElementById('qrSection').style.display = 'block';
     new QRCode(document.getElementById("qrcode"), {
       text: PROFILE_DATA.contactUrl,
-      width: 200,
-      height: 200,
+      width: 180,
+      height: 180,
       colorDark: "#14171c",
       colorLight: "#ede6d6",
       correctLevel: QRCode.CorrectLevel.M
