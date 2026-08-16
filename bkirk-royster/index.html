@@ -14,9 +14,9 @@
      or change PHOTO_FILE to a full URL.
   3. skills[] and social{} fields are all optional — leave a
      social handle blank ("") and that row just doesn't render.
-  4. QR code: the page detects its own live URL automatically —
-     you don't need to type a contactUrl at all. Set showQR to
-     false only if you want to hide the QR section entirely.
+  4. Set contactUrl to this page's own live URL to generate a
+     working QR code (useful for print materials or a poster
+     next to a laptop, alongside the NFC tag).
   5. Save as a new file per person and deploy to its own URL.
   ============================================================
 -->
@@ -348,37 +348,36 @@
      except name; leave an array empty to hide that section.
      ============================================================ */
   const PROFILE_DATA = {
-    firstName: "Monica",
-    lastName:  "Lacey",
-    title:     "Director",
-    org:       "Mo Tea",
-    tagline:   "Professional · Community · Mother",
+    firstName: "B. Kirk",
+    lastName:  "Royster",
+    title:     "Marketing Director",
+    org:       "Black Hat LLC",
+    tagline:   "Brand Strategy · Community · Growth",
     // about, skills, social, and contactUrl below are all optional —
 
-    about: "Not Your Ordinary Tea!  Mo Tea is a handcrafted tea in a jar made with three simple, powerful ingredients — Honey, Lemon & Ginger.  Great hot or cold.",
+    about: "I help growing companies find their voice and build marketing that actually sounds like them. Fifteen years in brand strategy, half of it spent convincing people that the boring stuff (positioning, messaging hierarchy) is what makes the fun stuff (campaigns, launches) actually work.",
 
-    skills: [],
+    skills: ["Brand Strategy", "Positioning", "Content Strategy", "Team Leadership", "Public Speaking"],
 
     // Leave any handle as "" to hide that row. Just the @handle or
     // page name is enough — full URLs are built automatically below.
     social: {
-      instagram: "moteajar",
-      tiktok:    "moteajar",
-      facebook:  "moteajar"
+      instagram: "janedoe",
+      tiktok:    "janedoe",
+      facebook:  "jane.doe"
     },
 
     phones: [
-      { type: "Mobile", number: "484.366.1818" }
+      { type: "Mobile", number: "919.594.7639" }
     ],
     emails: [
-      { type: "Email", address: "Monica@MoTeaJar.com" }
+      { type: "Email", address: "BlackHatCommunications@GMail.com" }
     ],
-    website: "https://moteajar.com/",
+    website: "https://BlackHatToday.com",
 
-    // The QR code below always points to wherever this page is
-    // actually deployed — detected automatically, nothing to type.
-    // Set this to false only if you want to hide the QR section.
-    showQR: true
+    // This page's own live URL, once deployed — used to generate the
+    // QR code below. Leave "" to hide the QR section entirely.
+    contactUrl: "https://black-hat-contact-cards.vercel.app/a-template/"
   };
 
   const PHOTO_FILE = "photo.jpg";
@@ -425,12 +424,11 @@
     document.getElementById('aboutSection').style.display = 'block';
   }
 
-  // QR code — auto-detects this page's own live URL, no manual entry needed
-  if (PROFILE_DATA.showQR !== false){
-    const selfUrl = window.location.href.split('#')[0].split('?')[0];
+  // QR code — only shown if a contact URL is set
+  if (PROFILE_DATA.contactUrl){
     document.getElementById('qrSection').style.display = 'block';
     new QRCode(document.getElementById("qrcode"), {
-      text: selfUrl,
+      text: PROFILE_DATA.contactUrl,
       width: 180,
       height: 180,
       colorDark: "#14171c",
