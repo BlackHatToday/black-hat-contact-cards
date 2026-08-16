@@ -9,16 +9,11 @@
   ============================================================
   HOW TO REUSE THIS FOR EACH PERSON
   ============================================================
-  1. Edit FLYER_DATA in the <script> near the bottom (no URL
-     needed — it's built automatically from the name).
+  1. Edit FLYER_DATA in the <script> near the bottom.
   2. Put a photo named to match PHOTO_FILE next to this file,
      or change PHOTO_FILE to a full URL.
   3. Open in a browser and print (Ctrl/Cmd+P) — sized for a
      standard Letter page, one flyer per sheet.
-
-  NOTE: PROJECT_BASE_URL only needs to be set once and reused
-  across every flyer — it should match wherever your contact
-  card project is actually deployed.
   ============================================================
 -->
 
@@ -218,12 +213,7 @@
     align-items:center;
     justify-content:center;
   }
-  #qrcode canvas, #qrcode img{
-    display:block;
-    width:100% !important;
-    height:100% !important;
-    max-width:100%;
-  }
+  #qrcode img{ display:block; width:100%; height:100%; }
 
   .fallback .text{ min-width:0; }
   .fallback .label{
@@ -338,23 +328,12 @@
     firstName: "Jane",
     lastName:  "Doe",
     title:     "Marketing Director",
-    org:       "Acme Co"
+    org:       "Acme Co",
+    contactUrl: "https://yourproject.vercel.app/jane-doe/"
   };
-
-  // Set this once for your whole project — same for every flyer.
-  // Only change it if your Vercel URL or custom domain changes.
-  const PROJECT_BASE_URL = "https://yourproject.vercel.app";
 
   const PHOTO_FILE = "photo.jpg";
   /* ============================================================ */
-
-  // Auto-builds the person's URL from their name — no per-person
-  // URL typing needed. "Jane Doe" -> yourproject.vercel.app/jane-doe/
-  const slug = `${FLYER_DATA.firstName}-${FLYER_DATA.lastName}`
-    .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, '')
-    .replace(/\s+/g, '-');
-  const contactUrl = `${PROJECT_BASE_URL.replace(/\/$/, '')}/${slug}/`;
 
   const fullName = `${FLYER_DATA.firstName} ${FLYER_DATA.lastName}`.trim();
   document.title = `${fullName} — Contact Flyer`;
@@ -372,7 +351,7 @@
   document.getElementById('subText').textContent =
     `${FLYER_DATA.firstName}'s contact card is built into this card — just tap your phone to it.`;
 
-  document.getElementById('urlText').textContent = contactUrl.replace(/^https?:\/\//,'');
+  document.getElementById('urlText').textContent = FLYER_DATA.contactUrl.replace(/^https?:\/\//,'');
 
   // Avatar or initials fallback (trailing-slash-safe path resolution)
   const initials = (FLYER_DATA.firstName[0] || '') + (FLYER_DATA.lastName[0] || '');
@@ -394,7 +373,7 @@
 
   // Render QR code
   new QRCode(document.getElementById("qrcode"), {
-    text: contactUrl,
+    text: FLYER_DATA.contactUrl,
     width: 200,
     height: 200,
     colorDark: "#14171c",
