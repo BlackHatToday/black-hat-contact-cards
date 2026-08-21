@@ -1,9 +1,9 @@
 {
   "prefix": "",
-  "firstName": "Place",
-  "lastName": "Holder",
-  "title": "",
-  "org": "",
+  "firstName": "Susan",
+  "lastName": "Tucker",
+  "title": "Senior Center Program Coordinator",
+  "org": "North Granville Senior Center",
   "tagline": "",
   "about": "",
   "experience": [],
@@ -17,7 +17,7 @@
     "youtube": ""
   },
   "payments": {
-    "cashapp": "$BlackHat",
+    "cashapp": "",
     "venmo": "",
     "paypal": "",
     "zelle": ""
@@ -26,10 +26,15 @@
   "phones": [
     {
       "type": "Mobile",
-      "number": "(919) 693-2468"
+      "number": "(919) 693-3383"
     }
   ],
-  "emails": [],
+  "emails": [
+    {
+      "type": "Personal",
+      "address": "Susan.Tucker@GranvilleCounty.org"
+    }
+  ],
   "websites": [],
   "calendlyUrl": "",
   "photoFile": "photo.jpg",

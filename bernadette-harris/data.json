@@ -23,7 +23,12 @@
     "zelle": ""
   },
   "notes": "",
-  "phones": [],
+  "phones": [
+    {
+      "type": "Mobile",
+      "number": "(252) 767-9523"
+    }
+  ],
   "emails": [
     {
       "type": "Personal",

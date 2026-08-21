@@ -1,9 +1,9 @@
 {
   "prefix": "",
-  "firstName": "Place",
-  "lastName": "Holder",
-  "title": "",
-  "org": "",
+  "firstName": "B. Kirk",
+  "lastName": "Royster",
+  "title": "Marketing Director",
+  "org": "Black Hat LLC",
   "tagline": "",
   "about": "",
   "experience": [],
@@ -26,10 +26,19 @@
   "phones": [
     {
       "type": "Mobile",
-      "number": "(919) 693-2468"
+      "number": "(919) 594-7693"
     }
   ],
-  "emails": [],
+  "emails": [
+    {
+      "type": "Personal",
+      "address": "WhiteStoneMemorials@GMail.com"
+    },
+    {
+      "type": "Personal",
+      "address": "BlackHatToday@GMail.com"
+    }
+  ],
   "websites": [],
   "calendlyUrl": "",
   "photoFile": "photo.jpg",

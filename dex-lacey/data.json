@@ -1,10 +1,10 @@
 {
   "prefix": "",
-  "firstName": "Place",
-  "lastName": "Holder",
-  "title": "",
-  "org": "",
-  "tagline": "",
+  "firstName": "Dex",
+  "lastName": "Lacey",
+  "title": "Security Professional",
+  "org": "Mo Tea LLC",
+  "tagline": "Very friendly but also very firm.",
   "about": "",
   "experience": [],
   "skills": [],
@@ -17,7 +17,7 @@
     "youtube": ""
   },
   "payments": {
-    "cashapp": "$BlackHat",
+    "cashapp": "",
     "venmo": "",
     "paypal": "",
     "zelle": ""
@@ -26,10 +26,15 @@
   "phones": [
     {
       "type": "Mobile",
-      "number": "(919) 693-2468"
+      "number": "(484) 368-1293"
     }
   ],
-  "emails": [],
+  "emails": [
+    {
+      "type": "Personal",
+      "address": "LaceyMonica.ML@GMail.com"
+    }
+  ],
   "websites": [],
   "calendlyUrl": "",
   "photoFile": "photo.jpg",

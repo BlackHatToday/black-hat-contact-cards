@@ -1,9 +1,9 @@
 {
   "prefix": "",
-  "firstName": "Place",
-  "lastName": "Holder",
+  "firstName": "Andrew",
+  "lastName": "Watson",
   "title": "",
-  "org": "",
+  "org": "Always Air Heating & Cooling",
   "tagline": "",
   "about": "",
   "experience": [],
@@ -17,7 +17,7 @@
     "youtube": ""
   },
   "payments": {
-    "cashapp": "$BlackHat",
+    "cashapp": "",
     "venmo": "",
     "paypal": "",
     "zelle": ""
@@ -26,11 +26,21 @@
   "phones": [
     {
       "type": "Mobile",
-      "number": "(919) 693-2468"
+      "number": "(919) 482-6916"
     }
   ],
-  "emails": [],
-  "websites": [],
+  "emails": [
+    {
+      "type": "Personal",
+      "address": "Andrew.Watson@AlwaysAirNC.com"
+    }
+  ],
+  "websites": [
+    {
+      "label": "Website",
+      "url": "www.AlwaysAirNC.com"
+    }
+  ],
   "calendlyUrl": "",
   "photoFile": "photo.jpg",
   "showQR": true
