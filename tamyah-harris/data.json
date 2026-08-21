@@ -1,0 +1,37 @@
+{
+  "prefix": "",
+  "firstName": "TaMyah",
+  "lastName": "Harris",
+  "title": "",
+  "org": "",
+  "tagline": "",
+  "about": "",
+  "experience": [],
+  "skills": [],
+  "social": {
+    "instagram": "",
+    "tiktok": "",
+    "facebook": "",
+    "linkedin": "",
+    "twitter": "",
+    "youtube": ""
+  },
+  "payments": {
+    "cashapp": "",
+    "venmo": "",
+    "paypal": "",
+    "zelle": ""
+  },
+  "notes": "",
+  "phones": [
+    {
+      "type": "Mobile",
+      "number": "(984) 999-5834"
+    }
+  ],
+  "emails": [],
+  "websites": [],
+  "calendlyUrl": "",
+  "photoFile": "photo.jpg",
+  "showQR": true
+}

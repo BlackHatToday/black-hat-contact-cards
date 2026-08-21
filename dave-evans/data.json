@@ -1,0 +1,37 @@
+{
+  "prefix": "",
+  "firstName": "Dave",
+  "lastName": "Evans",
+  "title": "",
+  "org": "",
+  "tagline": "",
+  "about": "",
+  "experience": [],
+  "skills": [],
+  "social": {
+    "instagram": "",
+    "tiktok": "",
+    "facebook": "",
+    "linkedin": "",
+    "twitter": "",
+    "youtube": ""
+  },
+  "payments": {
+    "cashapp": "",
+    "venmo": "",
+    "paypal": "",
+    "zelle": ""
+  },
+  "notes": "",
+  "phones": [
+    {
+      "type": "Mobile",
+      "number": "(919) 771-5573"
+    }
+  ],
+  "emails": [],
+  "websites": [],
+  "calendlyUrl": "",
+  "photoFile": "photo.jpg",
+  "showQR": true
+}
