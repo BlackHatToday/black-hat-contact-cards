@@ -6,11 +6,16 @@
    ============================================================ */
 
 (async function () {
+  // Set this to your own email address — used by the "Need to update
+  // this info?" link at the bottom of every card.
+  const ADMIN_EMAIL = "you@example.com";
+
   const ICONS = {
     phone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
     email: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 6 12 13 2 6"/><path d="M2 6h20v12H2z"/></svg>',
     website: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg>',
-    payment: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5c0-1.4 1.1-2.5 2.5-2.5s2.5 1.1 2.5 2.5c0 3-5 2-5 5 0 1.4 1.1 2.5 2.5 2.5s2.5-1.1 2.5-2.5"/></svg>'
+    payment: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5c0-1.4 1.1-2.5 2.5-2.5s2.5 1.1 2.5 2.5c0 3-5 2-5 5 0 1.4 1.1 2.5 2.5 2.5s2.5-1.1 2.5-2.5"/></svg>',
+    location: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>'
   };
 
   // Pre-configured platforms: just label + how to build the URL from a
@@ -137,7 +142,7 @@
               <span class="icon">${ICONS.payment}</span>
               <span class="meta"><div class="label">${cfg.label}</div><div class="value">${value}</div></span>
             </a>
-            <button type="button" class="field-qr-btn" data-qr-url="${url}" data-qr-label="Scan to pay via ${cfg.label}" aria-label="Show QR code for ${cfg.label}">
+            <button type="button" class="field-qr-btn" data-qr-url="${url}" data-qr-label="Scan with ${cfg.label}" aria-label="Show QR code for ${cfg.label}">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3zM20 14v3M14 20h3M20 20v.01"/></svg>
             </button>
           </div>`;
@@ -151,6 +156,7 @@
     }).join('');
 
     document.getElementById('paymentsEl').innerHTML = rows;
+    document.getElementById('paymentsLabelText').textContent = d.paymentSectionLabel || 'Payment';
     document.getElementById('paymentsSection').style.display = 'block';
 
     document.querySelectorAll('#paymentsEl .field-qr-btn').forEach(btn => {
@@ -187,6 +193,7 @@
     const rows = [];
     (d.phones || []).forEach(p => rows.push({ icon: 'phone', label: p.type || 'Phone', value: p.number, href: `tel:${String(p.number).replace(/[^+\d]/g, '')}` }));
     (d.emails || []).forEach(e => rows.push({ icon: 'email', label: e.type || 'Email', value: e.address, href: `mailto:${e.address}` }));
+    if (d.address) rows.push({ icon: 'location', label: 'Address', value: d.address, href: `https://maps.google.com/?q=${encodeURIComponent(d.address)}` });
     if (d.website) rows.push({ icon: 'website', label: 'Website', value: d.website.replace(/^https?:\/\//, ''), href: d.website }); // legacy single-website support
     (d.websites || []).forEach(w => rows.push({ icon: 'website', label: w.label || 'Website', value: w.url.replace(/^https?:\/\//, ''), href: w.url }));
     document.getElementById('fieldsEl').innerHTML = rows.map(r => `
@@ -201,6 +208,7 @@
     if (!d.calendlyUrl) return;
     const btn = document.getElementById('bookBtn');
     btn.href = d.calendlyUrl;
+    document.getElementById('bookBtnLabel').textContent = d.bookingLabel || 'Book a Time';
     btn.style.display = 'flex';
   }
 
@@ -223,6 +231,28 @@
     });
   }
 
+  // A subtle link, meant for the card holder themselves (not visitors),
+  // to request a change to their own info. Opens a pre-addressed email
+  // to the admin — always shown, no data dependency, since it's not
+  // tied to any field being present.
+  function renderUpdateRequest(d) {
+    const link = document.getElementById('updateRequestLink');
+    if (!link) return;
+    const fullName = `${d.firstName || ''} ${d.lastName || ''}`.trim() || 'this card';
+    const selfUrl = window.location.href.split('#')[0].split('?')[0];
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const subject = encodeURIComponent(`Update request: ${fullName}`);
+
+      const emailsList = (d.emails || []).map(em => `  ${em.type || 'Email'}: ${em.address}`).join('\n') || '  None on file';
+      const phonesList = (d.phones || []).map(p => `  ${p.type || 'Phone'}: ${p.number}`).join('\n') || '  None on file';
+      const reference = `\n\n---\nFor reference, the info currently on file for this card:\nEmail(s):\n${emailsList}\nPhone(s):\n${phonesList}`;
+
+      const body = encodeURIComponent(`Hi,\n\nI'd like to update the following on my card (${selfUrl}):\n\n${reference}`);
+      window.location.href = `mailto:${ADMIN_EMAIL}?subject=${subject}&body=${body}`;
+    });
+  }
+
   function renderQR(d) {
     if (d.showQR === false) return;
     const selfUrl = window.location.href.split('#')[0].split('?')[0];
@@ -241,6 +271,7 @@
     if (d.title) lines.push(`TITLE:${d.title}`);
     (d.phones || []).forEach(p => lines.push(`TEL;TYPE=${(p.type || 'CELL').toUpperCase()}:${p.number}`));
     (d.emails || []).forEach(e => lines.push(`EMAIL:${e.address}`));
+    if (d.address) lines.push(`ADR;TYPE=HOME:;;${d.address.replace(/,/g, '\\,')};;;;`);
     if (d.website) lines.push(`URL:${d.website}`); // legacy single-website support
     (d.websites || []).forEach(w => lines.push(`URL:${w.url}`));
     if (d.notes) lines.push(`NOTE:${d.notes.replace(/\n/g, '\\n')}`);
@@ -279,6 +310,7 @@
     renderQR(data);
     wireSaveButton(data);
     renderShareBack(data);
+    renderUpdateRequest(data);
   } catch (err) {
     document.querySelector('.page').innerHTML = `
       <div class="load-error">

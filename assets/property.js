@@ -1,0 +1,176 @@
+/* ============================================================
+   PROPERTY CARD ENGINE — shares assets/style.css with the
+   person-card engine, but is a separate script since property
+   data (address, price, beds/baths, agent) doesn't map onto
+   the person schema. Edit this once to change every property
+   page that uses property-template/index.html.
+   ============================================================ */
+
+(async function () {
+  // Set this to your own email address — used by the "Need to update
+  // this listing?" link at the bottom of every property card.
+  const ADMIN_EMAIL = "you@example.com";
+
+  function basePath() {
+    return window.location.pathname.endsWith('/')
+      ? window.location.pathname
+      : window.location.pathname + '/';
+  }
+
+  function resolveAsset(file) {
+    if (!file) return '';
+    return /^https?:\/\//i.test(file) ? file : basePath() + file;
+  }
+
+  async function loadData() {
+    const res = await fetch(basePath() + 'data.json', { cache: 'no-store' });
+    if (!res.ok) throw new Error('data.json not found');
+    return res.json();
+  }
+
+  function renderHero(d) {
+    const heroEl = document.getElementById('propHero');
+    if (d.heroPhoto) {
+      const img = document.createElement('img');
+      img.src = resolveAsset(d.heroPhoto);
+      img.alt = d.address || 'Property photo';
+      img.onerror = () => { heroEl.innerHTML = '<div class="prop-hero-fallback">Photo unavailable</div>'; };
+      heroEl.appendChild(img);
+    } else {
+      heroEl.innerHTML = '<div class="prop-hero-fallback">No photo added yet</div>';
+    }
+  }
+
+  function renderIdentity(d) {
+    document.title = d.address || 'Property';
+    document.getElementById('propAddress').textContent = d.address || '';
+    if (d.price) document.getElementById('propPrice').textContent = d.price;
+  }
+
+  function renderStats(d) {
+    const stats = [];
+    if (d.beds != null && d.beds !== '') stats.push({ num: d.beds, label: 'Beds' });
+    if (d.baths != null && d.baths !== '') stats.push({ num: d.baths, label: 'Baths' });
+    if (d.sqft) stats.push({ num: d.sqft, label: 'Sq Ft' });
+    if (!stats.length) return;
+    document.getElementById('statsRow').innerHTML = stats.map(s => `
+      <div class="stat-block">
+        <div class="stat-num">${s.num}</div>
+        <div class="stat-label">${s.label}</div>
+      </div>
+    `).join('');
+    document.getElementById('statsRow').style.display = 'flex';
+  }
+
+  function renderDescription(d) {
+    if (!d.description) return;
+    document.getElementById('descriptionText').textContent = d.description;
+    document.getElementById('descriptionSection').style.display = 'block';
+  }
+
+  function renderGallery(d) {
+    if (!d.photos || !d.photos.length) return;
+    document.getElementById('galleryGrid').innerHTML = d.photos.map(p => `
+      <a href="${resolveAsset(p)}" target="_blank" rel="noopener">
+        <img src="${resolveAsset(p)}" alt="Property photo" loading="lazy">
+      </a>
+    `).join('');
+    document.getElementById('gallerySection').style.display = 'block';
+  }
+
+  function renderAgent(d) {
+    if (!d.agentName) return;
+    const initials = d.agentName.split(' ').map(w => w[0]).filter(Boolean).slice(0, 2).join('').toUpperCase();
+    let avatarHtml;
+    if (d.agentPhotoFile) {
+      avatarHtml = `<img class="agent-avatar" src="${resolveAsset(d.agentPhotoFile)}" alt="${d.agentName}" onerror="this.outerHTML='<div class=&quot;agent-avatar-fallback&quot;>${initials}</div>'">`;
+    } else {
+      avatarHtml = `<div class="agent-avatar-fallback">${initials}</div>`;
+    }
+
+    document.getElementById('agentBlock').innerHTML = `
+      <div class="agent-card">
+        ${avatarHtml}
+        <div class="agent-info">
+          <div class="agent-name">${d.agentName}</div>
+          <div class="agent-role">Listing Agent</div>
+        </div>
+      </div>
+    `;
+
+    const rows = [];
+    if (d.agentPhone) rows.push({ label: 'Mobile', value: d.agentPhone, href: `tel:${String(d.agentPhone).replace(/[^+\d]/g, '')}` });
+    if (d.agentEmail) rows.push({ label: 'Email', value: d.agentEmail, href: `mailto:${d.agentEmail}` });
+    if (rows.length) {
+      document.getElementById('agentFields').innerHTML = rows.map(r => `
+        <a class="field" href="${r.href}" target="_blank" rel="noopener">
+          <span class="meta"><div class="label">${r.label}</div><div class="value">${r.value}</div></span>
+        </a>
+      `).join('');
+    }
+
+    document.getElementById('agentSection').style.display = 'block';
+  }
+
+  function renderBooking(d) {
+    if (!d.bookingUrl) return;
+    const btn = document.getElementById('bookShowingBtn');
+    btn.href = d.bookingUrl;
+    document.getElementById('bookShowingLabel').textContent = d.bookingLabel || 'Schedule a Showing';
+    btn.style.display = 'flex';
+  }
+
+  // A subtle link, meant for the listing agent (not visitors), to
+  // request a change to this listing. Always shown, no data dependency.
+  function renderUpdateRequest(d) {
+    const link = document.getElementById('updateRequestLink');
+    if (!link) return;
+    const address = d.address || 'this listing';
+    const selfUrl = window.location.href.split('#')[0].split('?')[0];
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const subject = encodeURIComponent(`Update request: ${address}`);
+
+      const refLines = [];
+      if (d.agentName) refLines.push(`  Agent: ${d.agentName}`);
+      if (d.agentEmail) refLines.push(`  Email: ${d.agentEmail}`);
+      if (d.agentPhone) refLines.push(`  Phone: ${d.agentPhone}`);
+      const reference = `\n\n---\nFor reference, the listing agent currently on file:\n${refLines.length ? refLines.join('\n') : '  None on file'}`;
+
+      const body = encodeURIComponent(`Hi,\n\nI'd like to update the following on this listing (${selfUrl}):\n\n${reference}`);
+      window.location.href = `mailto:${ADMIN_EMAIL}?subject=${subject}&body=${body}`;
+    });
+  }
+
+  function renderQR(d) {
+    if (d.showQR === false) return;
+    const selfUrl = window.location.href.split('#')[0].split('?')[0];
+    document.getElementById('qrSection').style.display = 'block';
+    /* global QRCode */
+    new QRCode(document.getElementById('qrcode'), {
+      text: selfUrl, width: 180, height: 180,
+      colorDark: '#14171c', colorLight: '#ede6d6',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  }
+
+  try {
+    const data = await loadData();
+    renderHero(data);
+    renderIdentity(data);
+    renderStats(data);
+    renderDescription(data);
+    renderGallery(data);
+    renderAgent(data);
+    renderBooking(data);
+    renderUpdateRequest(data);
+    renderQR(data);
+  } catch (err) {
+    document.querySelector('.page').innerHTML = `
+      <div class="load-error">
+        Couldn't load this listing's data.<br>
+        Make sure data.json is in the same folder as this page.
+      </div>`;
+    console.error(err);
+  }
+})();
