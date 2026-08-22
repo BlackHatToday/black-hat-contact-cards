@@ -238,6 +238,32 @@
   }
   document.getElementById('agentPhone').addEventListener('input', formatPhoneInput);
 
+  // If this page was opened via the "Review & edit first" link on a live
+  // listing card, its current info arrives as a URL parameter — fill in
+  // every field from it so the agent sees everything before editing.
+  (function prefillFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const prefillData = params.get('data');
+    if (!prefillData) return;
+    try {
+      const d = JSON.parse(prefillData);
+      const setVal = (id, value) => { const el = document.getElementById(id); if (el) el.value = value || ''; };
+      setVal('address', d.address);
+      setVal('price', d.price);
+      setVal('sqft', d.sqft);
+      setVal('beds', d.beds);
+      setVal('baths', d.baths);
+      setVal('description', d.description);
+      setVal('agentName', d.agentName);
+      setVal('agentPhone', d.agentPhone);
+      setVal('agentEmail', d.agentEmail);
+      setVal('bookingUrl', d.bookingUrl);
+      document.getElementById('statusEl').textContent = 'This listing\'s current info has been loaded below — review and edit anything, then send when ready.';
+    } catch (err) {
+      // Malformed data — just leave the form blank rather than error out
+    }
+  })();
+
   function renderPreview() {
     const d = collectData();
 
@@ -296,7 +322,7 @@
   });
 
   // Set this to your own email address before sending this form out.
-  const RECIPIENT_EMAIL = "BlackHatToday+BHCC@GMail.com";
+  const RECIPIENT_EMAIL = "you@example.com";
 
   function formatAsText(d) {
     const lines = [];

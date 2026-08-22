@@ -350,7 +350,7 @@
     input.value = out;
   }
 
-  document.getElementById('addPhone').addEventListener('click', () => {
+  function addPhoneRow(prefill = {}) {
     const row = repeatRow(document.getElementById('phoneList'), `
       <div>
         <label>Type</label>
@@ -367,10 +367,13 @@
       </div>
     `);
     row.querySelector('.phone-number').addEventListener('input', formatPhoneInput);
-  });
+    if (prefill.type) row.querySelector('.phone-type').value = prefill.type;
+    if (prefill.number) row.querySelector('.phone-number').value = prefill.number;
+    return row;
+  }
 
-  document.getElementById('addEmail').addEventListener('click', () => {
-    repeatRow(document.getElementById('emailList'), `
+  function addEmailRow(prefill = {}) {
+    const row = repeatRow(document.getElementById('emailList'), `
       <div>
         <label>Type</label>
         <select class="email-type field-descriptor">
@@ -384,16 +387,22 @@
         <input type="email" class="email-address field-content" placeholder="jane@acme.com">
       </div>
     `);
-  });
+    if (prefill.type) row.querySelector('.email-type').value = prefill.type;
+    if (prefill.address) row.querySelector('.email-address').value = prefill.address;
+    return row;
+  }
 
-  document.getElementById('addWebsite').addEventListener('click', () => {
-    repeatRow(document.getElementById('websiteList'), `
+  function addWebsiteRow(prefill = {}) {
+    const row = repeatRow(document.getElementById('websiteList'), `
       <div><label>Label</label><input type="text" class="website-label field-descriptor" placeholder="Website"></div>
       <div><label>URL</label><input type="text" class="website-url field-content" placeholder="https://acme.com"></div>
     `);
-  });
+    if (prefill.label) row.querySelector('.website-label').value = prefill.label;
+    if (prefill.url) row.querySelector('.website-url').value = prefill.url;
+    return row;
+  }
 
-  document.getElementById('addExperience').addEventListener('click', () => {
+  function addExperienceRow(prefill = {}) {
     const div = document.createElement('div');
     div.className = 'repeat-item';
     div.innerHTML = `
@@ -409,12 +418,59 @@
     `;
     div.querySelector('.remove-btn').addEventListener('click', () => div.remove());
     document.getElementById('experienceList').appendChild(div);
-  });
+    if (prefill.role) div.querySelector('.exp-role').value = prefill.role;
+    if (prefill.company) div.querySelector('.exp-company').value = prefill.company;
+    if (prefill.period) div.querySelector('.exp-period').value = prefill.period;
+    if (prefill.description) div.querySelector('.exp-desc').value = prefill.description;
+    return div;
+  }
+
+  document.getElementById('addPhone').addEventListener('click', () => addPhoneRow());
+  document.getElementById('addEmail').addEventListener('click', () => addEmailRow());
+  document.getElementById('addWebsite').addEventListener('click', () => addWebsiteRow());
+  document.getElementById('addExperience').addEventListener('click', () => addExperienceRow());
 
   // Start with one phone, one email, and one website row pre-added, since almost everyone needs at least one
-  document.getElementById('addPhone').click();
-  document.getElementById('addEmail').click();
-  document.getElementById('addWebsite').click();
+  const urlParams = new URLSearchParams(window.location.search);
+  const prefillData = urlParams.get('data');
+
+  if (!prefillData) {
+    addPhoneRow();
+    addEmailRow();
+    addWebsiteRow();
+  } else {
+    try {
+      const d = JSON.parse(prefillData);
+      const setVal = (id, value) => { const el = document.getElementById(id); if (el) el.value = value || ''; };
+
+      setVal('prefix', d.prefix);
+      setVal('firstName', d.firstName);
+      setVal('lastName', d.lastName);
+      setVal('title', d.title);
+      setVal('org', d.org);
+      setVal('tagline', d.tagline);
+      setVal('about', d.about);
+      setVal('notes', d.notes);
+      setVal('calendlyUrl', d.calendlyUrl);
+      setVal('address', d.address);
+      setVal('skills', (d.skills || []).join(', '));
+
+      ['instagram', 'tiktok', 'facebook', 'linkedin', 'twitter', 'youtube'].forEach(p => setVal(`social_${p}`, (d.social || {})[p]));
+      ['cashapp', 'venmo', 'paypal', 'zelle'].forEach(p => setVal(`payment_${p}`, (d.payments || {})[p]));
+
+      (d.phones && d.phones.length ? d.phones : [{}]).forEach(p => addPhoneRow(p));
+      (d.emails && d.emails.length ? d.emails : [{}]).forEach(e => addEmailRow(e));
+      (d.websites && d.websites.length ? d.websites : [{}]).forEach(w => addWebsiteRow(w));
+      (d.experience || []).forEach(e => addExperienceRow(e));
+
+      document.getElementById('statusEl').textContent = 'Your current info has been loaded below — review and edit anything, then send when ready.';
+    } catch (err) {
+      // If the loaded data is malformed for any reason, just fall back to a normal blank form
+      addPhoneRow();
+      addEmailRow();
+      addWebsiteRow();
+    }
+  }
 
   function collectData() {
     const phones = [...document.querySelectorAll('#phoneList .repeat-item')].map(item => ({
@@ -474,7 +530,7 @@
   }
 
   // Set this to your own email address before sending this form to friends.
-  const RECIPIENT_EMAIL = "BlackHatToday+BHCC@GMail.com";
+  const RECIPIENT_EMAIL = "you@example.com";
 
   function formatAsText(d) {
     const lines = [];
