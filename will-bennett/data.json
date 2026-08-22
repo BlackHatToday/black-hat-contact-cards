@@ -1,0 +1,42 @@
+{
+  "prefix": "",
+  "firstName": "Will",
+  "lastName": "Bennett",
+  "title": "Owner Director",
+  "org": "Bennett Achievements",
+  "tagline": "Being the best and clearing the path.",
+  "about": "",
+  "experience": [],
+  "skills": [
+    "Brand Strategy",
+    "Growth",
+    "Coaching"
+  ],
+  "social": {
+    "instagram": "",
+    "tiktok": "",
+    "facebook": "",
+    "linkedin": "",
+    "twitter": "",
+    "youtube": ""
+  },
+  "payments": {
+    "cashapp": "$PayMe",
+    "venmo": "",
+    "paypal": "",
+    "zelle": ""
+  },
+  "notes": "",
+  "phones": [
+    {
+      "type": "Mobile",
+      "number": "(919) 693-7185"
+    }
+  ],
+  "emails": [],
+  "websites": [],
+  "calendlyUrl": "",
+  "address": "604 North 1st Street Richmond  VA  23219",
+  "photoFile": "photo.jpg",
+  "showQR": true
+}
