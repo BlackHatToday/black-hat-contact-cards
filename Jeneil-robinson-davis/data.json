@@ -1,0 +1,33 @@
+{
+  "prefix": "",
+  "firstName": "Jeneil",
+  "lastName": "Robinson-Davis",
+  "title": "",
+  "org": "",
+  "tagline": "",
+  "about": "",
+  "experience": [],
+  "skills": [],
+  "social": {
+    "instagram": "",
+    "tiktok": "",
+    "facebook": "",
+    "linkedin": "",
+    "twitter": "",
+    "youtube": ""
+  },
+  "payments": {
+    "cashapp": "",
+    "venmo": "",
+    "paypal": "",
+    "zelle": ""
+  },
+  "notes": "",
+  "phones": [],
+  "emails": [],
+  "websites": [],
+  "calendlyUrl": "",
+  "address": "",
+  "photoFile": "photo.jpg",
+  "showQR": true
+}
