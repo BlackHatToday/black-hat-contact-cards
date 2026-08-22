@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Contact Info</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --ink:#14171c; --surface:#1c2129; --surface-2:#242a34;
+    --copper:#b8763f; --copper-soft:#c98549; --parchment:#ede6d6;
+    --muted:#8b93a1; --line:#2e3542;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    background: var(--ink); color: var(--parchment);
+    font-family:'IBM Plex Sans', sans-serif;
+    margin:0; padding: 40px 20px 100px;
+  }
+  .wrap{ max-width: 640px; margin: 0 auto; }
+  h1{ font-family:'Space Grotesk', sans-serif; font-size: 26px; margin-bottom: 6px; }
+  .sub{ color: var(--muted); font-size: 14px; margin-bottom: 32px; }
+
+  fieldset{
+    border: 1px solid var(--line); border-radius: 14px;
+    padding: 20px; margin-bottom: 18px;
+  }
+  legend{
+    font-family:'IBM Plex Mono', monospace; font-size: 11px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--copper);
+    padding: 0 8px;
+  }
+
+  label{ display:block; font-size: 12.5px; color: var(--muted); margin: 12px 0 5px; }
+  label:first-child{ margin-top: 0; }
+  input[type=text], input[type=url], textarea{
+    width: 100%; padding: 10px 12px; background: var(--surface);
+    border: 1px solid var(--line); border-radius: 8px; color: var(--parchment);
+    font-family:'IBM Plex Sans', sans-serif; font-size: 14px;
+  }
+  input:focus, textarea:focus{ outline: none; border-color: var(--copper); }
+  textarea{ resize: vertical; min-height: 70px; }
+
+  .row2{ display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .row-dc{ display:grid; grid-template-columns: 108px 1fr; gap: 12px; align-items: end; }
+
+  /* Descriptor = the "Type"/"Label" field: small, muted, tag-like —
+     visually says "pick a category" rather than "type your info" */
+  .field-descriptor{
+    width: 100%; padding: 9px 10px; background: var(--surface-2);
+    border: 1px solid var(--line); border-radius: 8px; color: var(--muted);
+    font-family:'IBM Plex Mono', monospace; font-size: 12px;
+  }
+  select.field-descriptor{ cursor: pointer; }
+  .field-descriptor:focus{ outline:none; border-color: var(--copper); color: var(--parchment); }
+
+  /* Content = the actual info: normal input styling, but a touch
+     more prominent so it reads as "the important part" */
+  .field-content{
+    width: 100%; padding: 10px 12px; background: var(--surface);
+    border: 1.5px solid var(--line); border-radius: 8px; color: var(--parchment);
+    font-family:'IBM Plex Sans', sans-serif; font-size: 14px;
+  }
+  .field-content:focus{ outline:none; border-color: var(--copper); }
+
+  .field-hint{
+    font-size: 10px; color: var(--muted); margin-top: 3px;
+    font-family:'IBM Plex Mono', monospace; letter-spacing: 0.04em;
+  }
+  .row3{ display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+  .repeat-item{
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 10px; padding: 14px; margin-bottom: 10px; position: relative;
+  }
+  .remove-btn{
+    position:absolute; top:10px; right:10px;
+    background: none; border: none; color: var(--muted);
+    cursor: pointer; font-size: 13px; font-family:'IBM Plex Mono', monospace;
+  }
+  .remove-btn:hover{ color: var(--copper); }
+
+  .add-btn{
+    background: var(--surface-2); border: 1px dashed var(--line);
+    color: var(--parchment); border-radius: 8px; padding: 10px 14px;
+    font-family:'IBM Plex Mono', monospace; font-size: 12.5px;
+    cursor: pointer; width: 100%; margin-top: 4px;
+  }
+  .add-btn:hover{ border-color: var(--copper); color: var(--copper-soft); }
+
+  .checkbox-row{ display:flex; align-items:center; gap: 8px; margin-top: 12px; }
+  .checkbox-row input{ width: auto; }
+  .checkbox-row label{ margin: 0; }
+
+  .actions{
+    position: sticky; bottom: 0; background: var(--ink);
+    padding: 18px 0; margin-top: 10px; display:flex; gap: 12px;
+    border-top: 1px solid var(--line);
+  }
+  .btn-primary{
+    flex:1; padding: 15px; background: var(--copper); color: var(--ink);
+    border: none; border-radius: 12px; font-family:'Space Grotesk', sans-serif;
+    font-weight: 700; font-size: 15px; cursor: pointer;
+  }
+  .btn-primary:hover{ background: var(--copper-soft); }
+  .btn-secondary{
+    padding: 15px 18px; background: var(--surface); color: var(--parchment);
+    border: 1px solid var(--line); border-radius: 12px;
+    font-family:'IBM Plex Mono', monospace; font-size: 13px; cursor: pointer;
+  }
+  .btn-secondary:hover{ border-color: var(--copper); }
+
+  .hint{ font-size: 11.5px; color: var(--muted); margin-top: 6px; line-height:1.5; }
+  .hint-photo{
+    font-size: 12px; color: var(--copper); margin-top: 8px; line-height:1.5;
+    font-weight: 500;
+  }
+  .status{ text-align:center; font-family:'IBM Plex Mono', monospace; font-size: 12.5px; color: var(--copper-soft); margin-top: 10px; min-height: 18px; }
+
+  /* ---- preview overlay ---- */
+  .overlay{
+    display:none; position:fixed; inset:0; background: rgba(10,11,14,0.85);
+    z-index: 100; align-items:flex-start; justify-content:center;
+    padding: 40px 16px; overflow-y:auto;
+  }
+  .overlay.open{ display:flex; }
+
+  .preview-close{
+    position: sticky; top: 0; align-self:flex-end;
+    background: var(--surface); border:1px solid var(--line); color: var(--parchment);
+    border-radius: 999px; width: 34px; height: 34px; font-size: 16px; cursor:pointer;
+    margin-bottom: -20px; margin-left: auto;
+  }
+
+  .preview-note{
+    max-width: 380px; margin: 0 auto 14px; text-align:center;
+    font-family:'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .mini-card{
+    width: 100%; max-width: 380px;
+    background: radial-gradient(circle at 50% 0%, #1a1f27 0%, var(--ink) 55%);
+    border: 1px solid var(--line); border-radius: 20px;
+    padding: 36px 26px; margin: 0 auto;
+    font-family:'IBM Plex Sans', sans-serif; color: var(--parchment);
+  }
+  .mc-avatar{
+    width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 16px;
+    background: var(--surface-2); border: 2px solid var(--copper);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Space Grotesk', sans-serif; font-weight: 600; font-size: 26px; color: var(--copper);
+  }
+  .mc-name{
+    text-align:center; font-family:'Space Grotesk', sans-serif; font-weight: 700; font-size: 24px;
+  }
+  .mc-tagline{ text-align:center; font-family:'IBM Plex Mono', monospace; font-size: 12.5px; color: var(--copper-soft); margin-top: 6px; }
+  .mc-role{ text-align:center; font-size: 13px; color: var(--muted); margin-top: 5px; }
+
+  .mc-section-label{
+    font-family:'IBM Plex Mono', monospace; font-size: 9.5px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--copper); margin: 22px 0 10px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .mc-section-label::after{ content:''; flex:1; height:1px; background: var(--line); }
+
+  .mc-fields{ background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow:hidden; }
+  .mc-field{ padding: 10px 14px; border-bottom: 1px solid var(--line); }
+  .mc-field:last-child{ border-bottom:none; }
+  .mc-field .mc-label{
+    font-family:'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 2px;
+  }
+  .mc-field .mc-value{ font-family:'IBM Plex Mono', monospace; font-size: 13px; color: var(--parchment); }
+
+  .mc-social{ display:flex; flex-wrap:wrap; gap: 7px; }
+  .mc-badge{
+    display:flex; align-items:center; gap:6px; padding:6px 11px;
+    background: var(--surface); border:1px solid var(--line); border-radius:999px;
+    font-family:'IBM Plex Mono', monospace; font-size: 11px; color: var(--parchment);
+  }
+
+  .mc-book{
+    display:block; text-align:center; margin-top: 16px; padding: 12px;
+    border: 1px solid var(--copper); border-radius: 12px; color: var(--copper-soft);
+    font-family:'Space Grotesk', sans-serif; font-weight:600; font-size: 13.5px;
+  }
+
+  .mc-empty{ text-align:center; color: var(--muted); font-size: 12.5px; padding: 20px 0; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <h1>My Contact Info</h1>
+  <p class="sub">Fill in whatever applies to you (skip anything you don't want on your card), then tap the button at the bottom — it'll open your email app with everything filled in, ready to send.</p>
+
+  <form id="cardForm">
+
+    <fieldset>
+      <legend>Identity</legend>
+      <div class="row3">
+        <div><label>Prefix (optional)</label><input type="text" id="prefix" placeholder="Dr."></div>
+        <div><label>First name</label><input type="text" id="firstName" required></div>
+        <div><label>Last name</label><input type="text" id="lastName" required></div>
+      </div>
+      <div class="row2">
+        <div><label>Title</label><input type="text" id="title" placeholder="Marketing Director"></div>
+        <div><label>Organization</label><input type="text" id="org" placeholder="Acme Co"></div>
+      </div>
+      <label>Tagline (optional — a short line under your name)</label>
+      <input type="text" id="tagline" placeholder="Brand strategy · Storytelling · Growth">
+      <div class="hint-photo">📎 If you'd like a photo on your card, attach it to the email after you hit send below.</div>
+    </fieldset>
+
+    <fieldset>
+      <legend>About</legend>
+      <label>Narrative / bio (leave blank to hide this section)</label>
+      <textarea id="about" placeholder="A few sentences about who you are and what you do."></textarea>
+    </fieldset>
+
+    <fieldset>
+      <legend>Experience (optional)</legend>
+      <div id="experienceList"></div>
+      <button type="button" class="add-btn" id="addExperience">+ Add a role</button>
+    </fieldset>
+
+    <fieldset>
+      <legend>Skills (optional)</legend>
+      <label>Comma-separated</label>
+      <input type="text" id="skills" placeholder="Brand Strategy, Positioning, Public Speaking">
+    </fieldset>
+
+    <fieldset>
+      <legend>Social (optional — leave any blank to hide it)</legend>
+      <div class="row3">
+        <div><label>Instagram</label><input type="text" id="social_instagram" placeholder="handle"></div>
+        <div><label>TikTok</label><input type="text" id="social_tiktok" placeholder="handle"></div>
+        <div><label>Facebook</label><input type="text" id="social_facebook" placeholder="page name"></div>
+      </div>
+      <div class="row3">
+        <div><label>LinkedIn</label><input type="text" id="social_linkedin" placeholder="handle"></div>
+        <div><label>X / Twitter</label><input type="text" id="social_twitter" placeholder="handle"></div>
+        <div><label>YouTube</label><input type="text" id="social_youtube" placeholder="handle"></div>
+      </div>
+      <div class="hint">Just the handle/page name, not the full URL — e.g. "janedoe" not "instagram.com/janedoe".</div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Payments (optional — leave any blank to hide it)</legend>
+      <div class="row2">
+        <div><label>Cash App</label><input type="text" id="payment_cashapp" placeholder="$cashtag"></div>
+        <div><label>Venmo</label><input type="text" id="payment_venmo" placeholder="@username"></div>
+      </div>
+      <div class="row2">
+        <div><label>PayPal</label><input type="text" id="payment_paypal" placeholder="paypal.me username"></div>
+        <div><label>Zelle</label><input type="text" id="payment_zelle" placeholder="phone or email"></div>
+      </div>
+      <div class="hint">If people can pay or tip you this way, this shows a tappable link on your card (Zelle shows as plain info instead, since it doesn't support a public link).</div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Phone numbers</legend>
+      <div id="phoneList"></div>
+      <button type="button" class="add-btn" id="addPhone">+ Add a phone number</button>
+    </fieldset>
+
+    <fieldset>
+      <legend>Email addresses</legend>
+      <div id="emailList"></div>
+      <button type="button" class="add-btn" id="addEmail">+ Add an email</button>
+    </fieldset>
+
+    <fieldset>
+      <legend>Address (optional)</legend>
+      <label>Physical / mailing address</label>
+      <input type="text" id="address" placeholder="123 Main St, Anytown, ST 12345">
+      <div class="hint">Only include this if you're comfortable with it being on your card — it'll show as a tappable row that opens directions.</div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Websites</legend>
+      <div id="websiteList"></div>
+      <button type="button" class="add-btn" id="addWebsite">+ Add a website</button>
+    </fieldset>
+
+    <fieldset>
+      <legend>Note (optional)</legend>
+      <textarea id="notes" placeholder="Any short freeform note — hidden if left blank."></textarea>
+    </fieldset>
+
+    <fieldset>
+      <legend>Calendly (optional)</legend>
+      <label>Booking link</label>
+      <input type="url" id="calendlyUrl" placeholder="https://calendly.com/janedoe">
+      <div class="hint">Shows as a "Book a Time" button. Leave blank to hide it.</div>
+    </fieldset>
+
+  </form>
+
+  <div class="actions">
+    <button type="button" class="btn-secondary" id="previewBtn">Preview My Card</button>
+    <button type="button" class="btn-primary" id="emailBtn">Email This to Me</button>
+  </div>
+  <p class="status" id="statusEl"></p>
+</div>
+
+<div class="overlay" id="previewOverlay">
+  <div style="width:100%; max-width:380px; margin:0 auto;">
+    <button type="button" class="preview-close" id="closePreview">✕</button>
+    <p class="preview-note">This is roughly how your card will look. Your photo isn't shown here since you'll attach it separately — it'll replace these initials on the real card.</p>
+    <div class="mini-card" id="miniCard"></div>
+  </div>
+</div>
+
+<script>
+  function repeatRow(container, fields, gridClass = 'row-dc') {
+    const div = document.createElement('div');
+    div.className = 'repeat-item';
+    div.innerHTML = `
+      <button type="button" class="remove-btn">✕ remove</button>
+      <div class="${gridClass}">${fields}</div>
+    `;
+    div.querySelector('.remove-btn').addEventListener('click', () => div.remove());
+    container.appendChild(div);
+    return div;
+  }
+
+  // Live-formats a phone number as the person types: recognizes a
+  // 10-digit US number as (555) 123-4567, or 11 digits starting with
+  // 1 as +1 (555) 123-4567. Numbers that don't fit that shape (most
+  // non-US numbers) are left as typed, digits and + only.
+  function formatPhoneInput(e) {
+    const input = e.target;
+    const raw = input.value;
+    const digits = raw.replace(/[^\d]/g, '').slice(0, 11);
+    let out = digits;
+    let prefix = '';
+    let d = digits;
+    if (d.length === 11 && d[0] === '1') { prefix = '+1 '; d = d.slice(1); }
+    if (d.length > 0 && d.length <= 10) {
+      if (d.length <= 3) out = prefix + d;
+      else if (d.length <= 6) out = `${prefix}(${d.slice(0,3)}) ${d.slice(3)}`;
+      else out = `${prefix}(${d.slice(0,3)}) ${d.slice(3,6)}-${d.slice(6,10)}`;
+    } else if (d.length > 10) {
+      // Longer than a standard US number — likely international; don't force US formatting.
+      out = raw.replace(/[^\d+]/g, '');
+    }
+    input.value = out;
+  }
+
+  document.getElementById('addPhone').addEventListener('click', () => {
+    const row = repeatRow(document.getElementById('phoneList'), `
+      <div>
+        <label>Type</label>
+        <select class="phone-type field-descriptor">
+          <option>Mobile</option>
+          <option>Work</option>
+          <option>Home</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div>
+        <label>Phone number</label>
+        <input type="tel" class="phone-number field-content" placeholder="(555) 123-4567" inputmode="tel">
+      </div>
+    `);
+    row.querySelector('.phone-number').addEventListener('input', formatPhoneInput);
+  });
+
+  document.getElementById('addEmail').addEventListener('click', () => {
+    repeatRow(document.getElementById('emailList'), `
+      <div>
+        <label>Type</label>
+        <select class="email-type field-descriptor">
+          <option>Personal</option>
+          <option>Work</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div>
+        <label>Email address</label>
+        <input type="email" class="email-address field-content" placeholder="jane@acme.com">
+      </div>
+    `);
+  });
+
+  document.getElementById('addWebsite').addEventListener('click', () => {
+    repeatRow(document.getElementById('websiteList'), `
+      <div><label>Label</label><input type="text" class="website-label field-descriptor" placeholder="Website"></div>
+      <div><label>URL</label><input type="text" class="website-url field-content" placeholder="https://acme.com"></div>
+    `);
+  });
+
+  document.getElementById('addExperience').addEventListener('click', () => {
+    const div = document.createElement('div');
+    div.className = 'repeat-item';
+    div.innerHTML = `
+      <button type="button" class="remove-btn">✕ remove</button>
+      <div class="row2">
+        <div><label>Role</label><input type="text" class="exp-role" placeholder="Marketing Director"></div>
+        <div><label>Company</label><input type="text" class="exp-company" placeholder="Acme Co"></div>
+      </div>
+      <label>Period</label>
+      <input type="text" class="exp-period" placeholder="2022 — Present">
+      <label>Description</label>
+      <textarea class="exp-desc" placeholder="One or two sentences."></textarea>
+    `;
+    div.querySelector('.remove-btn').addEventListener('click', () => div.remove());
+    document.getElementById('experienceList').appendChild(div);
+  });
+
+  // Start with one phone, one email, and one website row pre-added, since almost everyone needs at least one
+  document.getElementById('addPhone').click();
+  document.getElementById('addEmail').click();
+  document.getElementById('addWebsite').click();
+
+  function collectData() {
+    const phones = [...document.querySelectorAll('#phoneList .repeat-item')].map(item => ({
+      type: item.querySelector('.phone-type').value || 'Mobile',
+      number: item.querySelector('.phone-number').value
+    })).filter(p => p.number);
+
+    const emails = [...document.querySelectorAll('#emailList .repeat-item')].map(item => ({
+      type: item.querySelector('.email-type').value || 'Email',
+      address: item.querySelector('.email-address').value
+    })).filter(e => e.address);
+
+    const experience = [...document.querySelectorAll('#experienceList .repeat-item')].map(item => ({
+      role: item.querySelector('.exp-role').value,
+      company: item.querySelector('.exp-company').value,
+      period: item.querySelector('.exp-period').value,
+      description: item.querySelector('.exp-desc').value
+    })).filter(e => e.role || e.company);
+
+    const skills = document.getElementById('skills').value
+      .split(',').map(s => s.trim()).filter(Boolean);
+
+    const websites = [...document.querySelectorAll('#websiteList .repeat-item')].map(item => ({
+      label: item.querySelector('.website-label').value || 'Website',
+      url: item.querySelector('.website-url').value
+    })).filter(w => w.url);
+
+    const social = {};
+    ['instagram', 'tiktok', 'facebook', 'linkedin', 'twitter', 'youtube'].forEach(p => {
+      social[p] = document.getElementById(`social_${p}`).value.trim();
+    });
+
+    const payments = {};
+    ['cashapp', 'venmo', 'paypal', 'zelle'].forEach(p => {
+      payments[p] = document.getElementById(`payment_${p}`).value.trim();
+    });
+
+    return {
+      prefix: document.getElementById('prefix').value,
+      firstName: document.getElementById('firstName').value,
+      lastName: document.getElementById('lastName').value,
+      title: document.getElementById('title').value,
+      org: document.getElementById('org').value,
+      tagline: document.getElementById('tagline').value,
+      about: document.getElementById('about').value,
+      experience,
+      skills,
+      social,
+      payments,
+      notes: document.getElementById('notes').value,
+      phones,
+      emails,
+      websites,
+      calendlyUrl: document.getElementById('calendlyUrl').value,
+      address: document.getElementById('address').value
+    };
+  }
+
+  // Set this to your own email address before sending this form to friends.
+  const RECIPIENT_EMAIL = "you@example.com";
+
+  function formatAsText(d) {
+    const lines = [];
+    const name = [d.prefix, d.firstName, d.lastName].filter(Boolean).join(' ');
+    lines.push(`Name: ${name}`);
+    if (d.title) lines.push(`Title: ${d.title}`);
+    if (d.org) lines.push(`Organization: ${d.org}`);
+    if (d.tagline) lines.push(`Tagline: ${d.tagline}`);
+    if (d.about) lines.push(`\nAbout:\n${d.about}`);
+    if (d.experience.length) {
+      lines.push('\nExperience:');
+      d.experience.forEach(e => {
+        lines.push(`  ${e.role || ''}${e.company ? ' at ' + e.company : ''}${e.period ? ' (' + e.period + ')' : ''}`);
+        if (e.description) lines.push(`    ${e.description}`);
+      });
+    }
+    if (d.skills.length) lines.push(`\nSkills: ${d.skills.join(', ')}`);
+
+    if (d.phones.length) {
+      lines.push('\nPhone numbers:');
+      d.phones.forEach(p => lines.push(`  ${p.type}: ${p.number}`));
+    }
+    if (d.emails.length) {
+      lines.push('\nEmails:');
+      d.emails.forEach(e => lines.push(`  ${e.type}: ${e.address}`));
+    }
+    if (d.address) lines.push(`\nAddress: ${d.address}`);
+    if (d.websites.length) {
+      lines.push('\nWebsites:');
+      d.websites.forEach(w => lines.push(`  ${w.label}: ${w.url}`));
+    }
+
+    const socialLines = Object.entries(d.social).filter(([, v]) => v);
+    if (socialLines.length) {
+      lines.push('\nSocial media:');
+      socialLines.forEach(([platform, handle]) => lines.push(`  ${platform}: ${handle}`));
+    }
+
+    const paymentLines = Object.entries(d.payments || {}).filter(([, v]) => v);
+    if (paymentLines.length) {
+      lines.push('\nPayments:');
+      paymentLines.forEach(([platform, handle]) => lines.push(`  ${platform}: ${handle}`));
+    }
+
+    if (d.calendlyUrl) lines.push(`\nCalendly link: ${d.calendlyUrl}`);
+    if (d.notes) lines.push(`\nNotes:\n${d.notes}`);
+
+    lines.push('\n---\nDon\'t forget to attach a photo to this email if you\'d like one on your card!');
+    return lines.join('\n');
+  }
+
+  const SOCIAL_LABELS = {
+    instagram: { label: 'Instagram', abbr: 'IG' },
+    tiktok:    { label: 'TikTok',    abbr: 'TT' },
+    facebook:  { label: 'Facebook',  abbr: 'FB' },
+    linkedin:  { label: 'LinkedIn',  abbr: 'IN' },
+    twitter:   { label: 'X',         abbr: 'X'  },
+    youtube:   { label: 'YouTube',   abbr: 'YT' }
+  };
+
+  const PAYMENT_LABELS = {
+    cashapp: 'Cash App',
+    venmo: 'Venmo',
+    paypal: 'PayPal',
+    zelle: 'Zelle'
+  };
+
+  function renderPreview() {
+    const d = collectData();
+    const fullName = `${d.firstName || ''} ${d.lastName || ''}`.trim();
+    const initials = ((d.firstName || '')[0] || '') + ((d.lastName || '')[0] || '');
+
+    let roleLine = '';
+    if (d.title && d.org) roleLine = `${d.title} · ${d.org}`;
+    else roleLine = d.title || d.org || '';
+
+    const fieldRows = [];
+    d.phones.forEach(p => p.number && fieldRows.push({ label: p.type, value: p.number }));
+    d.emails.forEach(e => e.address && fieldRows.push({ label: e.type, value: e.address }));
+    if (d.address) fieldRows.push({ label: 'Address', value: d.address });
+    d.websites.forEach(w => w.url && fieldRows.push({ label: w.label, value: w.url.replace(/^https?:\/\//,'') }));
+
+    const paymentRows = Object.entries(d.payments || {})
+      .filter(([, v]) => v)
+      .map(([platform, handle]) => ({ label: PAYMENT_LABELS[platform] || platform, value: handle }));
+
+    const socialBadges = Object.entries(d.social)
+      .filter(([, v]) => v)
+      .map(([platform, handle]) => {
+        const cfg = SOCIAL_LABELS[platform] || { label: platform, abbr: platform.slice(0,2).toUpperCase() };
+        return `<span class="mc-badge">${cfg.abbr} ${cfg.label}</span>`;
+      }).join('');
+
+    const html = `
+      <div class="mc-avatar">${initials.toUpperCase() || '?'}</div>
+      <div class="mc-name">${fullName || 'Your Name'}</div>
+      ${d.tagline ? `<div class="mc-tagline">${d.tagline}</div>` : ''}
+      ${roleLine ? `<div class="mc-role">${roleLine}</div>` : ''}
+
+      ${d.about ? `
+        <div class="mc-section-label">About</div>
+        <p style="font-size:13px; line-height:1.6; color:var(--parchment);">${d.about}</p>
+      ` : ''}
+
+      ${d.experience.length ? `
+        <div class="mc-section-label">Experience</div>
+        ${d.experience.map(e => `
+          <div style="margin-bottom:10px;">
+            <div style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:13px;">${e.role || ''}</div>
+            <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted); margin-top:2px;">${[e.company, e.period].filter(Boolean).join(' · ')}</div>
+            ${e.description ? `<div style="font-size:12px; color:var(--parchment); margin-top:5px; line-height:1.5;">${e.description}</div>` : ''}
+          </div>
+        `).join('')}
+      ` : ''}
+
+      ${d.skills.length ? `
+        <div class="mc-section-label">Skills</div>
+        <div class="mc-social">${d.skills.map(s => `<span class="mc-badge">${s}</span>`).join('')}</div>
+      ` : ''}
+
+      ${socialBadges ? `
+        <div class="mc-section-label">Follow</div>
+        <div class="mc-social">${socialBadges}</div>
+      ` : ''}
+
+      ${paymentRows.length ? `
+        <div class="mc-section-label">Payment</div>
+        <div class="mc-fields">
+          ${paymentRows.map(r => `<div class="mc-field"><div class="mc-label">${r.label}</div><div class="mc-value">${r.value}</div></div>`).join('')}
+        </div>
+      ` : ''}
+
+      ${d.notes ? `
+        <div class="mc-section-label">Note</div>
+        <p style="font-size:12.5px; line-height:1.5; color:var(--parchment);">${d.notes}</p>
+      ` : ''}
+
+      <div class="mc-section-label">Contact</div>
+      ${fieldRows.length ? `
+        <div class="mc-fields">
+          ${fieldRows.map(r => `<div class="mc-field"><div class="mc-label">${r.label}</div><div class="mc-value">${r.value}</div></div>`).join('')}
+        </div>
+      ` : `<div class="mc-empty">No phone, email, or website entered yet</div>`}
+
+      ${d.calendlyUrl ? `<div class="mc-book">Book a Time</div>` : ''}
+    `;
+
+    document.getElementById('miniCard').innerHTML = html;
+  }
+
+  document.getElementById('previewBtn').addEventListener('click', () => {
+    renderPreview();
+    document.getElementById('previewOverlay').classList.add('open');
+  });
+  document.getElementById('closePreview').addEventListener('click', () => {
+    document.getElementById('previewOverlay').classList.remove('open');
+  });
+  document.getElementById('previewOverlay').addEventListener('click', (e) => {
+    if (e.target.id === 'previewOverlay') document.getElementById('previewOverlay').classList.remove('open');
+  });
+
+  document.getElementById('emailBtn').addEventListener('click', () => {
+    const data = collectData();
+    if (!data.firstName || !data.lastName) {
+      document.getElementById('statusEl').textContent = 'Please enter at least your first and last name.';
+      return;
+    }
+    const name = `${data.firstName} ${data.lastName}`;
+    const subject = encodeURIComponent(`Contact card info — ${name}`);
+    const body = encodeURIComponent(formatAsText(data));
+    window.location.href = `mailto:${RECIPIENT_EMAIL}?subject=${subject}&body=${body}`;
+    document.getElementById('statusEl').textContent = 'Your email app should be opening now — just hit send (and attach a photo if you\'d like one).';
+  });
+</script>
+
+</body>
+</html>

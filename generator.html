@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Card Generator</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --ink:#14171c; --surface:#1c2129; --surface-2:#242a34;
+    --copper:#b8763f; --copper-soft:#c98549; --parchment:#ede6d6;
+    --muted:#8b93a1; --line:#2e3542;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    background: var(--ink); color: var(--parchment);
+    font-family:'IBM Plex Sans', sans-serif;
+    margin:0; padding: 40px 20px 100px;
+  }
+  .wrap{ max-width: 640px; margin: 0 auto; }
+  h1{ font-family:'Space Grotesk', sans-serif; font-size: 26px; margin-bottom: 6px; }
+  .sub{ color: var(--muted); font-size: 14px; margin-bottom: 32px; }
+
+  fieldset{
+    border: 1px solid var(--line); border-radius: 14px;
+    padding: 20px; margin-bottom: 18px;
+  }
+  legend{
+    font-family:'IBM Plex Mono', monospace; font-size: 11px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--copper);
+    padding: 0 8px;
+  }
+
+  label{ display:block; font-size: 12.5px; color: var(--muted); margin: 12px 0 5px; }
+  label:first-child{ margin-top: 0; }
+  input[type=text], input[type=url], textarea{
+    width: 100%; padding: 10px 12px; background: var(--surface);
+    border: 1px solid var(--line); border-radius: 8px; color: var(--parchment);
+    font-family:'IBM Plex Sans', sans-serif; font-size: 14px;
+  }
+  input:focus, textarea:focus{ outline: none; border-color: var(--copper); }
+  textarea{ resize: vertical; min-height: 70px; }
+
+  .row2{ display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .row-dc{ display:grid; grid-template-columns: 108px 1fr; gap: 12px; align-items: end; }
+
+  .field-descriptor{
+    width: 100%; padding: 9px 10px; background: var(--surface-2);
+    border: 1px solid var(--line); border-radius: 8px; color: var(--muted);
+    font-family:'IBM Plex Mono', monospace; font-size: 12px;
+  }
+  select.field-descriptor{ cursor: pointer; }
+  .field-descriptor:focus{ outline:none; border-color: var(--copper); color: var(--parchment); }
+
+  .field-content{
+    width: 100%; padding: 10px 12px; background: var(--surface);
+    border: 1.5px solid var(--line); border-radius: 8px; color: var(--parchment);
+    font-family:'IBM Plex Sans', sans-serif; font-size: 14px;
+  }
+  .field-content:focus{ outline:none; border-color: var(--copper); }
+  .row3{ display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+  .repeat-item{
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 10px; padding: 14px; margin-bottom: 10px; position: relative;
+  }
+  .remove-btn{
+    position:absolute; top:10px; right:10px;
+    background: none; border: none; color: var(--muted);
+    cursor: pointer; font-size: 13px; font-family:'IBM Plex Mono', monospace;
+  }
+  .remove-btn:hover{ color: var(--copper); }
+
+  .add-btn{
+    background: var(--surface-2); border: 1px dashed var(--line);
+    color: var(--parchment); border-radius: 8px; padding: 10px 14px;
+    font-family:'IBM Plex Mono', monospace; font-size: 12.5px;
+    cursor: pointer; width: 100%; margin-top: 4px;
+  }
+  .add-btn:hover{ border-color: var(--copper); color: var(--copper-soft); }
+
+  .checkbox-row{ display:flex; align-items:center; gap: 8px; margin-top: 12px; }
+  .checkbox-row input{ width: auto; }
+  .checkbox-row label{ margin: 0; }
+
+  .actions{
+    position: sticky; bottom: 0; background: var(--ink);
+    padding: 18px 0; margin-top: 10px; display:flex; gap: 12px;
+    border-top: 1px solid var(--line);
+  }
+  .btn-primary{
+    flex:1; padding: 15px; background: var(--copper); color: var(--ink);
+    border: none; border-radius: 12px; font-family:'Space Grotesk', sans-serif;
+    font-weight: 700; font-size: 15px; cursor: pointer;
+  }
+  .btn-primary:hover{ background: var(--copper-soft); }
+  .btn-secondary{
+    padding: 15px 18px; background: var(--surface); color: var(--parchment);
+    border: 1px solid var(--line); border-radius: 12px;
+    font-family:'IBM Plex Mono', monospace; font-size: 13px; cursor: pointer;
+  }
+  .btn-secondary:hover{ border-color: var(--copper); }
+
+  .hint{ font-size: 11.5px; color: var(--muted); margin-top: 6px; line-height:1.5; }
+  .status{ text-align:center; font-family:'IBM Plex Mono', monospace; font-size: 12.5px; color: var(--copper-soft); margin-top: 10px; min-height: 18px; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <h1>Contact Card Generator</h1>
+  <p class="sub">Fill this in, download data.json, drop it into a copy of person-template/ with their photo. No code editing required.</p>
+
+  <form id="cardForm">
+
+    <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+      <div>
+        <div style="font-family:'Space Grotesk', sans-serif; font-weight: 600; font-size: 13.5px;">Editing someone already added?</div>
+        <div class="hint" style="margin-top: 3px;">Load their existing data.json to fill in every field below, then Download to save your changes over it.</div>
+      </div>
+      <button type="button" class="btn-secondary" id="loadFileBtn" style="white-space: nowrap;">Load data.json</button>
+      <input type="file" id="loadFileInput" accept="application/json" style="display: none;">
+    </div>
+
+    <fieldset>
+      <legend>Identity</legend>
+      <div class="row3">
+        <div><label>Prefix (optional)</label><input type="text" id="prefix" placeholder="Dr."></div>
+        <div><label>First name</label><input type="text" id="firstName" required></div>
+        <div><label>Last name</label><input type="text" id="lastName" required></div>
+      </div>
+      <div class="row2">
+        <div><label>Title</label><input type="text" id="title" placeholder="Marketing Director"></div>
+        <div><label>Organization</label><input type="text" id="org" placeholder="Acme Co"></div>
+      </div>
+      <label>Tagline (short, under the name)</label>
+      <input type="text" id="tagline" placeholder="Brand strategy · Storytelling · Growth">
+      <label>Photo filename</label>
+      <input type="text" id="photoFile" value="photo.jpg">
+      <div class="hint">This file needs to sit in the same folder as this person's index.html.</div>
+    </fieldset>
+
+    <fieldset>
+      <legend>About</legend>
+      <label>Narrative / bio (leave blank to hide this section)</label>
+      <textarea id="about" placeholder="A few sentences about who you are and what you do."></textarea>
+    </fieldset>
+
+    <fieldset>
+      <legend>Experience (optional)</legend>
+      <div id="experienceList"></div>
+      <button type="button" class="add-btn" id="addExperience">+ Add a role</button>
+    </fieldset>
+
+    <fieldset>
+      <legend>Skills (optional)</legend>
+      <label>Comma-separated</label>
+      <input type="text" id="skills" placeholder="Brand Strategy, Positioning, Public Speaking">
+    </fieldset>
+
+    <fieldset>
+      <legend>Social (optional — leave any blank to hide it)</legend>
+      <div class="row3">
+        <div><label>Instagram</label><input type="text" id="social_instagram" placeholder="handle"></div>
+        <div><label>TikTok</label><input type="text" id="social_tiktok" placeholder="handle"></div>
+        <div><label>Facebook</label><input type="text" id="social_facebook" placeholder="page name"></div>
+      </div>
+      <div class="row3">
+        <div><label>LinkedIn</label><input type="text" id="social_linkedin" placeholder="handle"></div>
+        <div><label>X / Twitter</label><input type="text" id="social_twitter" placeholder="handle"></div>
+        <div><label>YouTube</label><input type="text" id="social_youtube" placeholder="handle"></div>
+      </div>
+      <div class="hint">Just the handle/page name, not the full URL — e.g. "janedoe" not "instagram.com/janedoe".</div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Payments (optional — leave any blank to hide it)</legend>
+      <div class="row2">
+        <div><label>Cash App</label><input type="text" id="payment_cashapp" placeholder="$cashtag"></div>
+        <div><label>Venmo</label><input type="text" id="payment_venmo" placeholder="@username"></div>
+      </div>
+      <div class="row2">
+        <div><label>PayPal</label><input type="text" id="payment_paypal" placeholder="paypal.me username"></div>
+        <div><label>Zelle</label><input type="text" id="payment_zelle" placeholder="phone or email"></div>
+      </div>
+      <div class="hint">Cash App, Venmo, and PayPal show as tappable payment links. Zelle doesn't support a public link, so it's shown as plain info to copy — Zelle transfers are matched by phone/email inside your own banking app.</div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Phone numbers</legend>
+      <div id="phoneList"></div>
+      <button type="button" class="add-btn" id="addPhone">+ Add a phone number</button>
+    </fieldset>
+
+    <fieldset>
+      <legend>Email addresses</legend>
+      <div id="emailList"></div>
+      <button type="button" class="add-btn" id="addEmail">+ Add an email</button>
+    </fieldset>
+
+    <fieldset>
+      <legend>Address (optional)</legend>
+      <label>Physical / mailing address</label>
+      <input type="text" id="address" placeholder="123 Main St, Anytown, ST 12345">
+      <div class="hint">Shown as a tappable row that opens directions. Leave blank to hide it.</div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Websites</legend>
+      <div id="websiteList"></div>
+      <button type="button" class="add-btn" id="addWebsite">+ Add a website</button>
+    </fieldset>
+
+    <fieldset>
+      <legend>Note (optional)</legend>
+      <textarea id="notes" placeholder="Any short freeform note — hidden if left blank."></textarea>
+    </fieldset>
+
+    <fieldset>
+      <legend>Calendly (optional)</legend>
+      <label>Booking link</label>
+      <input type="url" id="calendlyUrl" placeholder="https://calendly.com/janedoe">
+      <div class="hint">Shows as a "Book a Time" button. Leave blank to hide it.</div>
+    </fieldset>
+
+    <fieldset>
+      <legend>QR Code</legend>
+      <div class="checkbox-row">
+        <input type="checkbox" id="showQR" checked>
+        <label for="showQR">Show a QR code linking back to this page</label>
+      </div>
+    </fieldset>
+
+  </form>
+
+  <div class="actions">
+    <button type="button" class="btn-primary" id="downloadBtn">Download data.json</button>
+    <button type="button" class="btn-secondary" id="copyBtn">Copy JSON</button>
+  </div>
+  <p class="status" id="statusEl"></p>
+</div>
+
+<script>
+  function repeatRow(container, fields, gridClass = 'row-dc') {
+    const div = document.createElement('div');
+    div.className = 'repeat-item';
+    div.innerHTML = `
+      <button type="button" class="remove-btn">✕ remove</button>
+      <div class="${gridClass}">${fields}</div>
+    `;
+    div.querySelector('.remove-btn').addEventListener('click', () => div.remove());
+    container.appendChild(div);
+    return div;
+  }
+
+  // Live-formats a phone number as it's typed: 10 digits -> (555) 123-4567,
+  // 11 digits starting with 1 -> +1 (555) 123-4567. Longer numbers (likely
+  // international) are left as digits/+ only, not forced into US formatting.
+  function formatPhoneInput(e) {
+    const input = e.target;
+    const raw = input.value;
+    const digits = raw.replace(/[^\d]/g, '').slice(0, 11);
+    let out = digits;
+    let prefix = '';
+    let d = digits;
+    if (d.length === 11 && d[0] === '1') { prefix = '+1 '; d = d.slice(1); }
+    if (d.length > 0 && d.length <= 10) {
+      if (d.length <= 3) out = prefix + d;
+      else if (d.length <= 6) out = `${prefix}(${d.slice(0,3)}) ${d.slice(3)}`;
+      else out = `${prefix}(${d.slice(0,3)}) ${d.slice(3,6)}-${d.slice(6,10)}`;
+    } else if (d.length > 10) {
+      out = raw.replace(/[^\d+]/g, '');
+    }
+    input.value = out;
+  }
+
+  function addPhoneRow(prefill = {}) {
+    const row = repeatRow(document.getElementById('phoneList'), `
+      <div>
+        <label>Type</label>
+        <select class="phone-type field-descriptor">
+          <option>Mobile</option>
+          <option>Work</option>
+          <option>Home</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div>
+        <label>Phone number</label>
+        <input type="tel" class="phone-number field-content" placeholder="(555) 123-4567" inputmode="tel">
+      </div>
+    `);
+    row.querySelector('.phone-number').addEventListener('input', formatPhoneInput);
+    if (prefill.type) row.querySelector('.phone-type').value = prefill.type;
+    if (prefill.number) row.querySelector('.phone-number').value = prefill.number;
+    return row;
+  }
+
+  function addEmailRow(prefill = {}) {
+    const row = repeatRow(document.getElementById('emailList'), `
+      <div>
+        <label>Type</label>
+        <select class="email-type field-descriptor">
+          <option>Personal</option>
+          <option>Work</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div>
+        <label>Email address</label>
+        <input type="email" class="email-address field-content" placeholder="jane@acme.com">
+      </div>
+    `);
+    if (prefill.type) row.querySelector('.email-type').value = prefill.type;
+    if (prefill.address) row.querySelector('.email-address').value = prefill.address;
+    return row;
+  }
+
+  function addWebsiteRow(prefill = {}) {
+    const row = repeatRow(document.getElementById('websiteList'), `
+      <div><label>Label</label><input type="text" class="website-label field-descriptor" placeholder="Website"></div>
+      <div><label>URL</label><input type="text" class="website-url field-content" placeholder="https://acme.com"></div>
+    `);
+    if (prefill.label) row.querySelector('.website-label').value = prefill.label;
+    if (prefill.url) row.querySelector('.website-url').value = prefill.url;
+    return row;
+  }
+
+  function addExperienceRow(prefill = {}) {
+    const div = document.createElement('div');
+    div.className = 'repeat-item';
+    div.innerHTML = `
+      <button type="button" class="remove-btn">✕ remove</button>
+      <div class="row2">
+        <div><label>Role</label><input type="text" class="exp-role" placeholder="Marketing Director"></div>
+        <div><label>Company</label><input type="text" class="exp-company" placeholder="Acme Co"></div>
+      </div>
+      <label>Period</label>
+      <input type="text" class="exp-period" placeholder="2022 — Present">
+      <label>Description</label>
+      <textarea class="exp-desc" placeholder="One or two sentences."></textarea>
+    `;
+    div.querySelector('.remove-btn').addEventListener('click', () => div.remove());
+    document.getElementById('experienceList').appendChild(div);
+    if (prefill.role) div.querySelector('.exp-role').value = prefill.role;
+    if (prefill.company) div.querySelector('.exp-company').value = prefill.company;
+    if (prefill.period) div.querySelector('.exp-period').value = prefill.period;
+    if (prefill.description) div.querySelector('.exp-desc').value = prefill.description;
+    return div;
+  }
+
+  document.getElementById('addPhone').addEventListener('click', () => addPhoneRow());
+  document.getElementById('addEmail').addEventListener('click', () => addEmailRow());
+  document.getElementById('addWebsite').addEventListener('click', () => addWebsiteRow());
+  document.getElementById('addExperience').addEventListener('click', () => addExperienceRow());
+
+  // Start with one phone, one email, and one website row pre-added, since almost everyone needs at least one
+  addPhoneRow();
+  addEmailRow();
+  addWebsiteRow();
+
+  function collectData() {
+    const phones = [...document.querySelectorAll('#phoneList .repeat-item')].map(item => ({
+      type: item.querySelector('.phone-type').value || 'Mobile',
+      number: item.querySelector('.phone-number').value
+    })).filter(p => p.number);
+
+    const emails = [...document.querySelectorAll('#emailList .repeat-item')].map(item => ({
+      type: item.querySelector('.email-type').value || 'Email',
+      address: item.querySelector('.email-address').value
+    })).filter(e => e.address);
+
+    const experience = [...document.querySelectorAll('#experienceList .repeat-item')].map(item => ({
+      role: item.querySelector('.exp-role').value,
+      company: item.querySelector('.exp-company').value,
+      period: item.querySelector('.exp-period').value,
+      description: item.querySelector('.exp-desc').value
+    })).filter(e => e.role || e.company);
+
+    const skills = document.getElementById('skills').value
+      .split(',').map(s => s.trim()).filter(Boolean);
+
+    const websites = [...document.querySelectorAll('#websiteList .repeat-item')].map(item => ({
+      label: item.querySelector('.website-label').value || 'Website',
+      url: item.querySelector('.website-url').value
+    })).filter(w => w.url);
+
+    const social = {};
+    ['instagram', 'tiktok', 'facebook', 'linkedin', 'twitter', 'youtube'].forEach(p => {
+      social[p] = document.getElementById(`social_${p}`).value.trim();
+    });
+
+    const payments = {};
+    ['cashapp', 'venmo', 'paypal', 'zelle'].forEach(p => {
+      payments[p] = document.getElementById(`payment_${p}`).value.trim();
+    });
+
+    return {
+      prefix: document.getElementById('prefix').value,
+      firstName: document.getElementById('firstName').value,
+      lastName: document.getElementById('lastName').value,
+      title: document.getElementById('title').value,
+      org: document.getElementById('org').value,
+      tagline: document.getElementById('tagline').value,
+      about: document.getElementById('about').value,
+      experience,
+      skills,
+      social,
+      payments,
+      notes: document.getElementById('notes').value,
+      phones,
+      emails,
+      websites,
+      calendlyUrl: document.getElementById('calendlyUrl').value,
+      address: document.getElementById('address').value,
+      photoFile: document.getElementById('photoFile').value || 'photo.jpg',
+      showQR: document.getElementById('showQR').checked
+    };
+  }
+
+  function setVal(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.value = value || '';
+  }
+
+  function populateForm(d) {
+    setVal('prefix', d.prefix);
+    setVal('firstName', d.firstName);
+    setVal('lastName', d.lastName);
+    setVal('title', d.title);
+    setVal('org', d.org);
+    setVal('tagline', d.tagline);
+    setVal('about', d.about);
+    setVal('notes', d.notes);
+    setVal('calendlyUrl', d.calendlyUrl);
+    setVal('address', d.address);
+    setVal('photoFile', d.photoFile || 'photo.jpg');
+    setVal('skills', (d.skills || []).join(', '));
+    document.getElementById('showQR').checked = d.showQR !== false;
+
+    ['instagram', 'tiktok', 'facebook', 'linkedin', 'twitter', 'youtube'].forEach(p => {
+      setVal(`social_${p}`, (d.social || {})[p]);
+    });
+    ['cashapp', 'venmo', 'paypal', 'zelle'].forEach(p => {
+      setVal(`payment_${p}`, (d.payments || {})[p]);
+    });
+
+    // Clear existing repeatable rows, then rebuild from the loaded data
+    document.getElementById('phoneList').innerHTML = '';
+    document.getElementById('emailList').innerHTML = '';
+    document.getElementById('websiteList').innerHTML = '';
+    document.getElementById('experienceList').innerHTML = '';
+
+    (d.phones && d.phones.length ? d.phones : [{}]).forEach(p => addPhoneRow(p));
+    (d.emails && d.emails.length ? d.emails : [{}]).forEach(e => addEmailRow(e));
+    (d.websites && d.websites.length ? d.websites : [{}]).forEach(w => addWebsiteRow(w));
+    (d.experience || []).forEach(e => addExperienceRow(e));
+
+    document.getElementById('statusEl').textContent = `Loaded ${d.firstName || ''} ${d.lastName || ''}'s info — edit anything, then Download to save your changes.`;
+  }
+
+  document.getElementById('loadFileBtn').addEventListener('click', () => {
+    document.getElementById('loadFileInput').click();
+  });
+
+  document.getElementById('loadFileInput').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const data = JSON.parse(reader.result);
+        populateForm(data);
+      } catch (err) {
+        document.getElementById('statusEl').textContent = 'Could not read that file — make sure it\'s a valid data.json.';
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = ''; // allow reloading the same file again later if needed
+  });
+
+  document.getElementById('downloadBtn').addEventListener('click', () => {
+    const data = collectData();
+    if (!data.firstName || !data.lastName) {
+      document.getElementById('statusEl').textContent = 'First and last name are required.';
+      return;
+    }
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'data.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    document.getElementById('statusEl').textContent = 'Downloaded — place this in the person\'s folder alongside their photo and the template index.html.';
+  });
+
+  document.getElementById('copyBtn').addEventListener('click', async () => {
+    const data = collectData();
+    const text = JSON.stringify(data, null, 2);
+    try {
+      // Modern Clipboard API — blocked when the page is opened as a local
+      // file (file://) rather than served over http/https.
+      await navigator.clipboard.writeText(text);
+      document.getElementById('statusEl').textContent = 'Copied to clipboard.';
+    } catch (err) {
+      // Fallback: legacy copy method, which still works when opened locally
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      let copied = false;
+      try { copied = document.execCommand('copy'); } catch (e2) { /* ignore */ }
+      document.body.removeChild(ta);
+      document.getElementById('statusEl').textContent = copied
+        ? 'Copied to clipboard.'
+        : 'Could not copy automatically — use the Download button instead.';
+    }
+  });
+</script>
+
+</body>
+</html>
