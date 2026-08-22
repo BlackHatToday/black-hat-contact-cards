@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Property Listing Generator</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --ink:#14171c; --surface:#1c2129; --surface-2:#242a34;
+    --copper:#b8763f; --copper-soft:#c98549; --parchment:#ede6d6;
+    --muted:#8b93a1; --line:#2e3542;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    background: var(--ink); color: var(--parchment);
+    font-family:'IBM Plex Sans', sans-serif;
+    margin:0; padding: 40px 20px 100px;
+  }
+  .wrap{ max-width: 640px; margin: 0 auto; }
+  h1{ font-family:'Space Grotesk', sans-serif; font-size: 26px; margin-bottom: 6px; }
+  .sub{ color: var(--muted); font-size: 14px; margin-bottom: 32px; }
+
+  fieldset{
+    border: 1px solid var(--line); border-radius: 14px;
+    padding: 20px; margin-bottom: 18px;
+  }
+  legend{
+    font-family:'IBM Plex Mono', monospace; font-size: 11px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--copper);
+    padding: 0 8px;
+  }
+
+  label{ display:block; font-size: 12.5px; color: var(--muted); margin: 12px 0 5px; }
+  label:first-child{ margin-top: 0; }
+  input[type=text], input[type=url], input[type=number], textarea{
+    width: 100%; padding: 10px 12px; background: var(--surface);
+    border: 1px solid var(--line); border-radius: 8px; color: var(--parchment);
+    font-family:'IBM Plex Sans', sans-serif; font-size: 14px;
+  }
+  input:focus, textarea:focus{ outline: none; border-color: var(--copper); }
+  textarea{ resize: vertical; min-height: 70px; }
+
+  .row2{ display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .row3{ display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+
+  .repeat-item{
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 10px; padding: 14px; margin-bottom: 10px; position: relative;
+  }
+  .remove-btn{
+    position:absolute; top:10px; right:10px;
+    background: none; border: none; color: var(--muted);
+    cursor: pointer; font-size: 13px; font-family:'IBM Plex Mono', monospace;
+  }
+  .remove-btn:hover{ color: var(--copper); }
+
+  .add-btn{
+    background: var(--surface-2); border: 1px dashed var(--line);
+    color: var(--parchment); border-radius: 8px; padding: 10px 14px;
+    font-family:'IBM Plex Mono', monospace; font-size: 12.5px;
+    cursor: pointer; width: 100%; margin-top: 4px;
+  }
+  .add-btn:hover{ border-color: var(--copper); color: var(--copper-soft); }
+
+  .checkbox-row{ display:flex; align-items:center; gap: 8px; margin-top: 12px; }
+  .checkbox-row input{ width: auto; }
+  .checkbox-row label{ margin: 0; }
+
+  .actions{
+    position: sticky; bottom: 0; background: var(--ink);
+    padding: 18px 0; margin-top: 10px; display:flex; gap: 12px;
+    border-top: 1px solid var(--line);
+  }
+  .btn-primary{
+    flex:1; padding: 15px; background: var(--copper); color: var(--ink);
+    border: none; border-radius: 12px; font-family:'Space Grotesk', sans-serif;
+    font-weight: 700; font-size: 15px; cursor: pointer;
+  }
+  .btn-primary:hover{ background: var(--copper-soft); }
+  .btn-secondary{
+    padding: 15px 18px; background: var(--surface); color: var(--parchment);
+    border: 1px solid var(--line); border-radius: 12px;
+    font-family:'IBM Plex Mono', monospace; font-size: 13px; cursor: pointer;
+  }
+  .btn-secondary:hover{ border-color: var(--copper); }
+
+  .hint{ font-size: 11.5px; color: var(--muted); margin-top: 6px; line-height:1.5; }
+  .status{ text-align:center; font-family:'IBM Plex Mono', monospace; font-size: 12.5px; color: var(--copper-soft); margin-top: 10px; min-height: 18px; }
+
+  /* ---- preview overlay ---- */
+  .overlay{
+    display:none; position:fixed; inset:0; background: rgba(10,11,14,0.85);
+    z-index: 100; align-items:flex-start; justify-content:center;
+    padding: 40px 16px; overflow-y:auto;
+  }
+  .overlay.open{ display:flex; }
+  .preview-close{
+    position: sticky; top: 0; align-self:flex-end;
+    background: var(--surface); border:1px solid var(--line); color: var(--parchment);
+    border-radius: 999px; width: 34px; height: 34px; font-size: 16px; cursor:pointer;
+    margin-bottom: -20px; margin-left: auto;
+  }
+  .preview-note{
+    max-width: 380px; margin: 0 auto 14px; text-align:center;
+    font-family:'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted);
+    line-height: 1.6;
+  }
+  .mini-card{
+    width: 100%; max-width: 380px;
+    background: radial-gradient(circle at 50% 0%, #1a1f27 0%, var(--ink) 55%);
+    border: 1px solid var(--line); border-radius: 20px;
+    padding: 22px; margin: 0 auto;
+    font-family:'IBM Plex Sans', sans-serif; color: var(--parchment);
+  }
+  .mc-hero{
+    width: 100%; aspect-ratio: 4/3; border-radius: 12px;
+    background: var(--surface-2); border: 1px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+    color: var(--muted); font-family:'IBM Plex Mono', monospace; font-size: 12px;
+    margin-bottom: 16px;
+  }
+  .mc-address{ text-align:center; font-family:'Space Grotesk', sans-serif; font-weight: 700; font-size: 19px; line-height:1.3; }
+  .mc-price{ text-align:center; font-family:'Space Grotesk', sans-serif; font-weight: 700; font-size: 16px; color: var(--copper); margin-top: 4px; }
+  .mc-stats{ display:flex; justify-content:center; gap: 8px; margin-top: 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 8px; }
+  .mc-stat{ flex:1; text-align:center; }
+  .mc-stat-num{ font-family:'Space Grotesk', sans-serif; font-weight:700; font-size: 15px; }
+  .mc-stat-label{ font-family:'IBM Plex Mono', monospace; font-size: 9px; color: var(--muted); text-transform: uppercase; margin-top: 2px; }
+  .mc-section-label{
+    display:flex; align-items:center; gap:8px; margin: 18px 0 10px;
+    font-family:'IBM Plex Mono', monospace; font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--copper);
+  }
+  .mc-section-label::after{ content:''; flex:1; height:1px; background: var(--line); }
+  .mc-fields{ background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow:hidden; }
+  .mc-field{ padding: 10px 14px; border-bottom: 1px solid var(--line); }
+  .mc-field:last-child{ border-bottom:none; }
+  .mc-field .mc-label{
+    font-family:'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 2px;
+  }
+  .mc-field .mc-value{ font-family:'IBM Plex Mono', monospace; font-size: 13px; color: var(--parchment); }
+  .mc-book{
+    display:block; text-align:center; margin-top: 16px; padding: 12px;
+    background: var(--copper); color: var(--ink); border-radius: 12px;
+    font-family:'Space Grotesk', sans-serif; font-weight:600; font-size: 13.5px;
+  }
+  .mc-gallery-hint{ font-size:11.5px; color:var(--muted); margin-top:12px; text-align:center; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <h1>Property Listing Generator</h1>
+  <p class="sub">Fill this in, download data.json, drop it into a copy of property-template/ with the listing photos. No code editing required.</p>
+
+  <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+    <div>
+      <div style="font-family:'Space Grotesk', sans-serif; font-weight: 600; font-size: 13.5px;">Editing a listing already added?</div>
+      <div class="hint" style="margin-top: 3px;">Load its existing data.json to fill in every field below, then Download to save your changes over it.</div>
+    </div>
+    <button type="button" class="btn-secondary" id="loadFileBtn" style="white-space: nowrap;">Load data.json</button>
+    <input type="file" id="loadFileInput" accept="application/json" style="display: none;">
+  </div>
+
+  <form id="propertyForm">
+
+    <fieldset>
+      <legend>Property</legend>
+      <label>Address</label>
+      <input type="text" id="address" placeholder="123 Main St, Anytown, ST 12345">
+      <div class="row2">
+        <div><label>Price</label><input type="text" id="price" placeholder="$450,000"></div>
+        <div><label>Square Feet</label><input type="text" id="sqft" placeholder="1,850"></div>
+      </div>
+      <div class="row2">
+        <div><label>Beds</label><input type="number" id="beds" placeholder="3" min="0"></div>
+        <div><label>Baths</label><input type="number" id="baths" placeholder="2" min="0" step="0.5"></div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Description</legend>
+      <label>A few sentences about the home (optional)</label>
+      <textarea id="description" placeholder="A bright, updated home just minutes from downtown..."></textarea>
+    </fieldset>
+
+    <fieldset>
+      <legend>Photos</legend>
+      <label>Main / hero photo filename</label>
+      <input type="text" id="heroPhoto" placeholder="hero.jpg" value="hero.jpg">
+      <div class="hint">This file needs to sit in the same folder as this listing's index.html.</div>
+      <label style="margin-top:16px;">Additional gallery photos (optional)</label>
+      <div id="photosList"></div>
+      <button type="button" class="add-btn" id="addPhoto">+ Add a photo</button>
+    </fieldset>
+
+    <fieldset>
+      <legend>Listing Agent</legend>
+      <label>Agent name</label>
+      <input type="text" id="agentName" placeholder="Jane Doe">
+      <label>Agent photo filename (optional)</label>
+      <input type="text" id="agentPhotoFile" placeholder="agent.jpg" value="agent.jpg">
+      <div class="row2" style="margin-top:12px;">
+        <div><label>Agent phone</label><input type="tel" id="agentPhone" placeholder="(555) 123-4567" inputmode="tel"></div>
+        <div><label>Agent email</label><input type="email" id="agentEmail" placeholder="jane@realty.com"></div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Showing / Booking</legend>
+      <label>Booking link (Calendly or similar)</label>
+      <input type="url" id="bookingUrl" placeholder="https://calendly.com/janedoe/showing">
+      <label>Button text</label>
+      <input type="text" id="bookingLabel" placeholder="Schedule a Showing" value="Schedule a Showing">
+      <div class="hint">Leave the link blank to hide the button entirely.</div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Link to Another Listing (optional)</legend>
+      <label>URL of the other listing's card</label>
+      <input type="url" id="otherPropertyUrl" placeholder="https://blackhatcards.community/for-sale-456-oak-st/">
+      <label>Button text</label>
+      <input type="text" id="otherPropertyLabel" placeholder="View Another Listing" value="View Another Listing">
+      <div class="hint">Only fill this in once the other listing's card already exists and is live — this just links two existing cards together, it doesn't create a second card.</div>
+    </fieldset>
+
+    <fieldset>
+      <legend>QR Code</legend>
+      <div class="checkbox-row">
+        <input type="checkbox" id="showQR" checked>
+        <label for="showQR">Show a QR code linking back to this listing</label>
+      </div>
+    </fieldset>
+
+  </form>
+
+  <div class="actions">
+    <button type="button" class="btn-secondary" id="previewBtn">Preview</button>
+    <button type="button" class="btn-primary" id="downloadBtn">Download data.json</button>
+    <button type="button" class="btn-secondary" id="copyBtn">Copy JSON</button>
+  </div>
+  <p class="status" id="statusEl"></p>
+</div>
+
+<div class="overlay" id="previewOverlay">
+  <div style="width:100%; max-width:380px; margin:0 auto;">
+    <button type="button" class="preview-close" id="closePreview">✕</button>
+    <p class="preview-note">This is roughly how the listing card will look. Photos aren't shown here since they're referenced by filename, not uploaded in this form.</p>
+    <div class="mini-card" id="miniCard"></div>
+  </div>
+</div>
+
+<script>
+  function repeatRow(container, fields) {
+    const div = document.createElement('div');
+    div.className = 'repeat-item';
+    div.innerHTML = `
+      <button type="button" class="remove-btn">✕ remove</button>
+      ${fields}
+    `;
+    div.querySelector('.remove-btn').addEventListener('click', () => div.remove());
+    container.appendChild(div);
+    return div;
+  }
+
+  function addPhotoRow(prefill = '') {
+    const row = repeatRow(document.getElementById('photosList'), `
+      <label>Photo filename</label>
+      <input type="text" class="photo-file" placeholder="photo1.jpg">
+    `);
+    if (prefill) row.querySelector('.photo-file').value = prefill;
+    return row;
+  }
+
+  function formatPhoneInput(e) {
+    const input = e.target;
+    const raw = input.value;
+    const digits = raw.replace(/[^\d]/g, '').slice(0, 11);
+    let out = digits;
+    let prefix = '';
+    let d = digits;
+    if (d.length === 11 && d[0] === '1') { prefix = '+1 '; d = d.slice(1); }
+    if (d.length > 0 && d.length <= 10) {
+      if (d.length <= 3) out = prefix + d;
+      else if (d.length <= 6) out = `${prefix}(${d.slice(0,3)}) ${d.slice(3)}`;
+      else out = `${prefix}(${d.slice(0,3)}) ${d.slice(3,6)}-${d.slice(6,10)}`;
+    } else if (d.length > 10) {
+      out = raw.replace(/[^\d+]/g, '');
+    }
+    input.value = out;
+  }
+  document.getElementById('agentPhone').addEventListener('input', formatPhoneInput);
+
+  document.getElementById('addPhoto').addEventListener('click', () => addPhotoRow());
+
+  function collectData() {
+    const photos = [...document.querySelectorAll('#photosList .photo-file')]
+      .map(el => el.value.trim())
+      .filter(Boolean);
+
+    return {
+      address: document.getElementById('address').value,
+      price: document.getElementById('price').value,
+      sqft: document.getElementById('sqft').value,
+      beds: document.getElementById('beds').value,
+      baths: document.getElementById('baths').value,
+      description: document.getElementById('description').value,
+      heroPhoto: document.getElementById('heroPhoto').value || 'hero.jpg',
+      photos,
+      agentName: document.getElementById('agentName').value,
+      agentPhotoFile: document.getElementById('agentPhotoFile').value || 'agent.jpg',
+      agentPhone: document.getElementById('agentPhone').value,
+      agentEmail: document.getElementById('agentEmail').value,
+      bookingUrl: document.getElementById('bookingUrl').value,
+      bookingLabel: document.getElementById('bookingLabel').value || 'Schedule a Showing',
+      otherPropertyUrl: document.getElementById('otherPropertyUrl').value,
+      otherPropertyLabel: document.getElementById('otherPropertyLabel').value || 'View Another Listing',
+      showQR: document.getElementById('showQR').checked
+    };
+  }
+
+  function renderPreview() {
+    const d = collectData();
+
+    const stats = [];
+    if (d.beds !== '' && d.beds != null) stats.push({ num: d.beds, label: 'Beds' });
+    if (d.baths !== '' && d.baths != null) stats.push({ num: d.baths, label: 'Baths' });
+    if (d.sqft) stats.push({ num: d.sqft, label: 'Sq Ft' });
+
+    const agentRows = [];
+    if (d.agentPhone) agentRows.push({ label: 'Mobile', value: d.agentPhone });
+    if (d.agentEmail) agentRows.push({ label: 'Email', value: d.agentEmail });
+
+    const html = `
+      <div class="mc-hero">${d.heroPhoto ? `Photo: ${d.heroPhoto}` : 'No photo set'}</div>
+      <div class="mc-address">${d.address || 'Property Address'}</div>
+      ${d.price ? `<div class="mc-price">${d.price}</div>` : ''}
+
+      ${stats.length ? `
+        <div class="mc-stats">
+          ${stats.map(s => `<div class="mc-stat"><div class="mc-stat-num">${s.num}</div><div class="mc-stat-label">${s.label}</div></div>`).join('')}
+        </div>
+      ` : ''}
+
+      ${d.description ? `
+        <div class="mc-section-label">About This Home</div>
+        <p style="font-size:13px; line-height:1.6; color:var(--parchment);">${d.description}</p>
+      ` : ''}
+
+      ${d.photos.length ? `<div class="mc-gallery-hint">+ ${d.photos.length} gallery photo${d.photos.length > 1 ? 's' : ''} (not shown in this preview)</div>` : ''}
+
+      ${d.agentName || agentRows.length ? `
+        <div class="mc-section-label">Listing Agent</div>
+        ${d.agentName ? `<div style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px; margin-bottom:8px;">${d.agentName}</div>` : ''}
+        ${agentRows.length ? `
+          <div class="mc-fields">
+            ${agentRows.map(r => `<div class="mc-field"><div class="mc-label">${r.label}</div><div class="mc-value">${r.value}</div></div>`).join('')}
+          </div>
+        ` : ''}
+      ` : ''}
+
+      ${d.bookingUrl ? `<div class="mc-book">${d.bookingLabel || 'Schedule a Showing'}</div>` : ''}
+      ${d.otherPropertyUrl ? `
+        <div class="mc-section-label">Another Listing</div>
+        <div class="mc-book" style="background:transparent; border:1px solid var(--copper); color:var(--copper-soft);">${d.otherPropertyLabel || 'View Another Listing'}</div>
+      ` : ''}
+    `;
+
+    document.getElementById('miniCard').innerHTML = html;
+  }
+
+  document.getElementById('previewBtn').addEventListener('click', () => {
+    renderPreview();
+    document.getElementById('previewOverlay').classList.add('open');
+  });
+  document.getElementById('closePreview').addEventListener('click', () => {
+    document.getElementById('previewOverlay').classList.remove('open');
+  });
+  document.getElementById('previewOverlay').addEventListener('click', (e) => {
+    if (e.target.id === 'previewOverlay') document.getElementById('previewOverlay').classList.remove('open');
+  });
+
+  function setVal(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.value = value || '';
+  }
+
+  function populateForm(d) {
+    setVal('address', d.address);
+    setVal('price', d.price);
+    setVal('sqft', d.sqft);
+    setVal('beds', d.beds);
+    setVal('baths', d.baths);
+    setVal('description', d.description);
+    setVal('heroPhoto', d.heroPhoto || 'hero.jpg');
+    setVal('agentName', d.agentName);
+    setVal('agentPhotoFile', d.agentPhotoFile || 'agent.jpg');
+    setVal('agentPhone', d.agentPhone);
+    setVal('agentEmail', d.agentEmail);
+    setVal('bookingUrl', d.bookingUrl);
+    setVal('bookingLabel', d.bookingLabel || 'Schedule a Showing');
+    setVal('otherPropertyUrl', d.otherPropertyUrl);
+    setVal('otherPropertyLabel', d.otherPropertyLabel || 'View Another Listing');
+    document.getElementById('showQR').checked = d.showQR !== false;
+
+    document.getElementById('photosList').innerHTML = '';
+    (d.photos || []).forEach(p => addPhotoRow(p));
+
+    document.getElementById('statusEl').textContent = `Loaded ${d.address || 'this listing'} — edit anything, then Download to save your changes.`;
+  }
+
+  document.getElementById('loadFileBtn').addEventListener('click', () => {
+    document.getElementById('loadFileInput').click();
+  });
+
+  document.getElementById('loadFileInput').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const data = JSON.parse(reader.result);
+        populateForm(data);
+      } catch (err) {
+        document.getElementById('statusEl').textContent = 'Could not read that file — make sure it\'s a valid data.json.';
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  });
+
+  document.getElementById('downloadBtn').addEventListener('click', () => {
+    const data = collectData();
+    if (!data.address) {
+      document.getElementById('statusEl').textContent = 'Please enter at least the address.';
+      return;
+    }
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'data.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    document.getElementById('statusEl').textContent = 'Downloaded — place this in the listing\'s folder alongside its photos and the template index.html.';
+  });
+
+  document.getElementById('copyBtn').addEventListener('click', async () => {
+    const data = collectData();
+    const text = JSON.stringify(data, null, 2);
+    try {
+      await navigator.clipboard.writeText(text);
+      document.getElementById('statusEl').textContent = 'Copied to clipboard.';
+    } catch (err) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      let copied = false;
+      try { copied = document.execCommand('copy'); } catch (e2) { /* ignore */ }
+      document.body.removeChild(ta);
+      document.getElementById('statusEl').textContent = copied
+        ? 'Copied to clipboard.'
+        : 'Could not copy automatically — use the Download button instead.';
+    }
+  });
+
+  // Start with one blank photo row, since most listings have at least a couple extra shots
+  addPhotoRow();
+</script>
+
+</body>
+</html>
