@@ -26,6 +26,7 @@
     "paypal": "",
     "zelle": ""
   },
+  "paymentSectionLabel": "Payment",
   "notes": "",
   "phones": [
     {
@@ -36,6 +37,7 @@
   "emails": [],
   "websites": [],
   "calendlyUrl": "",
+  "bookingLabel": "Book a Time",
   "address": "604 North 1st Street Richmond  VA  23219",
   "photoFile": "photo.jpg",
   "showQR": true
