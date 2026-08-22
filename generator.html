@@ -104,6 +104,72 @@
 
   .hint{ font-size: 11.5px; color: var(--muted); margin-top: 6px; line-height:1.5; }
   .status{ text-align:center; font-family:'IBM Plex Mono', monospace; font-size: 12.5px; color: var(--copper-soft); margin-top: 10px; min-height: 18px; }
+
+  /* ---- preview overlay ---- */
+  .overlay{
+    display:none; position:fixed; inset:0; background: rgba(10,11,14,0.85);
+    z-index: 100; align-items:flex-start; justify-content:center;
+    padding: 40px 16px; overflow-y:auto;
+  }
+  .overlay.open{ display:flex; }
+  .preview-close{
+    position: sticky; top: 0; align-self:flex-end;
+    background: var(--surface); border:1px solid var(--line); color: var(--parchment);
+    border-radius: 999px; width: 34px; height: 34px; font-size: 16px; cursor:pointer;
+    margin-bottom: -20px; margin-left: auto;
+  }
+  .preview-note{
+    max-width: 380px; margin: 0 auto 14px; text-align:center;
+    font-family:'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted);
+    line-height: 1.6;
+  }
+  .mini-card{
+    width: 100%; max-width: 380px;
+    background: radial-gradient(circle at 50% 0%, #1a1f27 0%, var(--ink) 55%);
+    border: 1px solid var(--line); border-radius: 20px;
+    padding: 36px 26px; margin: 0 auto;
+    font-family:'IBM Plex Sans', sans-serif; color: var(--parchment);
+  }
+  .mc-avatar{
+    width: 80px; height: 80px; border-radius: 50%; margin: 0 auto 16px;
+    background: var(--surface-2); border: 2px solid var(--copper);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Space Grotesk', sans-serif; font-weight: 600; font-size: 26px; color: var(--copper);
+  }
+  .mc-name{ text-align:center; font-family:'Space Grotesk', sans-serif; font-weight: 700; font-size: 24px; }
+  .mc-tagline{ text-align:center; font-family:'IBM Plex Mono', monospace; font-size: 12.5px; color: var(--copper-soft); margin-top: 6px; }
+  .mc-role{ text-align:center; font-size: 13px; color: var(--muted); margin-top: 5px; }
+  .mc-section-label{
+    display:flex; align-items:center; gap:8px; margin: 18px 0 10px;
+    font-family:'IBM Plex Mono', monospace; font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--copper);
+  }
+  .mc-section-label::after{ content:''; flex:1; height:1px; background: var(--line); }
+  .mc-fields{ background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow:hidden; }
+  .mc-field{ padding: 10px 14px; border-bottom: 1px solid var(--line); }
+  .mc-field:last-child{ border-bottom:none; }
+  .mc-field .mc-label{
+    font-family:'IBM Plex Mono', monospace; font-size: 9px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 2px;
+  }
+  .mc-field .mc-value{ font-family:'IBM Plex Mono', monospace; font-size: 13px; color: var(--parchment); }
+  .mc-social{ display:flex; flex-wrap:wrap; gap: 7px; }
+  .mc-badge{
+    display:flex; align-items:center; gap:6px; padding:6px 11px;
+    background: var(--surface); border:1px solid var(--line); border-radius:999px;
+    font-family:'IBM Plex Mono', monospace; font-size: 11px; color: var(--parchment);
+  }
+  .mc-book{
+    display:block; text-align:center; margin-top: 16px; padding: 12px;
+    background: var(--copper); color: var(--ink); border-radius: 12px;
+    font-family:'Space Grotesk', sans-serif; font-weight:600; font-size: 13.5px;
+  }
+  .mc-save{
+    display:block; text-align:center; margin-top: 16px; padding: 14px;
+    background: var(--copper); color: var(--ink); border-radius: 14px;
+    font-family:'Space Grotesk', sans-serif; font-weight:600; font-size: 15px;
+  }
+  .mc-empty{ text-align:center; color: var(--muted); font-size: 12.5px; padding: 20px 0; }
 </style>
 </head>
 <body>
@@ -176,7 +242,10 @@
 
     <fieldset>
       <legend>Payments (optional — leave any blank to hide it)</legend>
-      <div class="row2">
+      <label>Section title on the card</label>
+      <input type="text" id="paymentSectionLabel" placeholder="Payment" value="Payment">
+      <div class="hint">Change this to "Donate" or anything else that fits the person's situation.</div>
+      <div class="row2" style="margin-top:12px;">
         <div><label>Cash App</label><input type="text" id="payment_cashapp" placeholder="$cashtag"></div>
         <div><label>Venmo</label><input type="text" id="payment_venmo" placeholder="@username"></div>
       </div>
@@ -221,7 +290,9 @@
       <legend>Calendly (optional)</legend>
       <label>Booking link</label>
       <input type="url" id="calendlyUrl" placeholder="https://calendly.com/janedoe">
-      <div class="hint">Shows as a "Book a Time" button. Leave blank to hide it.</div>
+      <label>Button text</label>
+      <input type="text" id="bookingLabel" placeholder="Book a Time" value="Book a Time">
+      <div class="hint">Change this to "Schedule a Showing," "Request a Quote," or whatever fits. Leave the link blank to hide the button entirely.</div>
     </fieldset>
 
     <fieldset>
@@ -235,10 +306,19 @@
   </form>
 
   <div class="actions">
+    <button type="button" class="btn-secondary" id="previewBtn">Preview</button>
     <button type="button" class="btn-primary" id="downloadBtn">Download data.json</button>
     <button type="button" class="btn-secondary" id="copyBtn">Copy JSON</button>
   </div>
   <p class="status" id="statusEl"></p>
+</div>
+
+<div class="overlay" id="previewOverlay">
+  <div style="width:100%; max-width:380px; margin:0 auto;">
+    <button type="button" class="preview-close" id="closePreview">✕</button>
+    <p class="preview-note">This is roughly how the card will look. Photos aren't shown here since they're referenced by filename, not uploaded in this form.</p>
+    <div class="mini-card" id="miniCard"></div>
+  </div>
 </div>
 
 <script>
@@ -408,16 +488,129 @@
       skills,
       social,
       payments,
+      paymentSectionLabel: document.getElementById('paymentSectionLabel').value || 'Payment',
       notes: document.getElementById('notes').value,
       phones,
       emails,
       websites,
       calendlyUrl: document.getElementById('calendlyUrl').value,
+      bookingLabel: document.getElementById('bookingLabel').value || 'Book a Time',
       address: document.getElementById('address').value,
       photoFile: document.getElementById('photoFile').value || 'photo.jpg',
       showQR: document.getElementById('showQR').checked
     };
   }
+
+  const SOCIAL_LABELS = {
+    instagram: { label: 'Instagram', abbr: 'IG' },
+    tiktok:    { label: 'TikTok',    abbr: 'TT' },
+    facebook:  { label: 'Facebook',  abbr: 'FB' },
+    linkedin:  { label: 'LinkedIn',  abbr: 'IN' },
+    twitter:   { label: 'X',         abbr: 'X'  },
+    youtube:   { label: 'YouTube',   abbr: 'YT' }
+  };
+
+  const PAYMENT_LABELS = {
+    cashapp: 'Cash App',
+    venmo: 'Venmo',
+    paypal: 'PayPal',
+    zelle: 'Zelle'
+  };
+
+  function renderPreview() {
+    const d = collectData();
+    const fullName = [d.prefix, d.firstName, d.lastName].filter(Boolean).join(' ');
+    const initials = ((d.firstName || '')[0] || '') + ((d.lastName || '')[0] || '');
+
+    let roleLine = '';
+    if (d.title && d.org) roleLine = `${d.title} · ${d.org}`;
+    else roleLine = d.title || d.org || '';
+
+    const fieldRows = [];
+    d.phones.forEach(p => p.number && fieldRows.push({ label: p.type, value: p.number }));
+    d.emails.forEach(e => e.address && fieldRows.push({ label: e.type, value: e.address }));
+    if (d.address) fieldRows.push({ label: 'Address', value: d.address });
+    d.websites.forEach(w => w.url && fieldRows.push({ label: w.label, value: w.url.replace(/^https?:\/\//,'') }));
+
+    const paymentRows = Object.entries(d.payments || {})
+      .filter(([, v]) => v)
+      .map(([platform, handle]) => ({ label: PAYMENT_LABELS[platform] || platform, value: handle }));
+
+    const socialBadges = Object.entries(d.social || {})
+      .filter(([, v]) => v)
+      .map(([platform, handle]) => {
+        const cfg = SOCIAL_LABELS[platform] || { label: platform, abbr: platform.slice(0,2).toUpperCase() };
+        return `<span class="mc-badge">${cfg.abbr} ${cfg.label}</span>`;
+      }).join('');
+
+    const html = `
+      <div class="mc-avatar">${initials.toUpperCase() || '?'}</div>
+      <div class="mc-name">${fullName || 'Name'}</div>
+      ${d.tagline ? `<div class="mc-tagline">${d.tagline}</div>` : ''}
+      ${roleLine ? `<div class="mc-role">${roleLine}</div>` : ''}
+
+      ${d.about ? `
+        <div class="mc-section-label">About</div>
+        <p style="font-size:13px; line-height:1.6; color:var(--parchment);">${d.about}</p>
+      ` : ''}
+
+      ${d.experience.length ? `
+        <div class="mc-section-label">Experience</div>
+        ${d.experience.map(e => `
+          <div style="margin-bottom:10px;">
+            <div style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:13px;">${e.role || ''}</div>
+            <div style="font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted); margin-top:2px;">${[e.company, e.period].filter(Boolean).join(' · ')}</div>
+            ${e.description ? `<div style="font-size:12px; color:var(--parchment); margin-top:5px; line-height:1.5;">${e.description}</div>` : ''}
+          </div>
+        `).join('')}
+      ` : ''}
+
+      ${d.skills.length ? `
+        <div class="mc-section-label">Skills</div>
+        <div class="mc-social">${d.skills.map(s => `<span class="mc-badge">${s}</span>`).join('')}</div>
+      ` : ''}
+
+      ${socialBadges ? `
+        <div class="mc-section-label">Follow</div>
+        <div class="mc-social">${socialBadges}</div>
+      ` : ''}
+
+      ${paymentRows.length ? `
+        <div class="mc-section-label">${d.paymentSectionLabel || 'Payment'}</div>
+        <div class="mc-fields">
+          ${paymentRows.map(r => `<div class="mc-field"><div class="mc-label">${r.label}</div><div class="mc-value">${r.value}</div></div>`).join('')}
+        </div>
+      ` : ''}
+
+      ${d.notes ? `
+        <div class="mc-section-label">Note</div>
+        <p style="font-size:12.5px; line-height:1.5; color:var(--parchment);">${d.notes}</p>
+      ` : ''}
+
+      <div class="mc-section-label">Contact</div>
+      ${fieldRows.length ? `
+        <div class="mc-fields">
+          ${fieldRows.map(r => `<div class="mc-field"><div class="mc-label">${r.label}</div><div class="mc-value">${r.value}</div></div>`).join('')}
+        </div>
+      ` : `<div class="mc-empty">No phone, email, or website entered yet</div>`}
+
+      ${d.calendlyUrl ? `<div class="mc-book">${d.bookingLabel || 'Book a Time'}</div>` : ''}
+      <div class="mc-save">Save Contact</div>
+    `;
+
+    document.getElementById('miniCard').innerHTML = html;
+  }
+
+  document.getElementById('previewBtn').addEventListener('click', () => {
+    renderPreview();
+    document.getElementById('previewOverlay').classList.add('open');
+  });
+  document.getElementById('closePreview').addEventListener('click', () => {
+    document.getElementById('previewOverlay').classList.remove('open');
+  });
+  document.getElementById('previewOverlay').addEventListener('click', (e) => {
+    if (e.target.id === 'previewOverlay') document.getElementById('previewOverlay').classList.remove('open');
+  });
 
   function setVal(id, value) {
     const el = document.getElementById(id);
@@ -434,6 +627,7 @@
     setVal('about', d.about);
     setVal('notes', d.notes);
     setVal('calendlyUrl', d.calendlyUrl);
+    setVal('bookingLabel', d.bookingLabel || 'Book a Time');
     setVal('address', d.address);
     setVal('photoFile', d.photoFile || 'photo.jpg');
     setVal('skills', (d.skills || []).join(', '));
@@ -445,6 +639,7 @@
     ['cashapp', 'venmo', 'paypal', 'zelle'].forEach(p => {
       setVal(`payment_${p}`, (d.payments || {})[p]);
     });
+    setVal('paymentSectionLabel', d.paymentSectionLabel || 'Payment');
 
     // Clear existing repeatable rows, then rebuild from the loaded data
     document.getElementById('phoneList').innerHTML = '';
