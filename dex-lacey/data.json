@@ -22,6 +22,7 @@
     "paypal": "",
     "zelle": ""
   },
+  "paymentSectionLabel": "Payment",
   "notes": "",
   "phones": [
     {
@@ -33,10 +34,18 @@
     {
       "type": "Personal",
       "address": "LaceyMonica.ML@GMail.com"
+    },
+    {
+      "type": "Personal",
+      "address": "LaceyDex.DOG@GMail.com"
     }
   ],
   "websites": [],
+  "listings": [],
   "calendlyUrl": "",
+  "bookingLabel": "Book a Time",
+  "address": "",
   "photoFile": "photo.jpg",
+  "accessToken": "69vc9ayg",
   "showQR": true
 }
