@@ -1,10 +1,10 @@
 {
-  "prefix": "",
+  "prefix": "Mr.",
   "firstName": "Will",
   "lastName": "Bennett",
-  "title": "Owner Director",
-  "org": "Bennett Achievements",
-  "tagline": "Being the best and clearing the path.",
+  "title": "Project Manager",
+  "org": "SCM",
+  "tagline": "Where there’s a will, there’s a way!",
   "about": "",
   "experience": [],
   "skills": [
@@ -21,8 +21,8 @@
     "youtube": ""
   },
   "payments": {
-    "cashapp": "$PayMe",
-    "venmo": "",
+    "cashapp": "$Will32BIT",
+    "venmo": "Will-Bennett-86",
     "paypal": "",
     "zelle": ""
   },
@@ -31,14 +31,21 @@
   "phones": [
     {
       "type": "Mobile",
-      "number": "(919) 693-7185"
+      "number": "(804) 898-5915"
     }
   ],
-  "emails": [],
+  "emails": [
+    {
+      "type": "Personal",
+      "address": "will.bennett@scm-net.com"
+    }
+  ],
   "websites": [],
+  "listings": [],
   "calendlyUrl": "",
   "bookingLabel": "Book a Time",
-  "address": "604 North 1st Street Richmond  VA  23219",
+  "address": "5850 Quality Way",
   "photoFile": "photo.jpg",
+  "accessToken": "7knsyd9b",
   "showQR": true
 }
