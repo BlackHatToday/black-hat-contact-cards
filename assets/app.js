@@ -6,10 +6,6 @@
    ============================================================ */
 
 (async function () {
-  // Set this to your own email address — used by the "Need to update
-  // this info?" link at the bottom of every card.
-  const ADMIN_EMAIL = "BlackHatToday+BHCC@Gmail.com";
-
   const ICONS = {
     phone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
     email: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 6 12 13 2 6"/><path d="M2 6h20v12H2z"/></svg>',
@@ -250,28 +246,6 @@
     });
   }
 
-  // A subtle link, meant for the card holder themselves (not visitors),
-  // to request a change to their own info. Opens a pre-addressed email
-  // to the admin — always shown, no data dependency, since it's not
-  // tied to any field being present.
-  function renderUpdateRequest(d) {
-    const link = document.getElementById('updateRequestLink');
-    if (!link) return;
-    const fullName = `${d.firstName || ''} ${d.lastName || ''}`.trim() || 'this card';
-    const selfUrl = window.location.href.split('#')[0].split('?')[0];
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const subject = encodeURIComponent(`Update request: ${fullName}`);
-
-      const emailsList = (d.emails || []).map(em => `  ${em.type || 'Email'}: ${em.address}`).join('\n') || '  None on file';
-      const phonesList = (d.phones || []).map(p => `  ${p.type || 'Phone'}: ${p.number}`).join('\n') || '  None on file';
-      const reference = `\n\n---\nFor reference, the info currently on file for this card:\nEmail(s):\n${emailsList}\nPhone(s):\n${phonesList}`;
-
-      const body = encodeURIComponent(`Hi,\n\nI'd like to update the following on my card (${selfUrl}):\n\n${reference}`);
-      window.location.href = `mailto:${ADMIN_EMAIL}?subject=${subject}&body=${body}`;
-    });
-  }
-
   // Sends the visitor to my-contact-info-form.html with their current info
   // already filled in, via a URL parameter — so they can see everything
   // laid out and edit it visually before sending, rather than typing a
@@ -349,7 +323,6 @@
     renderQR(data);
     wireSaveButton(data);
     renderShareBack(data);
-    renderUpdateRequest(data);
     renderEditMyInfoLink(data);
   } catch (err) {
     document.querySelector('.page').innerHTML = `

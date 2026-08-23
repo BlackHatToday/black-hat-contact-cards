@@ -7,10 +7,6 @@
    ============================================================ */
 
 (async function () {
-  // Set this to your own email address — used by the "Need to update
-  // this listing?" link at the bottom of every property card.
-  const ADMIN_EMAIL = "BlackHatToday+BHCC@Gmail.com";
-
   function basePath() {
     return window.location.pathname.endsWith('/')
       ? window.location.pathname
@@ -120,28 +116,6 @@
     btn.style.display = 'flex';
   }
 
-  // A subtle link, meant for the listing agent (not visitors), to
-  // request a change to this listing. Always shown, no data dependency.
-  function renderUpdateRequest(d) {
-    const link = document.getElementById('updateRequestLink');
-    if (!link) return;
-    const address = d.address || 'this listing';
-    const selfUrl = window.location.href.split('#')[0].split('?')[0];
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      const subject = encodeURIComponent(`Update request: ${address}`);
-
-      const refLines = [];
-      if (d.agentName) refLines.push(`  Agent: ${d.agentName}`);
-      if (d.agentEmail) refLines.push(`  Email: ${d.agentEmail}`);
-      if (d.agentPhone) refLines.push(`  Phone: ${d.agentPhone}`);
-      const reference = `\n\n---\nFor reference, the listing agent currently on file:\n${refLines.length ? refLines.join('\n') : '  None on file'}`;
-
-      const body = encodeURIComponent(`Hi,\n\nI'd like to update the following on this listing (${selfUrl}):\n\n${reference}`);
-      window.location.href = `mailto:${ADMIN_EMAIL}?subject=${subject}&body=${body}`;
-    });
-  }
-
   // Sends whoever's looking at this listing to property-intake-form.html
   // with its current info already filled in, via a URL parameter — so
   // it can be reviewed visually and edited before sending an update.
@@ -199,7 +173,6 @@
     renderAgent(data);
     renderOtherProperty(data);
     renderBooking(data);
-    renderUpdateRequest(data);
     renderEditListingLink(data);
     renderQR(data);
   } catch (err) {
