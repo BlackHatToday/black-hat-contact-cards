@@ -267,6 +267,7 @@
   </form>
 
   <div class="actions">
+    <button type="button" class="btn-primary" id="saveBtn" style="display:none;">Save</button>
     <button type="button" class="btn-secondary" id="previewBtn">Preview</button>
     <button type="button" class="btn-primary" id="downloadBtn">Download data.json</button>
     <button type="button" class="btn-secondary" id="copyBtn">Copy JSON</button>
@@ -524,8 +525,30 @@
     document.getElementById('statusEl').textContent = `Loaded ${d.address || 'this listing'} — edit anything, then Download to save your changes.`;
   }
 
-  document.getElementById('loadFileBtn').addEventListener('click', () => {
-    document.getElementById('loadFileInput').click();
+  let currentFileHandle = null;
+  const supportsFileSystemAccess = 'showOpenFilePicker' in window;
+
+  document.getElementById('loadFileBtn').addEventListener('click', async () => {
+    if (supportsFileSystemAccess) {
+      try {
+        const [handle] = await window.showOpenFilePicker({
+          types: [{ description: 'JSON files', accept: { 'application/json': ['.json'] } }]
+        });
+        const file = await handle.getFile();
+        const text = await file.text();
+        const data = JSON.parse(text);
+        currentFileHandle = handle;
+        populateForm(data);
+        document.getElementById('saveBtn').style.display = 'flex';
+        document.getElementById('statusEl').textContent = `Loaded ${handle.name} — Save will write changes straight back to this file.`;
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          document.getElementById('statusEl').textContent = 'Could not read that file — make sure it\'s a valid data.json.';
+        }
+      }
+    } else {
+      document.getElementById('loadFileInput').click();
+    }
   });
 
   document.getElementById('loadFileInput').addEventListener('change', (e) => {
@@ -535,6 +558,8 @@
     reader.onload = () => {
       try {
         const data = JSON.parse(reader.result);
+        currentFileHandle = null;
+        document.getElementById('saveBtn').style.display = 'none';
         populateForm(data);
       } catch (err) {
         document.getElementById('statusEl').textContent = 'Could not read that file — make sure it\'s a valid data.json.';
@@ -544,7 +569,22 @@
     e.target.value = '';
   });
 
+  document.getElementById('saveBtn').addEventListener('click', async () => {
+    if (!currentFileHandle) return;
+    try {
+      const data = collectData();
+      const writable = await currentFileHandle.createWritable();
+      await writable.write(JSON.stringify(data, null, 2));
+      await writable.close();
+      document.getElementById('statusEl').textContent = `Saved to ${currentFileHandle.name}.`;
+    } catch (err) {
+      document.getElementById('statusEl').textContent = 'Could not save — try reloading the file and saving again.';
+    }
+  });
+
   document.getElementById('newListingBtn').addEventListener('click', () => {
+    currentFileHandle = null;
+    document.getElementById('saveBtn').style.display = 'none';
     ['address', 'price', 'sqft', 'beds', 'baths', 'description', 'agentName',
      'agentPhone', 'agentEmail', 'bookingUrl', 'otherPropertyUrl',
      'folderName', 'tagUrl'].forEach(id => setVal(id, ''));

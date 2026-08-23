@@ -343,6 +343,7 @@
   </form>
 
   <div class="actions">
+    <button type="button" class="btn-primary" id="saveBtn" style="display:none;">Save</button>
     <button type="button" class="btn-secondary" id="previewBtn">Preview</button>
     <button type="button" class="btn-primary" id="downloadBtn">Download data.json</button>
     <button type="button" class="btn-secondary" id="copyBtn">Copy JSON</button>
@@ -815,8 +816,34 @@
     document.getElementById('statusEl').textContent = `Loaded ${d.firstName || ''} ${d.lastName || ''}'s info — edit anything, then Download to save your changes.`;
   }
 
-  document.getElementById('loadFileBtn').addEventListener('click', () => {
-    document.getElementById('loadFileInput').click();
+  // Tracks the exact file handle from a File System Access API load, so
+  // Save can write straight back to it. Only Chrome/Edge support this —
+  // Safari and Firefox fall back to the old download-based flow, where
+  // Save just stays hidden and Download is the only way to get a file.
+  let currentFileHandle = null;
+  const supportsFileSystemAccess = 'showOpenFilePicker' in window;
+
+  document.getElementById('loadFileBtn').addEventListener('click', async () => {
+    if (supportsFileSystemAccess) {
+      try {
+        const [handle] = await window.showOpenFilePicker({
+          types: [{ description: 'JSON files', accept: { 'application/json': ['.json'] } }]
+        });
+        const file = await handle.getFile();
+        const text = await file.text();
+        const data = JSON.parse(text);
+        currentFileHandle = handle;
+        populateForm(data);
+        document.getElementById('saveBtn').style.display = 'flex';
+        document.getElementById('statusEl').textContent = `Loaded ${handle.name} — Save will write changes straight back to this file.`;
+      } catch (err) {
+        if (err.name !== 'AbortError') { // AbortError just means they closed the picker — not a real error
+          document.getElementById('statusEl').textContent = 'Could not read that file — make sure it\'s a valid data.json.';
+        }
+      }
+    } else {
+      document.getElementById('loadFileInput').click();
+    }
   });
 
   document.getElementById('loadFileInput').addEventListener('change', (e) => {
@@ -826,6 +853,8 @@
     reader.onload = () => {
       try {
         const data = JSON.parse(reader.result);
+        currentFileHandle = null; // this fallback path never gets a writable handle
+        document.getElementById('saveBtn').style.display = 'none';
         populateForm(data);
       } catch (err) {
         document.getElementById('statusEl').textContent = 'Could not read that file — make sure it\'s a valid data.json.';
@@ -835,7 +864,22 @@
     e.target.value = ''; // allow reloading the same file again later if needed
   });
 
+  document.getElementById('saveBtn').addEventListener('click', async () => {
+    if (!currentFileHandle) return;
+    try {
+      const data = collectData();
+      const writable = await currentFileHandle.createWritable();
+      await writable.write(JSON.stringify(data, null, 2));
+      await writable.close();
+      document.getElementById('statusEl').textContent = `Saved to ${currentFileHandle.name}.`;
+    } catch (err) {
+      document.getElementById('statusEl').textContent = 'Could not save — try reloading the file and saving again.';
+    }
+  });
+
   document.getElementById('newPersonBtn').addEventListener('click', () => {
+    currentFileHandle = null;
+    document.getElementById('saveBtn').style.display = 'none';
     // Simple text/select fields, back to blank or their default
     ['prefix', 'firstName', 'lastName', 'title', 'org', 'tagline', 'about',
      'notes', 'calendlyUrl', 'address', 'skills', 'folderName', 'tagUrl'].forEach(id => setVal(id, ''));
