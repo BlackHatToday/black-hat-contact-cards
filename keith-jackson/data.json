@@ -1,0 +1,42 @@
+{
+  "prefix": "Dr.",
+  "firstName": "Keith",
+  "lastName": "Jackson",
+  "title": "Pastor",
+  "org": "Mount Zion United Holiness Church",
+  "tagline": "",
+  "about": "",
+  "experience": [],
+  "skills": [],
+  "social": {
+    "instagram": "",
+    "tiktok": "",
+    "facebook": "",
+    "linkedin": "",
+    "twitter": "",
+    "youtube": ""
+  },
+  "payments": {
+    "cashapp": "",
+    "venmo": "",
+    "paypal": "",
+    "zelle": ""
+  },
+  "paymentSectionLabel": "Payment",
+  "notes": "",
+  "phones": [
+    {
+      "type": "Mobile",
+      "number": "(919) 824-3095"
+    }
+  ],
+  "emails": [],
+  "websites": [],
+  "listings": [],
+  "calendlyUrl": "",
+  "bookingLabel": "Book a Time",
+  "address": "209 Orange Street  Oxford  NC  27565",
+  "photoFile": "photo.jpg",
+  "accessToken": "6h8etycb",
+  "showQR": true
+}
