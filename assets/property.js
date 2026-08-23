@@ -9,7 +9,7 @@
 (async function () {
   // Set this to your own email address — used by the "Need to update
   // this listing?" link at the bottom of every property card.
-  const ADMIN_EMAIL = "you@example.com";
+  const ADMIN_EMAIL = "BlackHatToday+BHCC@Gmail.com";
 
   function basePath() {
     return window.location.pathname.endsWith('/')
@@ -142,6 +142,34 @@
     });
   }
 
+  // Sends whoever's looking at this listing to property-intake-form.html
+  // with its current info already filled in, via a URL parameter — so
+  // it can be reviewed visually and edited before sending an update.
+  function renderEditListingLink(d) {
+    const link = document.getElementById('editMyInfoLink');
+    if (!link) return;
+    const trimmed = {
+      address: d.address, price: d.price, sqft: d.sqft, beds: d.beds, baths: d.baths,
+      description: d.description, agentName: d.agentName, agentPhone: d.agentPhone,
+      agentEmail: d.agentEmail, bookingUrl: d.bookingUrl
+    };
+    const encoded = encodeURIComponent(JSON.stringify(trimmed));
+    link.href = `/property-intake-form.html?data=${encoded}`;
+  }
+
+  function renderOtherProperty(d) {
+    if (!d.otherPropertyUrl) return;
+    document.getElementById('otherPropertyLabel').textContent = d.otherPropertyLabel || 'View Another Listing';
+    document.getElementById('otherPropertyBtn').href = d.otherPropertyUrl;
+    document.getElementById('otherPropertySection').style.display = 'block';
+    /* global QRCode */
+    new QRCode(document.getElementById('otherPropertyQrcode'), {
+      text: d.otherPropertyUrl, width: 180, height: 180,
+      colorDark: '#14171c', colorLight: '#ede6d6',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  }
+
   function renderQR(d) {
     if (d.showQR === false) return;
     const selfUrl = window.location.href.split('#')[0].split('?')[0];
@@ -154,16 +182,25 @@
     });
   }
 
+  function wireDownloadPdf() {
+    const btn = document.getElementById('pdfSaveBtn');
+    if (!btn) return;
+    btn.addEventListener('click', () => window.print());
+  }
+
   try {
     const data = await loadData();
+    wireDownloadPdf();
     renderHero(data);
     renderIdentity(data);
     renderStats(data);
     renderDescription(data);
     renderGallery(data);
     renderAgent(data);
+    renderOtherProperty(data);
     renderBooking(data);
     renderUpdateRequest(data);
+    renderEditListingLink(data);
     renderQR(data);
   } catch (err) {
     document.querySelector('.page').innerHTML = `

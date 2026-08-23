@@ -8,14 +8,15 @@
 (async function () {
   // Set this to your own email address — used by the "Need to update
   // this info?" link at the bottom of every card.
-  const ADMIN_EMAIL = "you@example.com";
+  const ADMIN_EMAIL = "BlackHatToday+BHCC@Gmail.com";
 
   const ICONS = {
     phone: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
     email: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 6 12 13 2 6"/><path d="M2 6h20v12H2z"/></svg>',
     website: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg>',
     payment: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5c0-1.4 1.1-2.5 2.5-2.5s2.5 1.1 2.5 2.5c0 3-5 2-5 5 0 1.4 1.1 2.5 2.5 2.5s2.5-1.1 2.5-2.5"/></svg>',
-    location: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>'
+    location: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>',
+    home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>'
   };
 
   // Pre-configured platforms: just label + how to build the URL from a
@@ -164,6 +165,18 @@
     });
   }
 
+  function renderListings(d) {
+    const listings = (d.listings || []).filter(l => l.url).slice(0, 5); // hard cap at 5, even if more sneak into the data
+    if (!listings.length) return;
+    document.getElementById('listingsEl').innerHTML = listings.map(l => `
+      <a class="field" href="${l.url}" target="_blank" rel="noopener">
+        <span class="icon">${ICONS.home}</span>
+        <span class="meta"><div class="label">${l.label || 'Listing'}</div><div class="value">${l.url.replace(/^https?:\/\//, '')}</div></span>
+      </a>
+    `).join('');
+    document.getElementById('listingsSection').style.display = 'block';
+  }
+
   function openQrModal(url, label) {
     const overlay = document.getElementById('qrModalOverlay');
     const codeEl = document.getElementById('qrModalCode');
@@ -181,6 +194,12 @@
     const overlay = document.getElementById('qrModalOverlay');
     document.getElementById('qrModalClose').addEventListener('click', () => overlay.classList.remove('open'));
     overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('open'); });
+  }
+
+  function wireDownloadPdf() {
+    const btn = document.getElementById('pdfSaveBtn');
+    if (!btn) return;
+    btn.addEventListener('click', () => window.print());
   }
 
   function renderNotes(d) {
@@ -253,6 +272,24 @@
     });
   }
 
+  // Sends the visitor to my-contact-info-form.html with their current info
+  // already filled in, via a URL parameter — so they can see everything
+  // laid out and edit it visually before sending, rather than typing a
+  // blank note. Only includes fields that form actually supports.
+  function renderEditMyInfoLink(d) {
+    const link = document.getElementById('editMyInfoLink');
+    if (!link) return;
+    const trimmed = {
+      prefix: d.prefix, firstName: d.firstName, lastName: d.lastName,
+      title: d.title, org: d.org, tagline: d.tagline, about: d.about,
+      experience: d.experience, skills: d.skills, social: d.social,
+      payments: d.payments, notes: d.notes, phones: d.phones, emails: d.emails,
+      websites: d.websites, address: d.address, calendlyUrl: d.calendlyUrl
+    };
+    const encoded = encodeURIComponent(JSON.stringify(trimmed));
+    link.href = `/my-contact-info-form.html?data=${encoded}`;
+  }
+
   function renderQR(d) {
     if (d.showQR === false) return;
     const selfUrl = window.location.href.split('#')[0].split('?')[0];
@@ -297,6 +334,7 @@
   try {
     const data = await loadData();
     wireQrModal();
+    wireDownloadPdf();
     renderPhoto(data);
     renderIdentity(data);
     renderAbout(data);
@@ -304,6 +342,7 @@
     renderSkills(data);
     renderSocial(data);
     renderPayments(data);
+    renderListings(data);
     renderNotes(data);
     renderFields(data);
     renderCalendly(data);
@@ -311,6 +350,7 @@
     wireSaveButton(data);
     renderShareBack(data);
     renderUpdateRequest(data);
+    renderEditMyInfoLink(data);
   } catch (err) {
     document.querySelector('.page').innerHTML = `
       <div class="load-error">

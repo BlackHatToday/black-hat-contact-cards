@@ -221,10 +221,89 @@ footer{
   letter-spacing:0.08em; text-transform:uppercase; color:#525a68;
 }
 
+.update-request-link{
+  display:block; text-align:center; margin-top:14px;
+  font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--muted);
+  text-decoration:none; letter-spacing:0.02em; cursor:pointer;
+}
+.update-request-link:hover{ color: var(--copper); }
+
 .load-error{
   text-align:center; padding: 60px 28px; color: var(--muted);
   font-family:'IBM Plex Mono', monospace; font-size: 13px; line-height:1.6;
 }
+
+/* ============================================================
+   PROPERTY LISTING CARD — used by property-template, not the
+   person card. Shares the same design tokens above.
+   ============================================================ */
+.prop-hero{
+  width: calc(100% - 56px); margin: 24px 28px 0;
+  aspect-ratio: 4 / 3; border-radius: 16px; overflow:hidden;
+  background: var(--surface-2); border: 1px solid var(--line);
+}
+.prop-hero img{ width:100%; height:100%; object-fit:cover; display:block; }
+.prop-hero-fallback{
+  width:100%; height:100%; display:flex; align-items:center; justify-content:center;
+  color: var(--muted); font-family:'IBM Plex Mono', monospace; font-size: 12px;
+}
+
+.prop-address{
+  text-align:center; margin: 22px 28px 4px;
+  font-family:'Space Grotesk', sans-serif; font-weight:700; font-size: 24px; line-height:1.3;
+}
+.prop-price{
+  text-align:center; font-family:'Space Grotesk', sans-serif; font-weight:700;
+  font-size: 20px; color: var(--copper); margin-top: 4px;
+}
+
+.stats-row{
+  display:flex; justify-content:center; gap: 10px;
+  margin: 22px 28px 0; padding: 18px 10px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+}
+.stat-block{ flex:1; text-align:center; }
+.stat-num{ font-family:'Space Grotesk', sans-serif; font-weight:700; font-size: 19px; color: var(--parchment); }
+.stat-label{
+  font-family:'IBM Plex Mono', monospace; font-size: 10px; color: var(--muted);
+  letter-spacing: 0.06em; text-transform: uppercase; margin-top: 3px;
+}
+
+.gallery-grid{
+  display:grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+}
+.gallery-grid a{ display:block; aspect-ratio: 1; border-radius: 8px; overflow:hidden; }
+.gallery-grid img{ width:100%; height:100%; object-fit:cover; display:block; transition: opacity .15s ease; }
+.gallery-grid a:hover img{ opacity: 0.85; }
+
+.agent-card{
+  display:flex; align-items:center; gap: 14px;
+  background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+  padding: 14px 16px; margin-bottom: 12px;
+}
+.agent-avatar{
+  width: 52px; height: 52px; border-radius: 50%; object-fit:cover;
+  border: 2px solid var(--copper); flex-shrink:0;
+}
+.agent-avatar-fallback{
+  width: 52px; height: 52px; border-radius: 50%; border: 2px solid var(--copper);
+  background: var(--surface-2); display:flex; align-items:center; justify-content:center;
+  font-family:'Space Grotesk', sans-serif; font-weight:600; font-size: 18px; color: var(--copper);
+  flex-shrink:0;
+}
+.agent-info .agent-name{ font-family:'Space Grotesk', sans-serif; font-weight:600; font-size: 15px; }
+.agent-info .agent-role{ font-family:'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+.book-showing-btn{
+  display:flex; align-items:center; justify-content:center; gap:10px; width:100%;
+  padding:16px 20px; background:var(--copper); color:var(--ink);
+  border:none; border-radius:14px; text-decoration:none;
+  font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:16px;
+  cursor:pointer; transition:background .15s ease, transform .1s ease;
+}
+.book-showing-btn:hover{ background:#c98549; }
+.book-showing-btn:active{ transform:scale(0.98); }
+.book-showing-btn svg{ width:19px; height:19px; }
 
 /* ---- share-back button (viewer sends their info to the card owner) ---- */
 .share-btn{
@@ -285,3 +364,29 @@ footer{
 }
 
 @media (prefers-reduced-motion: reduce){ .ring{ animation:none; opacity:0; } }
+
+/* ============================================================
+   PRINT / SAVE-AS-PDF
+   Forces the dark theme to actually render (browsers strip
+   backgrounds by default unless this is set), and hides only
+   the elements that are pure JavaScript with no real link
+   underneath — those would do nothing in a saved PDF. Genuine
+   <a href> links (Book a Time, Contact rows, Listings, etc.)
+   stay, since Chrome's Save-as-PDF preserves them as clickable.
+   ============================================================ */
+@media print{
+  html, body, *{
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  .save-btn,
+  #shareBackBtn,
+  .field-qr-btn,
+  .ring,
+  #updateRequestLink,
+  #editMyInfoLink,
+  #pdfSaveBtn,
+  .qr-modal-overlay{
+    display:none !important;
+  }
+}
