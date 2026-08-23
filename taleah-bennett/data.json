@@ -1,0 +1,50 @@
+{
+  "prefix": "",
+  "firstName": "TaLeah",
+  "lastName": "Bennett",
+  "title": "Marketing Director",
+  "org": "Rudy Marie Inc.",
+  "tagline": "",
+  "about": "",
+  "experience": [],
+  "skills": [],
+  "social": {
+    "instagram": "",
+    "tiktok": "",
+    "facebook": "",
+    "linkedin": "",
+    "twitter": "",
+    "youtube": ""
+  },
+  "payments": {
+    "cashapp": "",
+    "venmo": "",
+    "paypal": "",
+    "zelle": ""
+  },
+  "paymentSectionLabel": "Payment",
+  "notes": "",
+  "phones": [
+    {
+      "type": "Mobile",
+      "number": "(704) 302-0060"
+    }
+  ],
+  "emails": [
+    {
+      "type": "Personal",
+      "address": "TaLeahBennett@RudyMarie.com"
+    }
+  ],
+  "websites": [
+    {
+      "label": "Website",
+      "url": "www.RudyMarie.com"
+    }
+  ],
+  "calendlyUrl": "",
+  "bookingLabel": "Book a Time",
+  "address": "604 North 1st Street Richmond VA 23219",
+  "photoFile": "photo.jpg",
+  "showQR": true
+}
