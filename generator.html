@@ -189,6 +189,14 @@
       <input type="file" id="loadFileInput" accept="application/json" style="display: none;">
     </div>
 
+    <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+      <div>
+        <div style="font-family:'Space Grotesk', sans-serif; font-weight: 600; font-size: 13.5px;">Starting a brand new person?</div>
+        <div class="hint" style="margin-top: 3px;">Clears every field below and generates a fresh token, so you're not editing leftover data from whoever you built last.</div>
+      </div>
+      <button type="button" class="btn-secondary" id="newPersonBtn" style="white-space: nowrap;">New Person</button>
+    </div>
+
     <fieldset>
       <legend>Identity</legend>
       <div class="row3">
@@ -205,6 +213,28 @@
       <label>Photo filename</label>
       <input type="text" id="photoFile" value="photo.jpg">
       <div class="hint">This file needs to sit in the same folder as this person's index.html.</div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Security Token</legend>
+      <label>Access token</label>
+      <input type="text" id="accessToken" readonly style="font-family:'IBM Plex Mono', monospace; color: var(--copper-soft); cursor: default;">
+      <button type="button" class="btn-secondary" id="generateTokenBtn" style="margin-top:8px; width:100%;">Generate New Token</button>
+      <div class="hint">This gets appended to the NFC tag's URL as <code>?t=&lt;token&gt;</code> — do NOT include it in the plain link you'd ever hand out separately. A new card auto-generates one; only click "Generate New Token" if you suspect this one has leaked (this invalidates the old tag).</div>
+
+      <label style="margin-top:16px;">Folder name</label>
+      <div style="display:flex; gap:8px; align-items:flex-start;">
+        <input type="text" id="folderName" placeholder="jane-doe" style="flex:1;">
+        <button type="button" class="btn-secondary" id="copyFolderNameBtn" style="white-space:nowrap;">Copy</button>
+      </div>
+      <div class="hint">Auto-filled from the name above — edit this if the actual folder you create doesn't match exactly.</div>
+
+      <label style="margin-top:16px;">Tag URL — write this exact string to the physical tag</label>
+      <div style="display:flex; gap:8px; align-items:flex-start;">
+        <input type="text" id="tagUrl" readonly style="font-family:'IBM Plex Mono', monospace; font-size:12.5px; color: var(--copper-soft); cursor: default; flex:1;">
+        <button type="button" class="btn-secondary" id="copyTagUrlBtn" style="white-space:nowrap;">Copy</button>
+      </div>
+      <div class="hint">Update <code>PROJECT_BASE_URL</code> near the top of this file's script if your domain ever changes.</div>
     </fieldset>
 
     <fieldset>
@@ -254,6 +284,13 @@
         <div><label>Zelle</label><input type="text" id="payment_zelle" placeholder="phone or email"></div>
       </div>
       <div class="hint">Cash App, Venmo, and PayPal show as tappable payment links. Zelle doesn't support a public link, so it's shown as plain info to copy — Zelle transfers are matched by phone/email inside your own banking app.</div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Property Listings (optional — up to 5)</legend>
+      <div id="listingsList"></div>
+      <button type="button" class="add-btn" id="addListing">+ Add a listing</button>
+      <div class="hint">Only link listings that already have their own live card — this doesn't create a new card, just links to one that exists.</div>
     </fieldset>
 
     <fieldset>
@@ -322,6 +359,85 @@
 </div>
 
 <script>
+  function generateToken() {
+    const chars = 'abcdefghijkmnpqrstuvwxyz23456789'; // no ambiguous chars (0/O, 1/l/I)
+    const bytes = new Uint8Array(8);
+    crypto.getRandomValues(bytes);
+    return Array.from(bytes, b => chars[b % chars.length]).join('');
+  }
+
+  document.getElementById('generateTokenBtn').addEventListener('click', () => {
+    document.getElementById('accessToken').value = generateToken();
+    updateTagUrl();
+  });
+
+  // New cards start with a token already generated, so it's never blank
+  if (!document.getElementById('accessToken').value) {
+    document.getElementById('accessToken').value = generateToken();
+  }
+
+  // Set this once to your project's real domain — every generated
+  // Tag URL below is built from this.
+  const PROJECT_BASE_URL = 'https://blackhatcards.community';
+
+  function slugify(text) {
+    return (text || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  }
+
+  function updateTagUrl() {
+    const folderName = document.getElementById('folderName').value.trim();
+    const token = document.getElementById('accessToken').value.trim();
+    const tagUrlField = document.getElementById('tagUrl');
+    if (!folderName) { tagUrlField.value = ''; return; }
+    const base = PROJECT_BASE_URL.replace(/\/$/, '');
+    tagUrlField.value = token
+      ? `${base}/${folderName}/?t=${token}`
+      : `${base}/${folderName}/`;
+  }
+
+  // Auto-fill the folder name from the person's name, but only if the
+  // field hasn't already been manually edited to something else.
+  let folderNameAutoFilled = true;
+  function autoFillFolderName() {
+    if (!folderNameAutoFilled) return;
+    const slug = slugify(`${document.getElementById('firstName').value}-${document.getElementById('lastName').value}`);
+    document.getElementById('folderName').value = slug;
+    updateTagUrl();
+  }
+  document.getElementById('firstName').addEventListener('input', autoFillFolderName);
+  document.getElementById('lastName').addEventListener('input', autoFillFolderName);
+  document.getElementById('folderName').addEventListener('input', () => {
+    folderNameAutoFilled = false;
+    updateTagUrl();
+  });
+
+  async function copyTextToClipboard(value, label) {
+    if (!value) return;
+    try {
+      await navigator.clipboard.writeText(value);
+      document.getElementById('statusEl').textContent = `${label} copied.`;
+    } catch (err) {
+      const ta = document.createElement('textarea');
+      ta.value = value;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      try { document.execCommand('copy'); document.getElementById('statusEl').textContent = `${label} copied.`; }
+      catch (e2) { document.getElementById('statusEl').textContent = 'Could not copy automatically — select and copy the text manually.'; }
+      document.body.removeChild(ta);
+    }
+  }
+
+  document.getElementById('copyTagUrlBtn').addEventListener('click', () => {
+    copyTextToClipboard(document.getElementById('tagUrl').value, 'Tag URL');
+  });
+
+  document.getElementById('copyFolderNameBtn').addEventListener('click', () => {
+    copyTextToClipboard(document.getElementById('folderName').value, 'Folder name');
+  });
+
   function repeatRow(container, fields, gridClass = 'row-dc') {
     const div = document.createElement('div');
     div.className = 'repeat-item';
@@ -407,6 +523,28 @@
     return row;
   }
 
+  function updateAddListingButtonState() {
+    const count = document.querySelectorAll('#listingsList .repeat-item').length;
+    const btn = document.getElementById('addListing');
+    btn.disabled = count >= 5;
+    btn.textContent = count >= 5 ? 'Limit reached (5 listings max)' : '+ Add a listing';
+    btn.style.opacity = count >= 5 ? '0.5' : '1';
+    btn.style.cursor = count >= 5 ? 'default' : 'pointer';
+  }
+
+  function addListingRow(prefill = {}) {
+    if (document.querySelectorAll('#listingsList .repeat-item').length >= 5) return null;
+    const row = repeatRow(document.getElementById('listingsList'), `
+      <div><label>Label</label><input type="text" class="listing-label field-descriptor" placeholder="123 Main St"></div>
+      <div><label>URL</label><input type="text" class="listing-url field-content" placeholder="https://blackhatcards.community/for-sale-123-main-st/"></div>
+    `);
+    if (prefill.label) row.querySelector('.listing-label').value = prefill.label;
+    if (prefill.url) row.querySelector('.listing-url').value = prefill.url;
+    row.querySelector('.remove-btn').addEventListener('click', updateAddListingButtonState);
+    updateAddListingButtonState();
+    return row;
+  }
+
   function addExperienceRow(prefill = {}) {
     const div = document.createElement('div');
     div.className = 'repeat-item';
@@ -433,6 +571,7 @@
   document.getElementById('addPhone').addEventListener('click', () => addPhoneRow());
   document.getElementById('addEmail').addEventListener('click', () => addEmailRow());
   document.getElementById('addWebsite').addEventListener('click', () => addWebsiteRow());
+  document.getElementById('addListing').addEventListener('click', () => addListingRow());
   document.getElementById('addExperience').addEventListener('click', () => addExperienceRow());
 
   // Start with one phone, one email, and one website row pre-added, since almost everyone needs at least one
@@ -466,6 +605,11 @@
       url: item.querySelector('.website-url').value
     })).filter(w => w.url);
 
+    const listings = [...document.querySelectorAll('#listingsList .repeat-item')].map(item => ({
+      label: item.querySelector('.listing-label').value || 'Listing',
+      url: item.querySelector('.listing-url').value
+    })).filter(l => l.url).slice(0, 5);
+
     const social = {};
     ['instagram', 'tiktok', 'facebook', 'linkedin', 'twitter', 'youtube'].forEach(p => {
       social[p] = document.getElementById(`social_${p}`).value.trim();
@@ -493,10 +637,12 @@
       phones,
       emails,
       websites,
+      listings,
       calendlyUrl: document.getElementById('calendlyUrl').value,
       bookingLabel: document.getElementById('bookingLabel').value || 'Book a Time',
       address: document.getElementById('address').value,
       photoFile: document.getElementById('photoFile').value || 'photo.jpg',
+      accessToken: document.getElementById('accessToken').value,
       showQR: document.getElementById('showQR').checked
     };
   }
@@ -582,6 +728,13 @@
         </div>
       ` : ''}
 
+      ${d.listings.length ? `
+        <div class="mc-section-label">Listings</div>
+        <div class="mc-fields">
+          ${d.listings.map(l => `<div class="mc-field"><div class="mc-label">${l.label}</div><div class="mc-value">${l.url.replace(/^https?:\/\//,'')}</div></div>`).join('')}
+        </div>
+      ` : ''}
+
       ${d.notes ? `
         <div class="mc-section-label">Note</div>
         <p style="font-size:12.5px; line-height:1.5; color:var(--parchment);">${d.notes}</p>
@@ -630,6 +783,7 @@
     setVal('bookingLabel', d.bookingLabel || 'Book a Time');
     setVal('address', d.address);
     setVal('photoFile', d.photoFile || 'photo.jpg');
+    setVal('accessToken', d.accessToken || generateToken());
     setVal('skills', (d.skills || []).join(', '));
     document.getElementById('showQR').checked = d.showQR !== false;
 
@@ -645,12 +799,18 @@
     document.getElementById('phoneList').innerHTML = '';
     document.getElementById('emailList').innerHTML = '';
     document.getElementById('websiteList').innerHTML = '';
+    document.getElementById('listingsList').innerHTML = '';
     document.getElementById('experienceList').innerHTML = '';
 
     (d.phones && d.phones.length ? d.phones : [{}]).forEach(p => addPhoneRow(p));
     (d.emails && d.emails.length ? d.emails : [{}]).forEach(e => addEmailRow(e));
     (d.websites && d.websites.length ? d.websites : [{}]).forEach(w => addWebsiteRow(w));
+    (d.listings || []).forEach(l => addListingRow(l));
+    updateAddListingButtonState();
     (d.experience || []).forEach(e => addExperienceRow(e));
+
+    folderNameAutoFilled = true;
+    autoFillFolderName();
 
     document.getElementById('statusEl').textContent = `Loaded ${d.firstName || ''} ${d.lastName || ''}'s info — edit anything, then Download to save your changes.`;
   }
@@ -673,6 +833,35 @@
     };
     reader.readAsText(file);
     e.target.value = ''; // allow reloading the same file again later if needed
+  });
+
+  document.getElementById('newPersonBtn').addEventListener('click', () => {
+    // Simple text/select fields, back to blank or their default
+    ['prefix', 'firstName', 'lastName', 'title', 'org', 'tagline', 'about',
+     'notes', 'calendlyUrl', 'address', 'skills', 'folderName', 'tagUrl'].forEach(id => setVal(id, ''));
+    setVal('photoFile', 'photo.jpg');
+    setVal('paymentSectionLabel', 'Payment');
+    setVal('bookingLabel', 'Book a Time');
+    ['instagram', 'tiktok', 'facebook', 'linkedin', 'twitter', 'youtube'].forEach(p => setVal(`social_${p}`, ''));
+    ['cashapp', 'venmo', 'paypal', 'zelle'].forEach(p => setVal(`payment_${p}`, ''));
+    document.getElementById('showQR').checked = true;
+
+    // Repeatable rows — clear and rebuild to the same starting state as a fresh page load
+    document.getElementById('phoneList').innerHTML = '';
+    document.getElementById('emailList').innerHTML = '';
+    document.getElementById('websiteList').innerHTML = '';
+    document.getElementById('listingsList').innerHTML = '';
+    document.getElementById('experienceList').innerHTML = '';
+    addPhoneRow();
+    addEmailRow();
+    addWebsiteRow();
+    updateAddListingButtonState();
+
+    // Fresh token for the new person — never reuse one from whoever was last on screen
+    document.getElementById('accessToken').value = generateToken();
+    folderNameAutoFilled = true;
+
+    document.getElementById('statusEl').textContent = 'Cleared — ready for a new person.';
   });
 
   document.getElementById('downloadBtn').addEventListener('click', () => {

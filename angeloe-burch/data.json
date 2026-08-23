@@ -1,9 +1,9 @@
 {
   "prefix": "Dr.",
-  "firstName": "Angelo",
+  "firstName": "Angeloe",
   "lastName": "Burch",
-  "title": "",
-  "org": "",
+  "title": "Pastor",
+  "org": "Cedar Grove Baptist Church #2",
   "tagline": "",
   "about": "",
   "experience": [],
@@ -22,12 +22,16 @@
     "paypal": "",
     "zelle": ""
   },
+  "paymentSectionLabel": "Payment",
   "notes": "",
   "phones": [],
   "emails": [],
   "websites": [],
+  "listings": [],
   "calendlyUrl": "",
+  "bookingLabel": "Book a Time",
   "address": "",
   "photoFile": "photo.jpg",
+  "accessToken": "2j98ajfm",
   "showQR": true
 }

@@ -164,6 +164,14 @@
     <input type="file" id="loadFileInput" accept="application/json" style="display: none;">
   </div>
 
+  <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+    <div>
+      <div style="font-family:'Space Grotesk', sans-serif; font-weight: 600; font-size: 13.5px;">Starting a brand new listing?</div>
+      <div class="hint" style="margin-top: 3px;">Clears every field below and generates a fresh token, so you're not editing leftover data from whoever's listing you built last.</div>
+    </div>
+    <button type="button" class="btn-secondary" id="newListingBtn" style="white-space: nowrap;">New Listing</button>
+  </div>
+
   <form id="propertyForm">
 
     <fieldset>
@@ -178,6 +186,28 @@
         <div><label>Beds</label><input type="number" id="beds" placeholder="3" min="0"></div>
         <div><label>Baths</label><input type="number" id="baths" placeholder="2" min="0" step="0.5"></div>
       </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Security Token</legend>
+      <label>Access token</label>
+      <input type="text" id="accessToken" readonly style="font-family:'IBM Plex Mono', monospace; color: var(--copper-soft); cursor: default;">
+      <button type="button" class="btn-secondary" id="generateTokenBtn" style="margin-top:8px; width:100%;">Generate New Token</button>
+      <div class="hint">This gets appended to the NFC tag's URL as <code>?t=&lt;token&gt;</code> — do NOT include it in the plain link you'd ever hand out separately. A new listing auto-generates one; only click "Generate New Token" if you suspect this one has leaked (this invalidates the old tag).</div>
+
+      <label style="margin-top:16px;">Folder name</label>
+      <div style="display:flex; gap:8px; align-items:flex-start;">
+        <input type="text" id="folderName" placeholder="for-sale-123-main-st" style="flex:1;">
+        <button type="button" class="btn-secondary" id="copyFolderNameBtn" style="white-space:nowrap;">Copy</button>
+      </div>
+      <div class="hint">Auto-suggested from the address above — edit this if the actual folder you create doesn't match exactly.</div>
+
+      <label style="margin-top:16px;">Tag URL — write this exact string to the physical tag</label>
+      <div style="display:flex; gap:8px; align-items:flex-start;">
+        <input type="text" id="tagUrl" readonly style="font-family:'IBM Plex Mono', monospace; font-size:12.5px; color: var(--copper-soft); cursor: default; flex:1;">
+        <button type="button" class="btn-secondary" id="copyTagUrlBtn" style="white-space:nowrap;">Copy</button>
+      </div>
+      <div class="hint">Update <code>PROJECT_BASE_URL</code> near the top of this file's script if your domain ever changes.</div>
     </fieldset>
 
     <fieldset>
@@ -253,6 +283,84 @@
 </div>
 
 <script>
+  function generateToken() {
+    const chars = 'abcdefghijkmnpqrstuvwxyz23456789'; // no ambiguous chars (0/O, 1/l/I)
+    const bytes = new Uint8Array(8);
+    crypto.getRandomValues(bytes);
+    return Array.from(bytes, b => chars[b % chars.length]).join('');
+  }
+
+  document.getElementById('generateTokenBtn').addEventListener('click', () => {
+    document.getElementById('accessToken').value = generateToken();
+    updateTagUrl();
+  });
+
+  // New listings start with a token already generated, so it's never blank
+  if (!document.getElementById('accessToken').value) {
+    document.getElementById('accessToken').value = generateToken();
+  }
+
+  // Set this once to your project's real domain — every generated
+  // Tag URL below is built from this.
+  const PROJECT_BASE_URL = 'https://blackhatcards.community';
+
+  function slugify(text) {
+    return (text || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  }
+
+  function updateTagUrl() {
+    const folderName = document.getElementById('folderName').value.trim();
+    const token = document.getElementById('accessToken').value.trim();
+    const tagUrlField = document.getElementById('tagUrl');
+    if (!folderName) { tagUrlField.value = ''; return; }
+    const base = PROJECT_BASE_URL.replace(/\/$/, '');
+    tagUrlField.value = token
+      ? `${base}/${folderName}/?t=${token}`
+      : `${base}/${folderName}/`;
+  }
+
+  // Auto-suggest the folder name from the address, but only if the
+  // field hasn't already been manually edited to something else.
+  let folderNameAutoFilled = true;
+  function autoFillFolderName() {
+    if (!folderNameAutoFilled) return;
+    const slug = slugify(document.getElementById('address').value);
+    document.getElementById('folderName').value = slug;
+    updateTagUrl();
+  }
+  document.getElementById('address').addEventListener('input', autoFillFolderName);
+  document.getElementById('folderName').addEventListener('input', () => {
+    folderNameAutoFilled = false;
+    updateTagUrl();
+  });
+
+  async function copyTextToClipboard(value, label) {
+    if (!value) return;
+    try {
+      await navigator.clipboard.writeText(value);
+      document.getElementById('statusEl').textContent = `${label} copied.`;
+    } catch (err) {
+      const ta = document.createElement('textarea');
+      ta.value = value;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      try { document.execCommand('copy'); document.getElementById('statusEl').textContent = `${label} copied.`; }
+      catch (e2) { document.getElementById('statusEl').textContent = 'Could not copy automatically — select and copy the text manually.'; }
+      document.body.removeChild(ta);
+    }
+  }
+
+  document.getElementById('copyTagUrlBtn').addEventListener('click', () => {
+    copyTextToClipboard(document.getElementById('tagUrl').value, 'Tag URL');
+  });
+
+  document.getElementById('copyFolderNameBtn').addEventListener('click', () => {
+    copyTextToClipboard(document.getElementById('folderName').value, 'Folder name');
+  });
+
   function repeatRow(container, fields) {
     const div = document.createElement('div');
     div.className = 'repeat-item';
@@ -317,7 +425,8 @@
       bookingLabel: document.getElementById('bookingLabel').value || 'Schedule a Showing',
       otherPropertyUrl: document.getElementById('otherPropertyUrl').value,
       otherPropertyLabel: document.getElementById('otherPropertyLabel').value || 'View Another Listing',
-      showQR: document.getElementById('showQR').checked
+      showQR: document.getElementById('showQR').checked,
+      accessToken: document.getElementById('accessToken').value
     };
   }
 
@@ -404,9 +513,13 @@
     setVal('otherPropertyUrl', d.otherPropertyUrl);
     setVal('otherPropertyLabel', d.otherPropertyLabel || 'View Another Listing');
     document.getElementById('showQR').checked = d.showQR !== false;
+    setVal('accessToken', d.accessToken || generateToken());
 
     document.getElementById('photosList').innerHTML = '';
     (d.photos || []).forEach(p => addPhotoRow(p));
+
+    folderNameAutoFilled = true;
+    autoFillFolderName();
 
     document.getElementById('statusEl').textContent = `Loaded ${d.address || 'this listing'} — edit anything, then Download to save your changes.`;
   }
@@ -429,6 +542,25 @@
     };
     reader.readAsText(file);
     e.target.value = '';
+  });
+
+  document.getElementById('newListingBtn').addEventListener('click', () => {
+    ['address', 'price', 'sqft', 'beds', 'baths', 'description', 'agentName',
+     'agentPhone', 'agentEmail', 'bookingUrl', 'otherPropertyUrl',
+     'folderName', 'tagUrl'].forEach(id => setVal(id, ''));
+    setVal('heroPhoto', 'hero.jpg');
+    setVal('agentPhotoFile', 'agent.jpg');
+    setVal('bookingLabel', 'Schedule a Showing');
+    setVal('otherPropertyLabel', 'View Another Listing');
+    document.getElementById('showQR').checked = true;
+
+    document.getElementById('photosList').innerHTML = '';
+    addPhotoRow();
+
+    document.getElementById('accessToken').value = generateToken();
+    folderNameAutoFilled = true;
+
+    document.getElementById('statusEl').textContent = 'Cleared — ready for a new listing.';
   });
 
   document.getElementById('downloadBtn').addEventListener('click', () => {
