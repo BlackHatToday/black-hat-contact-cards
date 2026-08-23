@@ -463,7 +463,7 @@
       (d.websites && d.websites.length ? d.websites : [{}]).forEach(w => addWebsiteRow(w));
       (d.experience || []).forEach(e => addExperienceRow(e));
 
-      document.getElementById('statusEl').textContent = 'Your current info has been loaded below — review and edit anything, then send when ready.';
+      document.getElementById('statusEl').textContent = 'Your current info has been loaded — review and edit anything, then send when ready.';
     } catch (err) {
       // If the loaded data is malformed for any reason, just fall back to a normal blank form
       addPhoneRow();
@@ -530,7 +530,7 @@
   }
 
   // Set this to your own email address before sending this form to friends.
-  const RECIPIENT_EMAIL = "BlackHatToday+BHCC@GMail.com";
+  const RECIPIENT_EMAIL = "BlackHatToday+BHCC@Gmail.com";
 
   function formatAsText(d) {
     const lines = [];

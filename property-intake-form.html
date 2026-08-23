@@ -258,7 +258,7 @@
       setVal('agentPhone', d.agentPhone);
       setVal('agentEmail', d.agentEmail);
       setVal('bookingUrl', d.bookingUrl);
-      document.getElementById('statusEl').textContent = 'This listing\'s current info has been loaded below — review and edit anything, then send when ready.';
+      document.getElementById('statusEl').textContent = 'This listing\'s current info has been loaded — review and edit anything, then send when ready.';
     } catch (err) {
       // Malformed data — just leave the form blank rather than error out
     }
@@ -322,7 +322,7 @@
   });
 
   // Set this to your own email address before sending this form out.
-  const RECIPIENT_EMAIL = "BlackHatToday+BHCC@GMail.com";
+  const RECIPIENT_EMAIL = "BlackHatToday+BHCC@Gmail.com";
 
   function formatAsText(d) {
     const lines = [];
