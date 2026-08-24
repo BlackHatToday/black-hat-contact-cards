@@ -204,6 +204,23 @@
     btn.addEventListener('click', () => window.print());
   }
 
+  // Prints just the name + QR code, separate from the full-card
+  // Save-as-PDF above. Adds a body class the print stylesheet uses to
+  // hide everything else, then removes it once printing is done so it
+  // doesn't affect a later full-card print.
+  function wirePrintQrOnly() {
+    const link = document.getElementById('printQrLink');
+    if (!link) return;
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      document.body.classList.add('print-qr-only');
+      window.print();
+    });
+    window.addEventListener('afterprint', () => {
+      document.body.classList.remove('print-qr-only');
+    });
+  }
+
   function renderNotes(d) {
     if (!d.notes) return;
     document.getElementById('notesEl').textContent = d.notes;
@@ -330,6 +347,7 @@
     const data = await loadData();
     wireQrModal();
     wireDownloadPdf();
+    wirePrintQrOnly();
     renderPhoto(data);
     renderIdentity(data);
     renderAbout(data);
