@@ -199,6 +199,13 @@
   <form id="cardForm">
 
     <fieldset>
+      <legend>What can we help with?</legend>
+      <label>Message (optional)</label>
+      <textarea id="supportMessage" placeholder="Ask a question, report an issue, or just describe what changed below."></textarea>
+      <div class="hint">This goes straight to us — it's never shown on your card.</div>
+    </fieldset>
+
+    <fieldset>
       <legend>Identity</legend>
       <div class="row3">
         <div><label>Prefix (optional)</label><input type="text" id="prefix" placeholder="Dr."></div>
@@ -433,6 +440,7 @@
   // Start with one phone, one email, and one website row pre-added, since almost everyone needs at least one
   const urlParams = new URLSearchParams(window.location.search);
   const prefillData = urlParams.get('data');
+  let tokenStatus = 'none'; // set below if this was opened via the card's "Need to update" link
 
   if (!prefillData) {
     addPhoneRow();
@@ -441,6 +449,7 @@
   } else {
     try {
       const d = JSON.parse(prefillData);
+      tokenStatus = d._tokenStatus || 'none';
       const setVal = (id, value) => { const el = document.getElementById(id); if (el) el.value = value || ''; };
 
       setVal('prefix', d.prefix);
@@ -525,7 +534,8 @@
       emails,
       websites,
       calendlyUrl: document.getElementById('calendlyUrl').value,
-      address: document.getElementById('address').value
+      address: document.getElementById('address').value,
+      supportMessage: document.getElementById('supportMessage').value
     };
   }
 
@@ -534,6 +544,22 @@
 
   function formatAsText(d) {
     const lines = [];
+
+    if (tokenStatus === 'verified') {
+      lines.push('✓ VERIFIED — sent via the actual card link, token matches what\'s on file.');
+    } else if (tokenStatus === 'unverified') {
+      lines.push('⚠ NOT VERIFIED — token missing or doesn\'t match what\'s on file. Confirm this is really them before making changes.');
+    }
+    if (tokenStatus !== 'none') lines.push('');
+
+    if (d.supportMessage) {
+      lines.push('Message:');
+      lines.push(d.supportMessage);
+      lines.push('');
+      lines.push('---');
+      lines.push('');
+    }
+
     const name = [d.prefix, d.firstName, d.lastName].filter(Boolean).join(' ');
     lines.push(`Name: ${name}`);
     if (d.title) lines.push(`Title: ${d.title}`);
@@ -578,7 +604,8 @@
     if (d.calendlyUrl) lines.push(`\nCalendly link: ${d.calendlyUrl}`);
     if (d.notes) lines.push(`\nNotes:\n${d.notes}`);
 
-    lines.push('\n---\nDon\'t forget to attach a photo to this email if you\'d like one on your card!');
+    lines.push('\n---\nRemember to attach a photo to this email if you\'d like one on your card!');
+    lines.push('\nIf you\'d like to support this project:\nCash App: $BlackHatToday\nZelle: 252.433.7173');
     return lines.join('\n');
   }
 
@@ -699,7 +726,8 @@
       return;
     }
     const name = `${data.firstName} ${data.lastName}`;
-    const subject = encodeURIComponent(`Contact card info — ${name}`);
+    const subjectPrefix = tokenStatus === 'verified' ? '[Verified] ' : tokenStatus === 'unverified' ? '[UNVERIFIED] ' : '';
+    const subject = encodeURIComponent(`${subjectPrefix}Contact / Support — ${name}`);
     const body = encodeURIComponent(formatAsText(data));
     window.location.href = `mailto:${RECIPIENT_EMAIL}?subject=${subject}&body=${body}`;
     document.getElementById('statusEl').textContent = 'Your email app should be opening now — just hit send (and attach a photo if you\'d like one).';

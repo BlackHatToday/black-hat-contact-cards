@@ -148,6 +148,13 @@
   <form id="listingForm">
 
     <fieldset>
+      <legend>What can we help with?</legend>
+      <label>Message (optional)</label>
+      <textarea id="supportMessage" placeholder="Ask a question, report an issue, or just describe what changed below."></textarea>
+      <div class="hint">This goes straight to us — it's never shown on the listing card.</div>
+    </fieldset>
+
+    <fieldset>
       <legend>Property</legend>
       <label>Address</label>
       <input type="text" id="address" placeholder="123 Main St, Anytown, ST 12345">
@@ -215,7 +222,8 @@
       agentName: document.getElementById('agentName').value,
       agentPhone: document.getElementById('agentPhone').value,
       agentEmail: document.getElementById('agentEmail').value,
-      bookingUrl: document.getElementById('bookingUrl').value
+      bookingUrl: document.getElementById('bookingUrl').value,
+      supportMessage: document.getElementById('supportMessage').value
     };
   }
 
@@ -241,12 +249,14 @@
   // If this page was opened via the "Review & edit first" link on a live
   // listing card, its current info arrives as a URL parameter — fill in
   // every field from it so the agent sees everything before editing.
+  let tokenStatus = 'none'; // set below if this was opened via the card's "Need to update" link
   (function prefillFromUrl() {
     const params = new URLSearchParams(window.location.search);
     const prefillData = params.get('data');
     if (!prefillData) return;
     try {
       const d = JSON.parse(prefillData);
+      tokenStatus = d._tokenStatus || 'none';
       const setVal = (id, value) => { const el = document.getElementById(id); if (el) el.value = value || ''; };
       setVal('address', d.address);
       setVal('price', d.price);
@@ -326,6 +336,22 @@
 
   function formatAsText(d) {
     const lines = [];
+
+    if (tokenStatus === 'verified') {
+      lines.push('✓ VERIFIED — sent via the actual listing card link, token matches what\'s on file.');
+    } else if (tokenStatus === 'unverified') {
+      lines.push('⚠ NOT VERIFIED — token missing or doesn\'t match what\'s on file. Confirm this is really the listing agent before making changes.');
+    }
+    if (tokenStatus !== 'none') lines.push('');
+
+    if (d.supportMessage) {
+      lines.push('Message:');
+      lines.push(d.supportMessage);
+      lines.push('');
+      lines.push('---');
+      lines.push('');
+    }
+
     lines.push(`Address: ${d.address}`);
     if (d.price) lines.push(`Price: ${d.price}`);
     if (d.sqft) lines.push(`Square Feet: ${d.sqft}`);
@@ -340,7 +366,8 @@
 
     if (d.bookingUrl) lines.push(`\nBooking link: ${d.bookingUrl}`);
 
-    lines.push('\n---\nDon\'t forget to attach the property photos (and your own photo, if you\'d like it on the card) to this email!');
+    lines.push('\n---\nRemember to attach the property photos (and your own photo, if you\'d like it on the card) to this email!');
+    lines.push('\nIf you\'d like to support this project:\nCash App: $BlackHatToday\nZelle: 252.433.7173');
     return lines.join('\n');
   }
 
@@ -350,7 +377,8 @@
       document.getElementById('statusEl').textContent = 'Please enter at least the property address.';
       return;
     }
-    const subject = encodeURIComponent(`Listing info — ${data.address}`);
+    const subjectPrefix = tokenStatus === 'verified' ? '[Verified] ' : tokenStatus === 'unverified' ? '[UNVERIFIED] ' : '';
+    const subject = encodeURIComponent(`${subjectPrefix}Contact / Support — ${data.address}`);
     const body = encodeURIComponent(formatAsText(data));
     window.location.href = `mailto:${RECIPIENT_EMAIL}?subject=${subject}&body=${body}`;
     document.getElementById('statusEl').textContent = 'Your email app should be opening now — just hit send (and attach the photos!).';
