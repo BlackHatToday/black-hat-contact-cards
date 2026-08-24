@@ -24,8 +24,18 @@
   },
   "paymentSectionLabel": "Payment",
   "notes": "",
-  "phones": [],
-  "emails": [],
+  "phones": [
+    {
+      "type": "Mobile",
+      "number": "(919) 693-1121"
+    }
+  ],
+  "emails": [
+    {
+      "type": "Personal",
+      "address": "Mark.Pace@GranvilleCounty.org"
+    }
+  ],
   "websites": [],
   "listings": [],
   "calendlyUrl": "",
