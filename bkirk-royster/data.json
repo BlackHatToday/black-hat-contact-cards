@@ -20,27 +20,37 @@
     "cashapp": "$BlackHat",
     "venmo": "",
     "paypal": "",
-    "zelle": ""
+    "zelle": "252.433.7173"
   },
+  "paymentSectionLabel": "Payment",
   "notes": "",
   "phones": [
     {
-      "type": "Mobile",
+      "type": "Work",
       "number": "(919) 594-7693"
     }
   ],
   "emails": [
     {
-      "type": "Personal",
+      "type": "Work",
       "address": "WhiteStoneMemorials@GMail.com"
     },
     {
-      "type": "Personal",
+      "type": "Work",
       "address": "BlackHatToday@GMail.com"
     }
   ],
-  "websites": [],
+  "websites": [
+    {
+      "label": "Website",
+      "url": "https://christquarter.buzzsprout.com/"
+    }
+  ],
+  "listings": [],
   "calendlyUrl": "",
+  "bookingLabel": "Book a Time",
+  "address": "P.O. Box 913 Oxford NC 27565",
   "photoFile": "photo.jpg",
+  "accessToken": "7t9irvcj",
   "showQR": true
 }
