@@ -1,0 +1,37 @@
+{
+  "prefix": "",
+  "firstName": "Mark",
+  "lastName": "Pace",
+  "title": "Historian",
+  "org": "Richard H. Thornton Library",
+  "tagline": "",
+  "about": "",
+  "experience": [],
+  "skills": [],
+  "social": {
+    "instagram": "",
+    "tiktok": "",
+    "facebook": "",
+    "linkedin": "",
+    "twitter": "",
+    "youtube": ""
+  },
+  "payments": {
+    "cashapp": "",
+    "venmo": "",
+    "paypal": "",
+    "zelle": ""
+  },
+  "paymentSectionLabel": "Payment",
+  "notes": "",
+  "phones": [],
+  "emails": [],
+  "websites": [],
+  "listings": [],
+  "calendlyUrl": "",
+  "bookingLabel": "Book a Time",
+  "address": "",
+  "photoFile": "photo.jpg",
+  "accessToken": "2xf7cs48",
+  "showQR": true
+}
