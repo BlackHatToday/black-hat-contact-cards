@@ -222,52 +222,6 @@
     </fieldset>
 
     <fieldset>
-      <legend>About</legend>
-      <label>Narrative / bio (leave blank to hide this section)</label>
-      <textarea id="about" placeholder="A few sentences about who you are and what you do."></textarea>
-    </fieldset>
-
-    <fieldset>
-      <legend>Experience (optional)</legend>
-      <div id="experienceList"></div>
-      <button type="button" class="add-btn" id="addExperience">+ Add a role</button>
-    </fieldset>
-
-    <fieldset>
-      <legend>Skills (optional)</legend>
-      <label>Comma-separated</label>
-      <input type="text" id="skills" placeholder="Brand Strategy, Positioning, Public Speaking">
-    </fieldset>
-
-    <fieldset>
-      <legend>Social (optional — leave any blank to hide it)</legend>
-      <div class="row3">
-        <div><label>Instagram</label><input type="text" id="social_instagram" placeholder="handle"></div>
-        <div><label>TikTok</label><input type="text" id="social_tiktok" placeholder="handle"></div>
-        <div><label>Facebook</label><input type="text" id="social_facebook" placeholder="page name"></div>
-      </div>
-      <div class="row3">
-        <div><label>LinkedIn</label><input type="text" id="social_linkedin" placeholder="handle"></div>
-        <div><label>X / Twitter</label><input type="text" id="social_twitter" placeholder="handle"></div>
-        <div><label>YouTube</label><input type="text" id="social_youtube" placeholder="handle"></div>
-      </div>
-      <div class="hint">Just the handle/page name, not the full URL — e.g. "janedoe" not "instagram.com/janedoe".</div>
-    </fieldset>
-
-    <fieldset>
-      <legend>Payments (optional — leave any blank to hide it)</legend>
-      <div class="row2">
-        <div><label>Cash App</label><input type="text" id="payment_cashapp" placeholder="$cashtag"></div>
-        <div><label>Venmo</label><input type="text" id="payment_venmo" placeholder="@username"></div>
-      </div>
-      <div class="row2">
-        <div><label>PayPal</label><input type="text" id="payment_paypal" placeholder="paypal.me username"></div>
-        <div><label>Zelle</label><input type="text" id="payment_zelle" placeholder="phone or email"></div>
-      </div>
-      <div class="hint">If people can pay or tip you this way, this shows a tappable link on your card (Zelle shows as plain info instead, since it doesn't support a public link).</div>
-    </fieldset>
-
-    <fieldset>
       <legend>Phone numbers</legend>
       <div id="phoneList"></div>
       <button type="button" class="add-btn" id="addPhone">+ Add a phone number</button>
@@ -279,30 +233,82 @@
       <button type="button" class="add-btn" id="addEmail">+ Add an email</button>
     </fieldset>
 
-    <fieldset>
-      <legend>Address (optional)</legend>
-      <label>Physical / mailing address</label>
-      <input type="text" id="address" placeholder="123 Main St, Anytown, ST 12345">
-      <div class="hint">Only include this if you're comfortable with it being on your card — it'll show as a tappable row that opens directions.</div>
-    </fieldset>
+    <button type="button" class="add-btn" id="moreDetailsToggle" style="margin-bottom:18px;">+ Add more details (optional)</button>
 
-    <fieldset>
-      <legend>Websites</legend>
-      <div id="websiteList"></div>
-      <button type="button" class="add-btn" id="addWebsite">+ Add a website</button>
-    </fieldset>
+    <div id="moreDetailsSection" style="display:none;">
 
-    <fieldset>
-      <legend>Note (optional)</legend>
-      <textarea id="notes" placeholder="Any short freeform note — hidden if left blank."></textarea>
-    </fieldset>
+      <fieldset>
+        <legend>About</legend>
+        <label>Narrative / bio (leave blank to hide this section)</label>
+        <textarea id="about" placeholder="A few sentences about who you are and what you do."></textarea>
+      </fieldset>
 
-    <fieldset>
-      <legend>Calendly (optional)</legend>
-      <label>Booking link</label>
-      <input type="url" id="calendlyUrl" placeholder="https://calendly.com/janedoe">
-      <div class="hint">Shows as a "Book a Time" button. Leave blank to hide it.</div>
-    </fieldset>
+      <fieldset>
+        <legend>Experience (optional)</legend>
+        <div id="experienceList"></div>
+        <button type="button" class="add-btn" id="addExperience">+ Add a role</button>
+      </fieldset>
+
+      <fieldset>
+        <legend>Skills (optional)</legend>
+        <label>Comma-separated</label>
+        <input type="text" id="skills" placeholder="Brand Strategy, Positioning, Public Speaking">
+      </fieldset>
+
+      <fieldset>
+        <legend>Social (optional — leave any blank to hide it)</legend>
+        <div class="row3">
+          <div><label>Instagram</label><input type="text" id="social_instagram" placeholder="handle"></div>
+          <div><label>TikTok</label><input type="text" id="social_tiktok" placeholder="handle"></div>
+          <div><label>Facebook</label><input type="text" id="social_facebook" placeholder="page name"></div>
+        </div>
+        <div class="row3">
+          <div><label>LinkedIn</label><input type="text" id="social_linkedin" placeholder="handle"></div>
+          <div><label>X / Twitter</label><input type="text" id="social_twitter" placeholder="handle"></div>
+          <div><label>YouTube</label><input type="text" id="social_youtube" placeholder="handle"></div>
+        </div>
+        <div class="hint">Just the handle/page name, not the full URL — e.g. "janedoe" not "instagram.com/janedoe".</div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Payments (optional — leave any blank to hide it)</legend>
+        <div class="row2">
+          <div><label>Cash App</label><input type="text" id="payment_cashapp" placeholder="$cashtag"></div>
+          <div><label>Venmo</label><input type="text" id="payment_venmo" placeholder="@username"></div>
+        </div>
+        <div class="row2">
+          <div><label>PayPal</label><input type="text" id="payment_paypal" placeholder="paypal.me username"></div>
+          <div><label>Zelle</label><input type="text" id="payment_zelle" placeholder="phone or email"></div>
+        </div>
+        <div class="hint">If people can pay or tip you this way, this shows a tappable link on your card (Zelle shows as plain info instead, since it doesn't support a public link).</div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Address (optional)</legend>
+        <label>Physical / mailing address</label>
+        <input type="text" id="address" placeholder="123 Main St, Anytown, ST 12345">
+        <div class="hint">Only include this if you're comfortable with it being on your card — it'll show as a tappable row that opens directions.</div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Websites</legend>
+        <div id="websiteList"></div>
+        <button type="button" class="add-btn" id="addWebsite">+ Add a website</button>
+      </fieldset>
+
+      <fieldset>
+        <legend>Note (optional)</legend>
+        <textarea id="notes" placeholder="Any short freeform note — hidden if left blank."></textarea>
+      </fieldset>
+
+      <fieldset>
+        <legend>Calendly (optional)</legend>
+        <label>Booking link</label>
+        <input type="url" id="calendlyUrl" placeholder="https://calendly.com/janedoe">
+        <div class="hint">Shows as a "Book a Time" button. Leave blank to hide it.</div>
+      </fieldset>
+
+    </div>
 
   </form>
 
@@ -356,6 +362,13 @@
     }
     input.value = out;
   }
+
+  function expandMoreDetails() {
+    document.getElementById('moreDetailsSection').style.display = 'block';
+    document.getElementById('moreDetailsToggle').style.display = 'none';
+  }
+
+  document.getElementById('moreDetailsToggle').addEventListener('click', expandMoreDetails);
 
   function addPhoneRow(prefill = {}) {
     const row = repeatRow(document.getElementById('phoneList'), `
@@ -471,6 +484,8 @@
       (d.emails && d.emails.length ? d.emails : [{}]).forEach(e => addEmailRow(e));
       (d.websites && d.websites.length ? d.websites : [{}]).forEach(w => addWebsiteRow(w));
       (d.experience || []).forEach(e => addExperienceRow(e));
+
+      expandMoreDetails(); // this person already has real data — show it, don't make them dig for it
 
       document.getElementById('statusEl').textContent = 'Your current info has been loaded — review and edit anything, then send when ready.';
     } catch (err) {
