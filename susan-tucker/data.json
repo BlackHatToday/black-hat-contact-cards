@@ -1,0 +1,47 @@
+{
+  "prefix": "",
+  "firstName": "Susan",
+  "lastName": "Tucker",
+  "title": "Senior Center Program Coordinator",
+  "org": "North Granville Senior Center",
+  "tagline": "",
+  "about": "",
+  "experience": [],
+  "skills": [],
+  "social": {
+    "instagram": "",
+    "tiktok": "",
+    "facebook": "",
+    "linkedin": "",
+    "twitter": "",
+    "youtube": ""
+  },
+  "payments": {
+    "cashapp": "",
+    "venmo": "",
+    "paypal": "",
+    "zelle": ""
+  },
+  "paymentSectionLabel": "Payment",
+  "notes": "",
+  "phones": [
+    {
+      "type": "Mobile",
+      "number": "(919) 693-3383"
+    }
+  ],
+  "emails": [
+    {
+      "type": "Personal",
+      "address": "Susan.Tucker@GranvilleCounty.org"
+    }
+  ],
+  "websites": [],
+  "listings": [],
+  "calendlyUrl": "",
+  "bookingLabel": "Book a Time",
+  "address": "318 Highway 15 South   Stovall NC 27582",
+  "photoFile": "photo.jpg",
+  "accessToken": "eyt7mqmv",
+  "showQR": true
+}
