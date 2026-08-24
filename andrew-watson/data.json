@@ -5,7 +5,7 @@
   "title": "",
   "org": "Always Air Heating & Cooling",
   "tagline": "",
-  "about": "",
+  "about": "Always Air was established in 2023 by Andrew, an experienced HVAC technician with more than 11 years in the industry. The company is committed to providing high-quality heating and cooling solutions tailored to each client’s unique needs. With a strong foundation of expertise and a focus on dependable service, Always Air strives to ensure year-round indoor comfort. Discover the difference with Always Air—where your comfort is our priority.",
   "experience": [],
   "skills": [],
   "social": {
@@ -22,7 +22,8 @@
     "paypal": "",
     "zelle": ""
   },
-  "notes": "",
+  "paymentSectionLabel": "Payment",
+  "notes": "Always Air is proudly based in Granville County and provides reliable HVAC services to the surrounding areas. Our service region includes, but is not limited to, Granville County, Vance County, Durham County, Wake County, and Person County.",
   "phones": [
     {
       "type": "Mobile",
@@ -41,7 +42,11 @@
       "url": "www.AlwaysAirNC.com"
     }
   ],
+  "listings": [],
   "calendlyUrl": "",
+  "bookingLabel": "Book a Time",
+  "address": "4015 Chewning Road | Oxford, North Carolina 27565",
   "photoFile": "photo.jpg",
+  "accessToken": "qg9abqzw",
   "showQR": true
 }
