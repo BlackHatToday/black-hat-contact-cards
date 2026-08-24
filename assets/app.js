@@ -144,11 +144,17 @@
             </button>
           </div>`;
       }
-      // No universal link for this platform (e.g. Zelle) — plain info, no QR possible
+      // No universal link for this platform (e.g. Zelle) — plain info, no QR possible.
+      // Called out explicitly since the linkable rows above it (Cash App etc.)
+      // set an expectation that every payment row taps through to something.
       return `
         <div class="field" style="cursor:default;">
           <span class="icon">${ICONS.payment}</span>
-          <span class="meta"><div class="label">${cfg.label}</div><div class="value">${value}</div></span>
+          <span class="meta">
+            <div class="label">${cfg.label}</div>
+            <div class="value">${value}</div>
+            <div style="font-family:'IBM Plex Mono', monospace; font-size:9.5px; color:var(--muted); margin-top:2px;">Not clickable — send manually via your bank's Zelle</div>
+          </span>
         </div>`;
     }).join('');
 
@@ -250,15 +256,30 @@
   // already filled in, via a URL parameter — so they can see everything
   // laid out and edit it visually before sending, rather than typing a
   // blank note. Only includes fields that form actually supports.
+  //
+  // Also checks for a security token in the URL (?t=...), meant to be
+  // baked into the physical NFC tag itself, not guessable from just the
+  // person's name. If it matches what's stored in data.json, the outgoing
+  // request is flagged as verified — if it's missing or wrong, flagged as
+  // unverified — so you don't have to manually compare anything yourself.
+  // Cards without a token at all (not yet migrated) get no flag either way.
   function renderEditMyInfoLink(d) {
     const link = document.getElementById('editMyInfoLink');
     if (!link) return;
+
+    let tokenStatus = 'none'; // this card has no token system in use yet
+    if (d.accessToken) {
+      const urlToken = new URLSearchParams(window.location.search).get('t');
+      tokenStatus = (urlToken && urlToken === d.accessToken) ? 'verified' : 'unverified';
+    }
+
     const trimmed = {
       prefix: d.prefix, firstName: d.firstName, lastName: d.lastName,
       title: d.title, org: d.org, tagline: d.tagline, about: d.about,
       experience: d.experience, skills: d.skills, social: d.social,
       payments: d.payments, notes: d.notes, phones: d.phones, emails: d.emails,
-      websites: d.websites, address: d.address, calendlyUrl: d.calendlyUrl
+      websites: d.websites, address: d.address, calendlyUrl: d.calendlyUrl,
+      _tokenStatus: tokenStatus
     };
     const encoded = encodeURIComponent(JSON.stringify(trimmed));
     link.href = `/my-contact-info-form.html?data=${encoded}`;

@@ -642,7 +642,7 @@
 
     const paymentRows = Object.entries(d.payments || {})
       .filter(([, v]) => v)
-      .map(([platform, handle]) => ({ label: PAYMENT_LABELS[platform] || platform, value: handle }));
+      .map(([platform, handle]) => ({ platform, label: PAYMENT_LABELS[platform] || platform, value: handle }));
 
     const socialBadges = Object.entries(d.social)
       .filter(([, v]) => v)
@@ -686,7 +686,7 @@
       ${paymentRows.length ? `
         <div class="mc-section-label">Payment</div>
         <div class="mc-fields">
-          ${paymentRows.map(r => `<div class="mc-field"><div class="mc-label">${r.label}</div><div class="mc-value">${r.value}</div></div>`).join('')}
+          ${paymentRows.map(r => `<div class="mc-field"><div class="mc-label">${r.label}</div><div class="mc-value">${r.value}</div>${r.platform === 'zelle' ? '<div style="font-family:\'IBM Plex Mono\',monospace; font-size:9px; color:var(--muted); margin-top:2px;">Not clickable — send manually via your bank\'s Zelle</div>' : ''}</div>`).join('')}
         </div>
       ` : ''}
 
