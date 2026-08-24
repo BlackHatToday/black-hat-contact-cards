@@ -1,0 +1,47 @@
+{
+  "prefix": "",
+  "firstName": "Sydney",
+  "lastName": "Brainard",
+  "title": "Reporter",
+  "org": "The Ledger News",
+  "tagline": "",
+  "about": "",
+  "experience": [],
+  "skills": [],
+  "social": {
+    "instagram": "",
+    "tiktok": "",
+    "facebook": "",
+    "linkedin": "",
+    "twitter": "",
+    "youtube": ""
+  },
+  "payments": {
+    "cashapp": "",
+    "venmo": "",
+    "paypal": "",
+    "zelle": ""
+  },
+  "paymentSectionLabel": "Payment",
+  "notes": "",
+  "phones": [],
+  "emails": [
+    {
+      "type": "Work",
+      "address": "SBrainard@TheLedgerNews.com"
+    }
+  ],
+  "websites": [
+    {
+      "label": "Website",
+      "url": "https://www.theledgernews.com/"
+    }
+  ],
+  "listings": [],
+  "calendlyUrl": "",
+  "bookingLabel": "Book a Time",
+  "address": "",
+  "photoFile": "photo.jpg",
+  "accessToken": "m3zgh2se",
+  "showQR": true
+}
