@@ -101,6 +101,8 @@
     <a id="printQrLink" class="update-request-link" style="margin-top:10px;">Print QR Code Only</a>
   </section>
 
+  <p id="quickShareIntro" style="display:none; text-align:center; padding:0 28px; margin-bottom:16px; color:var(--muted); font-size:14px;"></p>
+
   <div style="padding: 0 28px;">
     <button class="save-btn" id="saveBtn">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -115,6 +117,13 @@
         <path d="M22 2 11 13M22 2 15 22l-4-9-9-4 20-7z"/>
       </svg>
       <span id="shareBackLabel">Share Your Info</span>
+    </button>
+    <button type="button" class="book-btn" id="collectContactBtn" style="display:none;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+        <rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3zM20 14v3M14 20h3M20 20v.01"/>
+      </svg>
+      Collect Contact Info
     </button>
     <button type="button" class="book-btn" id="pdfSaveBtn">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -165,6 +174,21 @@
       Copy Link
     </button>
     <button type="button" class="refer-modal-cancel" id="referModalClose">Cancel</button>
+  </div>
+</div>
+
+<div class="qr-modal-overlay" id="shareBackModalOverlay">
+  <div class="refer-modal">
+    <div class="refer-modal-title" id="shareBackModalTitle">Share Your Info</div>
+    <button type="button" class="refer-modal-btn" id="shareBackTextBtn" style="display:none;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Text
+    </button>
+    <button type="button" class="refer-modal-btn" id="shareBackEmailBtn" style="display:none;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 6 12 13 2 6"/><path d="M2 6h20v12H2z"/></svg>
+      Email
+    </button>
+    <button type="button" class="refer-modal-cancel" id="shareBackModalClose">Cancel</button>
   </div>
 </div>
 
