@@ -231,30 +231,55 @@
   // the correct domain regardless of which URL they arrived through.
   const PROJECT_BASE_URL = 'https://blackhatcards.community';
 
+  // Explicit Text/Email/Copy choices instead of the OS-controlled Web
+  // Share sheet — that sheet's available targets vary by device/browser
+  // (desktop browsers often only offer Mail, no SMS capability at all),
+  // so this guarantees all three options work everywhere, every time.
   function wireReferButton() {
     const btn = document.getElementById('referBtn');
-    if (!btn) return;
-    btn.addEventListener('click', async () => {
-      const referUrl = `${PROJECT_BASE_URL}/my-contact-info-form.html`;
-      // Some share targets (SMS, WhatsApp) ignore "title" entirely and only
-      // show "text" — so text needs to fully carry the message on its own,
-      // not depend on title being displayed.
-      const shareData = {
-        title: 'Request a Black Hat Card',
-        text: 'I have a digital contact card that saves to your phone with a tap. Want your own? Request a Black Hat Card here:',
-        url: referUrl
-      };
-      if (navigator.share) {
-        try { await navigator.share(shareData); }
-        catch (err) { /* they cancelled the share sheet — not an error */ }
-      } else {
-        try {
-          await navigator.clipboard.writeText(`${shareData.text}\n${referUrl}`);
-          document.getElementById('statusEl').textContent = 'Referral link copied — paste it wherever you\'d like to send it.';
-        } catch (err) {
-          document.getElementById('statusEl').textContent = `Share this link: ${referUrl}`;
-        }
+    const overlay = document.getElementById('referModalOverlay');
+    if (!btn || !overlay) return;
+
+    const referUrl = `${PROJECT_BASE_URL}/my-contact-info-form.html`;
+    const message = 'I have a digital contact card that saves to your phone with a tap. Want your own? Request a Black Hat Card here:';
+
+    btn.addEventListener('click', () => overlay.classList.add('open'));
+    document.getElementById('referModalClose').addEventListener('click', () => overlay.classList.remove('open'));
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('open'); });
+
+    document.getElementById('referTextBtn').addEventListener('click', () => {
+      // iOS and Android expect different separators before the body param
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      const separator = isIOS ? '&' : '?';
+      window.location.href = `sms:${separator}body=${encodeURIComponent(`${message}\n${referUrl}`)}`;
+      overlay.classList.remove('open');
+    });
+
+    document.getElementById('referEmailBtn').addEventListener('click', () => {
+      const subject = encodeURIComponent('Request a Black Hat Card');
+      const body = encodeURIComponent(`${message}\n\n${referUrl}`);
+      window.location.href = `mailto:?subject=${subject}&body=${body}`;
+      overlay.classList.remove('open');
+    });
+
+    document.getElementById('referCopyBtn').addEventListener('click', async () => {
+      const text = `${message}\n${referUrl}`;
+      try {
+        await navigator.clipboard.writeText(text);
+        document.getElementById('statusEl').textContent = 'Referral link copied — paste it wherever you\'d like to send it.';
+      } catch (err) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        try { document.execCommand('copy'); document.getElementById('statusEl').textContent = 'Referral link copied.'; }
+        catch (e2) { document.getElementById('statusEl').textContent = `Share this link: ${referUrl}`; }
+        document.body.removeChild(ta);
       }
+      overlay.classList.remove('open');
     });
   }
 

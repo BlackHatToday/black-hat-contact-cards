@@ -150,6 +150,30 @@ section{ padding: 0 28px; margin-top: 8px; }
 }
 .qr-modal-close:hover{ background:var(--copper-soft); }
 
+/* ---- refer choice modal (Text / Email / Copy) ---- */
+.refer-modal{
+  background:var(--surface); border:1px solid var(--line); border-radius:16px;
+  padding:24px 22px; text-align:center; max-width:280px; width:100%;
+}
+.refer-modal-title{
+  font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:15px;
+  margin-bottom:18px; color:var(--parchment);
+}
+.refer-modal-btn{
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  width:100%; padding:13px; margin-bottom:10px;
+  background:var(--surface-2); border:1px solid var(--line); border-radius:12px;
+  color:var(--parchment); font-family:'Space Grotesk', sans-serif; font-weight:500; font-size:14px;
+  cursor:pointer; transition:border-color .15s ease;
+}
+.refer-modal-btn:hover{ border-color:var(--copper); }
+.refer-modal-btn svg{ width:17px; height:17px; color:var(--copper); }
+.refer-modal-cancel{
+  width:100%; padding:11px; background:none; border:none;
+  color:var(--muted); font-family:'IBM Plex Mono', monospace; font-size:12.5px; cursor:pointer;
+}
+.refer-modal-cancel:hover{ color:var(--parchment); }
+
 /* ---- QR block ---- */
 .qr-block{
   display:flex; align-items:center; gap:20px; padding:18px 20px;
@@ -393,7 +417,8 @@ footer{
   #updateRequestLink,
   #editMyInfoLink,
   #pdfSaveBtn,
-  .qr-modal-overlay{
+  .qr-modal-overlay,
+  .refer-modal-overlay{
     display:none !important;
   }
 
