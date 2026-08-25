@@ -315,20 +315,99 @@
   // Lets a visitor send THEIR info back to the card owner. There's no
   // web technology that can read "the visitor's own contact card" from
   // their phone (that's locked down for privacy reasons), so this opens
-  // a pre-addressed, pre-written email the visitor fills in themselves —
-  // same low-friction pattern used elsewhere in this project.
+  // a pre-addressed, pre-written email or text the visitor fills in
+  // themselves — same low-friction pattern used elsewhere in this project.
+  //
+  // Adds a timestamp automatically (email only — texts already carry
+  // their own timestamp in the Messages app), and a location link IF the
+  // visitor's browser grants permission — a genuine permission prompt on
+  // their end, never automatic, and the message still sends fine either way.
+  function getLocationLinkBestEffort() {
+    return new Promise((resolve) => {
+      if (!navigator.geolocation) { resolve(''); return; }
+      navigator.geolocation.getCurrentPosition(
+        (pos) => resolve(`https://maps.google.com/?q=${pos.coords.latitude},${pos.coords.longitude}`),
+        () => resolve(''), // denied, timed out, or unavailable — just omit it, not an error
+        { timeout: 4000, maximumAge: 60000 }
+      );
+    });
+  }
+
+  async function sendShareBackEmail(ownerEmail, ownerFirstName) {
+    const timestamp = new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
+    const locationLink = await getLocationLinkBestEffort();
+
+    const subject = encodeURIComponent(`[New Contact] Nice to meet you, ${ownerFirstName}!`);
+    const bodyLines = [
+      `Hi ${ownerFirstName},`, '',
+      `Great meeting you! Here's my info:`, '',
+      'Name: ', 'Title: ', 'Company: ', 'Phone: ', 'Email: ', '',
+      '(fill in when you get a chance!)', '',
+      '---',
+      `Met: ${timestamp}`
+    ];
+    if (locationLink) bodyLines.push(`Location: ${locationLink}`);
+    const body = encodeURIComponent(bodyLines.join('\n'));
+
+    window.location.href = `mailto:${ownerEmail}?subject=${subject}&body=${body}`;
+  }
+
+  async function sendShareBackText(ownerPhone, ownerFirstName) {
+    const locationLink = await getLocationLinkBestEffort();
+
+    const bodyLines = [
+      `Hi ${ownerFirstName}! Great meeting you — here's my info:`, '',
+      'Name: ', 'Title: ', 'Company: ', 'Phone: ', 'Email: '
+    ];
+    if (locationLink) { bodyLines.push(''); bodyLines.push(`Location: ${locationLink}`); }
+    const body = bodyLines.join('\n');
+
+    const cleanPhone = ownerPhone.replace(/[^+\d]/g, '');
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const separator = isIOS ? '&' : '?';
+    window.location.href = `sms:${cleanPhone}${separator}body=${encodeURIComponent(body)}`;
+  }
+
   function renderShareBack(d) {
     const ownerEmail = (d.emails && d.emails[0] && d.emails[0].address) || '';
-    if (!ownerEmail) return; // nothing to address the email to
+    const ownerPhone = (d.phones && d.phones[0] && d.phones[0].number) || '';
+    if (!ownerEmail && !ownerPhone) return; // nothing to send this to at all
+
     const btn = document.getElementById('shareBackBtn');
     const ownerFirstName = d.firstName || 'there';
     document.getElementById('shareBackLabel').textContent = `Share Your Info With ${ownerFirstName}`;
     btn.style.display = 'flex';
-    btn.addEventListener('click', () => {
-      const subject = encodeURIComponent(`Nice to meet you, ${ownerFirstName}!`);
-      const body = encodeURIComponent(`Hi ${ownerFirstName},\n\nGreat meeting you! Here's my info:\n\nName: \nPhone: \nEmail: \n\n(fill in when you get a chance!)`);
-      window.location.href = `mailto:${ownerEmail}?subject=${subject}&body=${body}`;
+
+    const overlay = document.getElementById('shareBackModalOverlay');
+    const textBtn = document.getElementById('shareBackTextBtn');
+    const emailBtn = document.getElementById('shareBackEmailBtn');
+    if (ownerPhone) textBtn.style.display = 'flex';
+    if (ownerEmail) emailBtn.style.display = 'flex';
+
+    btn.addEventListener('click', () => overlay.classList.add('open'));
+    document.getElementById('shareBackModalClose').addEventListener('click', () => overlay.classList.remove('open'));
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('open'); });
+
+    textBtn.addEventListener('click', () => {
+      sendShareBackText(ownerPhone, ownerFirstName);
+      overlay.classList.remove('open');
     });
+    emailBtn.addEventListener('click', () => {
+      sendShareBackEmail(ownerEmail, ownerFirstName);
+      overlay.classList.remove('open');
+    });
+
+    // "Collect Contact Info" — lets the card OWNER show a QR that jumps
+    // straight to a minimal "share your info" screen, skipping the full
+    // card. See quick-share-mode below for what that screen looks like.
+    const collectBtn = document.getElementById('collectContactBtn');
+    if (collectBtn) {
+      collectBtn.style.display = 'flex';
+      collectBtn.addEventListener('click', () => {
+        const selfUrl = window.location.href.split('#')[0].split('?')[0];
+        openQrModal(`${selfUrl}?action=share`, 'Have them scan this to share their info with you');
+      });
+    }
   }
 
   // Sends the visitor to my-contact-info-form.html with their current info
@@ -407,6 +486,15 @@
 
   try {
     const data = await loadData();
+
+    // "Collect Contact Info" QR jumps here with ?action=share — strips
+    // the page down to just a photo/name and the Share Your Info button,
+    // so someone can send their info without wading through the full card.
+    if (new URLSearchParams(window.location.search).get('action') === 'share') {
+      document.body.classList.add('quick-share-mode');
+      document.getElementById('quickShareIntro').textContent = `${data.firstName || 'They'} would like your contact info.`;
+    }
+
     wireQrModal();
     wireDownloadPdf();
     wirePrintQrOnly();
