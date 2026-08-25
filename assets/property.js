@@ -119,13 +119,25 @@
   // Sends whoever's looking at this listing to property-intake-form.html
   // with its current info already filled in, via a URL parameter — so
   // it can be reviewed visually and edited before sending an update.
+  //
+  // Also checks for a security token in the URL (?t=...), baked into the
+  // physical NFC tag rather than guessable from the address alone. See
+  // the matching comment in assets/app.js for the full explanation.
   function renderEditListingLink(d) {
     const link = document.getElementById('editMyInfoLink');
     if (!link) return;
+
+    let tokenStatus = 'none';
+    if (d.accessToken) {
+      const urlToken = new URLSearchParams(window.location.search).get('t');
+      tokenStatus = (urlToken && urlToken === d.accessToken) ? 'verified' : 'unverified';
+    }
+
     const trimmed = {
       address: d.address, price: d.price, sqft: d.sqft, beds: d.beds, baths: d.baths,
       description: d.description, agentName: d.agentName, agentPhone: d.agentPhone,
-      agentEmail: d.agentEmail, bookingUrl: d.bookingUrl
+      agentEmail: d.agentEmail, bookingUrl: d.bookingUrl,
+      _tokenStatus: tokenStatus
     };
     const encoded = encodeURIComponent(JSON.stringify(trimmed));
     link.href = `/property-intake-form.html?data=${encoded}`;
@@ -162,9 +174,36 @@
     btn.addEventListener('click', () => window.print());
   }
 
+  // Same referral mechanism as the person card — always points at the
+  // general "get your own card" intake form, regardless of listing.
+  function wireReferButton() {
+    const btn = document.getElementById('referBtn');
+    if (!btn) return;
+    btn.addEventListener('click', async () => {
+      const referUrl = `${window.location.origin}/my-contact-info-form.html`;
+      const shareData = {
+        title: 'Get your own digital contact card',
+        text: 'I\'m using this to share my contact info with a tap — you can get one too:',
+        url: referUrl
+      };
+      if (navigator.share) {
+        try { await navigator.share(shareData); }
+        catch (err) { /* they cancelled the share sheet — not an error */ }
+      } else {
+        try {
+          await navigator.clipboard.writeText(`${shareData.text}\n${referUrl}`);
+          document.getElementById('statusEl').textContent = 'Referral link copied — paste it wherever you\'d like to send it.';
+        } catch (err) {
+          document.getElementById('statusEl').textContent = `Share this link: ${referUrl}`;
+        }
+      }
+    });
+  }
+
   try {
     const data = await loadData();
     wireDownloadPdf();
+    wireReferButton();
     renderHero(data);
     renderIdentity(data);
     renderStats(data);

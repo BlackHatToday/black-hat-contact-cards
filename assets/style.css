@@ -221,6 +221,12 @@ footer{
   letter-spacing:0.08em; text-transform:uppercase; color:#525a68;
 }
 
+.brand-line{
+  text-align:center; margin-top:8px;
+  font-family:'IBM Plex Mono', monospace; font-size:8.5px;
+  letter-spacing:0.04em; color:#3a3f4a;
+}
+
 .update-request-link{
   display:block; text-align:center; margin-top:14px;
   font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--muted);
@@ -381,12 +387,27 @@ footer{
   }
   .save-btn,
   #shareBackBtn,
+  #referBtn,
   .field-qr-btn,
   .ring,
   #updateRequestLink,
   #editMyInfoLink,
   #pdfSaveBtn,
   .qr-modal-overlay{
+    display:none !important;
+  }
+
+  /* "Print QR Code Only" mode — set via body.print-qr-only right before
+     window.print() is called, removed again right after. Strips the page
+     down to just the person's name and the QR code itself, for a clean
+     standalone printout separate from the full Save-as-PDF card. */
+  body.print-qr-only .hero .signal,
+  body.print-qr-only .hero .tagline,
+  body.print-qr-only .hero .role,
+  body.print-qr-only section:not(#qrSection),
+  body.print-qr-only .qr-block .text,
+  body.print-qr-only #printQrLink,
+  body.print-qr-only footer{
     display:none !important;
   }
 }

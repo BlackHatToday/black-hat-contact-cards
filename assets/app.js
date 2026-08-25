@@ -221,6 +221,33 @@
     });
   }
 
+  // Lets anyone viewing this card — not just the card holder — pass along
+  // a link for someone ELSE to get their own card made. Always points at
+  // the general intake form, regardless of what page this button lives on.
+  function wireReferButton() {
+    const btn = document.getElementById('referBtn');
+    if (!btn) return;
+    btn.addEventListener('click', async () => {
+      const referUrl = `${window.location.origin}/my-contact-info-form.html`;
+      const shareData = {
+        title: 'Get your own digital contact card',
+        text: 'I\'m using this to share my contact info with a tap — you can get one too:',
+        url: referUrl
+      };
+      if (navigator.share) {
+        try { await navigator.share(shareData); }
+        catch (err) { /* they cancelled the share sheet — not an error */ }
+      } else {
+        try {
+          await navigator.clipboard.writeText(`${shareData.text}\n${referUrl}`);
+          document.getElementById('statusEl').textContent = 'Referral link copied — paste it wherever you\'d like to send it.';
+        } catch (err) {
+          document.getElementById('statusEl').textContent = `Share this link: ${referUrl}`;
+        }
+      }
+    });
+  }
+
   function renderNotes(d) {
     if (!d.notes) return;
     document.getElementById('notesEl').textContent = d.notes;
@@ -348,6 +375,7 @@
     wireQrModal();
     wireDownloadPdf();
     wirePrintQrOnly();
+    wireReferButton();
     renderPhoto(data);
     renderIdentity(data);
     renderAbout(data);
