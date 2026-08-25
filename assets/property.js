@@ -176,14 +176,20 @@
 
   // Same referral mechanism as the person card — always points at the
   // general "get your own card" intake form, regardless of listing.
+  //
+  // Set this to your real domain — deliberately NOT derived from
+  // window.location.origin, since a visitor could be viewing this
+  // listing via an old .vercel.app tag.
+  const PROJECT_BASE_URL = 'https://blackhatcards.community';
+
   function wireReferButton() {
     const btn = document.getElementById('referBtn');
     if (!btn) return;
     btn.addEventListener('click', async () => {
-      const referUrl = `${window.location.origin}/my-contact-info-form.html`;
+      const referUrl = `${PROJECT_BASE_URL}/my-contact-info-form.html`;
       const shareData = {
-        title: 'Get your own digital contact card',
-        text: 'I\'m using this to share my contact info with a tap — you can get one too:',
+        title: 'Request a Black Hat Card',
+        text: 'I have a digital contact card that saves to your phone with a tap. Want your own? Request a Black Hat Card here:',
         url: referUrl
       };
       if (navigator.share) {

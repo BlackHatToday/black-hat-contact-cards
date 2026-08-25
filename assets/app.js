@@ -224,14 +224,24 @@
   // Lets anyone viewing this card — not just the card holder — pass along
   // a link for someone ELSE to get their own card made. Always points at
   // the general intake form, regardless of what page this button lives on.
+  //
+  // Set this to your real domain — deliberately NOT derived from
+  // window.location.origin, since a visitor could be viewing this card
+  // via an old .vercel.app tag, and the referral should always point at
+  // the correct domain regardless of which URL they arrived through.
+  const PROJECT_BASE_URL = 'https://blackhatcards.community';
+
   function wireReferButton() {
     const btn = document.getElementById('referBtn');
     if (!btn) return;
     btn.addEventListener('click', async () => {
-      const referUrl = `${window.location.origin}/my-contact-info-form.html`;
+      const referUrl = `${PROJECT_BASE_URL}/my-contact-info-form.html`;
+      // Some share targets (SMS, WhatsApp) ignore "title" entirely and only
+      // show "text" — so text needs to fully carry the message on its own,
+      // not depend on title being displayed.
       const shareData = {
-        title: 'Get your own digital contact card',
-        text: 'I\'m using this to share my contact info with a tap — you can get one too:',
+        title: 'Request a Black Hat Card',
+        text: 'I have a digital contact card that saves to your phone with a tap. Want your own? Request a Black Hat Card here:',
         url: referUrl
       };
       if (navigator.share) {
