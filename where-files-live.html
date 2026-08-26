@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Where The Files Live</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --ink:#14171c; --surface:#1c2129; --line:#2e3542;
+    --parchment:#ede6d6; --muted:#8b93a1; --copper:#c98549;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{
+    background: var(--ink); color: var(--parchment);
+    font-family:'IBM Plex Sans', sans-serif;
+    padding: 32px 20px;
+  }
+  .wrap{ max-width: 680px; margin: 0 auto; }
+  p.intro{ font-size: 14px; line-height: 1.6; margin-bottom: 18px; color: var(--parchment); }
+
+  .tree-card{
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: 14px; padding: 22px 24px; position: relative;
+  }
+  .copy-icon{
+    position: absolute; top: 18px; right: 20px;
+    color: var(--muted); font-size: 15px; cursor: default;
+  }
+  pre{
+    font-family:'IBM Plex Mono', monospace; font-size: 12.5px;
+    line-height: 1.85; color: var(--parchment);
+    white-space: pre; overflow-x: auto;
+  }
+  .arrow-note{ color: var(--muted); }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <p class="intro">Here's the current full picture — a few new tools since last time, plus two documentation files that now live at the root too:</p>
+
+  <div class="tree-card">
+    <span class="copy-icon">⧉</span>
+    <pre>your-project/
+├── assets/
+│   ├── style.css              <span class="arrow-note">← shared by every page, person and property alike</span>
+│   ├── app.js                 <span class="arrow-note">← person card engine</span>
+│   └── property.js            <span class="arrow-note">← property card engine</span>
+├── brands/
+│   └── acme-corp.json         <span class="arrow-note">← one file per business, made in brand-generator.html</span>
+├── generator.html             <span class="arrow-note">← build/edit person cards</span>
+├── property-generator.html    <span class="arrow-note">← build/edit listings</span>
+├── my-contact-info-form.html  <span class="arrow-note">← friends fill this out themselves</span>
+├── property-intake-form.html  <span class="arrow-note">← realtors fill this out themselves</span>
+├── brand-generator.html       <span class="arrow-note">← create/edit a business's color palette</span>
+├── bulk-generator.html        <span class="arrow-note">← CSV → many new person folders at once</span>
+├── person-template/
+│   ├── index.html             <span class="arrow-note">← unedited skeleton, copied per person</span>
+│   └── data.json              <span class="arrow-note">← sample/reference schema</span>
+├── property-template/
+│   ├── index.html             <span class="arrow-note">← unedited skeleton, copied per listing</span>
+│   └── data.json              <span class="arrow-note">← sample/reference schema</span>
+├── PROJECT-NOTES.md           <span class="arrow-note">← architecture & the reasoning behind key decisions</span>
+├── MANUAL.md                  <span class="arrow-note">← step-by-step for every recurring task</span>
+├── jane-doe/                  <span class="arrow-note">← a person folder</span>
+│   ├── index.html               (unedited copy of person-template/index.html)
+│   ├── data.json                (that person's actual info)
+│   └── photo.jpg
+└── for-sale-123-main-st/      <span class="arrow-note">← a property folder would look like this</span>
+    ├── index.html               (unedited copy of property-template/index.html)
+    ├── data.json                (that listing's actual info)
+    └── hero.jpg, photo1.jpg, etc.</pre>
+  </div>
+</div>
+
+</body>
+</html>
