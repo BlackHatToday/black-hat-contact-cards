@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brand Generator</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --ink:#14171c; --surface:#1c2129; --surface-2:#242a34;
+    --copper:#b8763f; --copper-soft:#c98549; --parchment:#ede6d6;
+    --muted:#8b93a1; --line:#2e3542;
+  }
+  *{ box-sizing:border-box; }
+  body{
+    background: var(--ink); color: var(--parchment);
+    font-family:'IBM Plex Sans', sans-serif;
+    margin:0; padding: 40px 20px 100px;
+  }
+  .wrap{ max-width: 640px; margin: 0 auto; }
+  h1{ font-family:'Space Grotesk', sans-serif; font-size: 26px; margin-bottom: 6px; }
+  .sub{ color: var(--muted); font-size: 14px; margin-bottom: 32px; }
+
+  fieldset{
+    border: 1px solid var(--line); border-radius: 14px;
+    padding: 20px; margin-bottom: 18px;
+  }
+  legend{
+    font-family:'IBM Plex Mono', monospace; font-size: 11px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--copper);
+    padding: 0 8px;
+  }
+
+  label{ display:block; font-size: 12.5px; color: var(--muted); margin: 12px 0 5px; }
+  label:first-child{ margin-top: 0; }
+  input[type=text]{
+    width: 100%; padding: 10px 12px; background: var(--surface);
+    border: 1px solid var(--line); border-radius: 8px; color: var(--parchment);
+    font-family:'IBM Plex Sans', sans-serif; font-size: 14px;
+  }
+  input[type=text]:focus{ outline: none; border-color: var(--copper); }
+
+  .color-row{ display:flex; align-items:center; gap: 12px; }
+  input[type=color]{
+    width: 52px; height: 42px; padding: 2px; background: var(--surface);
+    border: 1px solid var(--line); border-radius: 8px; cursor: pointer;
+  }
+  .color-hex{
+    font-family:'IBM Plex Mono', monospace; font-size: 13px; color: var(--parchment);
+    background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+    padding: 10px 12px; flex: 1;
+  }
+  .color-hex:focus{ outline: none; border-color: var(--copper); }
+
+  .row2{ display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .hint{ font-size: 11.5px; color: var(--muted); margin-top: 6px; line-height:1.5; }
+
+  .actions{
+    position: sticky; bottom: 0; background: var(--ink);
+    padding: 18px 0; margin-top: 10px; display:flex; gap: 12px;
+    border-top: 1px solid var(--line); flex-wrap: wrap;
+  }
+  .btn-primary{
+    flex:1; padding: 15px; background: var(--copper); color: var(--ink);
+    border: none; border-radius: 12px; font-family:'Space Grotesk', sans-serif;
+    font-weight: 700; font-size: 15px; cursor: pointer; min-width: 140px;
+  }
+  .btn-primary:hover{ background: var(--copper-soft); }
+  .btn-secondary{
+    padding: 15px 18px; background: var(--surface); color: var(--parchment);
+    border: 1px solid var(--line); border-radius: 12px;
+    font-family:'IBM Plex Mono', monospace; font-size: 13px; cursor: pointer;
+  }
+  .btn-secondary:hover{ border-color: var(--copper); }
+
+  .status{ text-align:center; font-family:'IBM Plex Mono', monospace; font-size: 12.5px; color: var(--copper-soft); margin-top: 10px; min-height: 18px; }
+
+  /* ---- live preview, isolated color scope ---- */
+  .preview-section{ margin-bottom: 18px; }
+  .preview-label{
+    font-family:'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 12px;
+  }
+  .preview-card{
+    /* --copper / --copper-soft get overridden inline via JS —
+       everything inside this card reads from those two variables,
+       same as the real live cards do. */
+    background: radial-gradient(circle at 50% 0%, #1a1f27 0%, var(--ink) 60%);
+    border: 1px solid var(--line); border-radius: 20px;
+    padding: 28px 24px; max-width: 320px; margin: 0 auto;
+  }
+  .pv-avatar{
+    width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 14px;
+    background: var(--surface-2); border: 2px solid var(--copper);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Space Grotesk', sans-serif; font-weight: 600; font-size: 22px; color: var(--copper);
+  }
+  .pv-name{ text-align:center; font-family:'Space Grotesk', sans-serif; font-weight: 700; font-size: 19px; color: var(--parchment); }
+  .pv-role{ text-align:center; font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+  .pv-section-label{
+    display:flex; align-items:center; gap:8px; margin: 20px 0 10px;
+    font-family:'IBM Plex Mono', monospace; font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--copper);
+  }
+  .pv-section-label::after{ content:''; flex:1; height:1px; background: var(--line); }
+  .pv-badges{ display:flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+  .pv-badge{
+    font-family:'IBM Plex Mono', monospace; font-size: 11px; color: var(--parchment);
+    background: var(--surface); border: 1px solid var(--copper); padding: 6px 12px; border-radius: 999px;
+  }
+  .pv-save-btn{
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    width:100%; padding:13px; margin-bottom: 8px;
+    background: var(--copper); color: var(--ink); border-radius: 12px;
+    font-family:'Space Grotesk', sans-serif; font-weight:600; font-size: 14px;
+  }
+  .pv-outline-btn{
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    width:100%; padding:12px;
+    background: transparent; color: var(--copper-soft); border: 1px solid var(--copper);
+    border-radius: 12px; font-family:'Space Grotesk', sans-serif; font-weight:500; font-size: 13.5px;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <h1>Brand Generator</h1>
+  <p class="sub">Create or edit a business's color palette. Every employee card that references this brand's slug picks up these colors automatically.</p>
+
+  <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+    <div>
+      <div style="font-family:'Space Grotesk', sans-serif; font-weight: 600; font-size: 13.5px;">Editing an existing business?</div>
+      <div class="hint" style="margin-top: 3px;">Load their brand file, adjust colors, Save writes changes back to it.</div>
+    </div>
+    <button type="button" class="btn-secondary" id="loadFileBtn" style="white-space: nowrap;">Load Brand File</button>
+    <input type="file" id="loadFileInput" accept="application/json" style="display: none;">
+  </div>
+
+  <form id="brandForm">
+
+    <fieldset>
+      <legend>Business</legend>
+      <label>Business name</label>
+      <input type="text" id="businessName" placeholder="Acme Corp">
+      <label>Brand slug</label>
+      <input type="text" id="brandSlug" placeholder="acme-corp">
+      <div class="hint">This is what you'll type into each employee's "Brand" field in generator.html — auto-filled from the name above, editable if needed.</div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Colors</legend>
+      <label>Accent color</label>
+      <div class="color-row">
+        <input type="color" id="accentPicker" value="#b8763f">
+        <input type="text" class="color-hex" id="accentHex" value="#b8763f">
+      </div>
+      <div class="hint">This becomes every button, icon, and highlight color across the whole card.</div>
+
+      <label style="margin-top:18px;">Accent color — hover / soft variant</label>
+      <div class="color-row">
+        <input type="color" id="accentSoftPicker" value="#c98549">
+        <input type="text" class="color-hex" id="accentSoftHex" value="#c98549">
+      </div>
+      <div class="hint">Auto-filled as a lighter version of the accent color — adjust it yourself if you'd like a different hover shade.</div>
+    </fieldset>
+
+  </form>
+
+  <div class="preview-section">
+    <div class="preview-label">Live Preview</div>
+    <div class="preview-card" id="previewCard">
+      <div class="pv-avatar" id="pvAvatar">AC</div>
+      <div class="pv-name">Sample Employee</div>
+      <div class="pv-role">Marketing Director · <span id="pvOrgName">Acme Corp</span></div>
+
+      <div class="pv-section-label">Skills</div>
+      <div class="pv-badges">
+        <span class="pv-badge">Strategy</span>
+        <span class="pv-badge">Sales</span>
+        <span class="pv-badge">Leadership</span>
+      </div>
+
+      <div class="pv-section-label">Contact</div>
+      <button type="button" class="pv-save-btn">Save Contact</button>
+      <button type="button" class="pv-outline-btn">Book a Time</button>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button type="button" class="btn-primary" id="saveBtn" style="display:none;">Save</button>
+    <button type="button" class="btn-primary" id="downloadBtn">Download Brand File</button>
+    <button type="button" class="btn-secondary" id="copyBtn">Copy JSON</button>
+  </div>
+  <p class="status" id="statusEl"></p>
+</div>
+
+<script>
+  function slugify(text) {
+    return (text || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  }
+
+  function lightenColor(hex, percent) {
+    const num = parseInt(hex.replace('#', ''), 16);
+    let r = (num >> 16) + Math.round(255 * percent);
+    let g = ((num >> 8) & 0x00FF) + Math.round(255 * percent);
+    let b = (num & 0x0000FF) + Math.round(255 * percent);
+    r = Math.min(255, Math.max(0, r));
+    g = Math.min(255, Math.max(0, g));
+    b = Math.min(255, Math.max(0, b));
+    return '#' + (0x1000000 + r * 0x10000 + g * 0x100 + b).toString(16).slice(1);
+  }
+
+  function updatePreview() {
+    const accent = document.getElementById('accentHex').value;
+    const accentSoft = document.getElementById('accentSoftHex').value;
+    const card = document.getElementById('previewCard');
+    card.style.setProperty('--copper', accent);
+    card.style.setProperty('--copper-soft', accentSoft);
+  }
+
+  // Keep the color picker and hex text field in sync, whichever one changes
+  function linkColorInputs(pickerId, hexId, onChange) {
+    const picker = document.getElementById(pickerId);
+    const hex = document.getElementById(hexId);
+    picker.addEventListener('input', () => { hex.value = picker.value; onChange(); });
+    hex.addEventListener('input', () => {
+      if (/^#[0-9a-fA-F]{6}$/.test(hex.value)) { picker.value = hex.value; onChange(); }
+    });
+  }
+
+  let accentSoftAutoFilled = true;
+  linkColorInputs('accentPicker', 'accentHex', () => {
+    if (accentSoftAutoFilled) {
+      const lighter = lightenColor(document.getElementById('accentHex').value, 0.15);
+      document.getElementById('accentSoftPicker').value = lighter;
+      document.getElementById('accentSoftHex').value = lighter;
+    }
+    updatePreview();
+  });
+  linkColorInputs('accentSoftPicker', 'accentSoftHex', () => {
+    accentSoftAutoFilled = false;
+    updatePreview();
+  });
+
+  let slugAutoFilled = true;
+  function autoFillSlug() {
+    if (!slugAutoFilled) return;
+    document.getElementById('brandSlug').value = slugify(document.getElementById('businessName').value);
+  }
+  document.getElementById('businessName').addEventListener('input', () => {
+    autoFillSlug();
+    document.getElementById('pvOrgName').textContent = document.getElementById('businessName').value || 'Acme Corp';
+    const name = document.getElementById('businessName').value.trim();
+    const initials = name.split(' ').map(w => w[0]).filter(Boolean).slice(0, 2).join('').toUpperCase();
+    document.getElementById('pvAvatar').textContent = initials || 'AC';
+  });
+  document.getElementById('brandSlug').addEventListener('input', () => { slugAutoFilled = false; });
+
+  function collectData() {
+    return {
+      businessName: document.getElementById('businessName').value,
+      brandSlug: document.getElementById('brandSlug').value,
+      accent: document.getElementById('accentHex').value,
+      accentSoft: document.getElementById('accentSoftHex').value
+    };
+  }
+
+  function setVal(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.value = value || '';
+  }
+
+  function populateForm(d) {
+    setVal('businessName', d.businessName);
+    setVal('brandSlug', d.brandSlug);
+    setVal('accentPicker', d.accent || '#b8763f');
+    setVal('accentHex', d.accent || '#b8763f');
+    setVal('accentSoftPicker', d.accentSoft || '#c98549');
+    setVal('accentSoftHex', d.accentSoft || '#c98549');
+    document.getElementById('pvOrgName').textContent = d.businessName || 'Acme Corp';
+    slugAutoFilled = false;
+    accentSoftAutoFilled = false;
+    updatePreview();
+    document.getElementById('statusEl').textContent = `Loaded ${d.businessName || 'this brand'} — edit colors, then Save or Download to update it.`;
+  }
+
+  let currentFileHandle = null;
+  const supportsFileSystemAccess = 'showOpenFilePicker' in window;
+
+  document.getElementById('loadFileBtn').addEventListener('click', async () => {
+    if (supportsFileSystemAccess) {
+      try {
+        const [handle] = await window.showOpenFilePicker({
+          types: [{ description: 'JSON files', accept: { 'application/json': ['.json'] } }]
+        });
+        const file = await handle.getFile();
+        const data = JSON.parse(await file.text());
+        currentFileHandle = handle;
+        populateForm(data);
+        document.getElementById('saveBtn').style.display = 'flex';
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          document.getElementById('statusEl').textContent = 'Could not read that file — make sure it\'s a valid brand file.';
+        }
+      }
+    } else {
+      document.getElementById('loadFileInput').click();
+    }
+  });
+
+  document.getElementById('loadFileInput').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        currentFileHandle = null;
+        document.getElementById('saveBtn').style.display = 'none';
+        populateForm(JSON.parse(reader.result));
+      } catch (err) {
+        document.getElementById('statusEl').textContent = 'Could not read that file — make sure it\'s a valid brand file.';
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  });
+
+  document.getElementById('saveBtn').addEventListener('click', async () => {
+    if (!currentFileHandle) return;
+    try {
+      const data = collectData();
+      const writable = await currentFileHandle.createWritable();
+      await writable.write(JSON.stringify(data, null, 2));
+      await writable.close();
+      document.getElementById('statusEl').textContent = `Saved to ${currentFileHandle.name}.`;
+    } catch (err) {
+      document.getElementById('statusEl').textContent = 'Could not save — try reloading the file and saving again.';
+    }
+  });
+
+  document.getElementById('downloadBtn').addEventListener('click', () => {
+    const data = collectData();
+    if (!data.brandSlug) {
+      document.getElementById('statusEl').textContent = 'Please enter a business name or slug first.';
+      return;
+    }
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${data.brandSlug}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    document.getElementById('statusEl').textContent = `Downloaded ${data.brandSlug}.json — place it in your project's brands/ folder.`;
+  });
+
+  document.getElementById('copyBtn').addEventListener('click', async () => {
+    const text = JSON.stringify(collectData(), null, 2);
+    try {
+      await navigator.clipboard.writeText(text);
+      document.getElementById('statusEl').textContent = 'Copied to clipboard.';
+    } catch (err) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      try { document.execCommand('copy'); document.getElementById('statusEl').textContent = 'Copied to clipboard.'; }
+      catch (e2) { document.getElementById('statusEl').textContent = 'Could not copy automatically — select and copy the text manually.'; }
+      document.body.removeChild(ta);
+    }
+  });
+
+  updatePreview();
+</script>
+
+</body>
+</html>

@@ -208,6 +208,9 @@
         <div><label>Title</label><input type="text" id="title" placeholder="Marketing Director"></div>
         <div><label>Organization</label><input type="text" id="org" placeholder="Acme Co"></div>
       </div>
+      <label>Brand (optional)</label>
+      <input type="text" id="brand" placeholder="acme-corp">
+      <div class="hint">Match this to a business's brand slug from brand-generator.html to apply their colors to this card. Leave blank for the default Black Hat colors.</div>
       <label>Tagline (short, under the name)</label>
       <input type="text" id="tagline" placeholder="Brand strategy · Storytelling · Growth">
       <label>Photo filename</label>
@@ -644,6 +647,7 @@
       address: document.getElementById('address').value,
       photoFile: document.getElementById('photoFile').value || 'photo.jpg',
       accessToken: document.getElementById('accessToken').value,
+      brand: document.getElementById('brand').value,
       showQR: document.getElementById('showQR').checked
     };
   }
@@ -785,6 +789,7 @@
     setVal('address', d.address);
     setVal('photoFile', d.photoFile || 'photo.jpg');
     setVal('accessToken', d.accessToken || generateToken());
+    setVal('brand', d.brand);
     setVal('skills', (d.skills || []).join(', '));
     document.getElementById('showQR').checked = d.showQR !== false;
 
@@ -882,7 +887,7 @@
     document.getElementById('saveBtn').style.display = 'none';
     // Simple text/select fields, back to blank or their default
     ['prefix', 'firstName', 'lastName', 'title', 'org', 'tagline', 'about',
-     'notes', 'calendlyUrl', 'address', 'skills', 'folderName', 'tagUrl'].forEach(id => setVal(id, ''));
+     'notes', 'calendlyUrl', 'address', 'skills', 'folderName', 'tagUrl', 'brand'].forEach(id => setVal(id, ''));
     setVal('photoFile', 'photo.jpg');
     setVal('paymentSectionLabel', 'Payment');
     setVal('bookingLabel', 'Book a Time');

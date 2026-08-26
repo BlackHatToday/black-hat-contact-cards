@@ -396,6 +396,25 @@ footer{
 @media (prefers-reduced-motion: reduce){ .ring{ animation:none; opacity:0; } }
 
 /* ============================================================
+   QUICK SHARE MODE — triggered by ?action=share in the URL,
+   set via the "Collect Contact Info" QR. Hides everything except
+   the photo/name and the Share Your Info button, so someone can
+   send their info without scrolling through the whole card.
+   ============================================================ */
+body.quick-share-mode section,
+body.quick-share-mode .save-btn,
+body.quick-share-mode #pdfSaveBtn,
+body.quick-share-mode #referBtn,
+body.quick-share-mode #collectContactBtn,
+body.quick-share-mode #updateRequestLink,
+body.quick-share-mode #editMyInfoLink{
+  display:none !important;
+}
+body.quick-share-mode #quickShareIntro{
+  display:block !important;
+}
+
+/* ============================================================
    PRINT / SAVE-AS-PDF
    Forces the dark theme to actually render (browsers strip
    backgrounds by default unless this is set), and hides only
@@ -412,6 +431,7 @@ footer{
   .save-btn,
   #shareBackBtn,
   #referBtn,
+  #collectContactBtn,
   .field-qr-btn,
   .ring,
   #updateRequestLink,

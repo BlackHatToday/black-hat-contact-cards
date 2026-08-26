@@ -158,7 +158,10 @@
 
   function renderQR(d) {
     if (d.showQR === false) return;
-    const selfUrl = window.location.href.split('#')[0].split('?')[0];
+    // Uses the canonical domain, not window.location — a visitor could be
+    // viewing this listing via an old .vercel.app tag, and the QR it
+    // shares should always point at the correct domain regardless.
+    const selfUrl = `${PROJECT_BASE_URL}${basePath()}`;
     document.getElementById('qrSection').style.display = 'block';
     /* global QRCode */
     new QRCode(document.getElementById('qrcode'), {
@@ -231,8 +234,24 @@
     });
   }
 
+  // Same brand-theming mechanism as the person card — see the matching
+  // comment in assets/app.js.
+  async function applyBrandTheme(d) {
+    if (!d.brand) return;
+    try {
+      const res = await fetch(`/brands/${d.brand}.json`, { cache: 'no-store' });
+      if (!res.ok) return;
+      const brand = await res.json();
+      if (brand.accent) document.documentElement.style.setProperty('--copper', brand.accent);
+      if (brand.accentSoft) document.documentElement.style.setProperty('--copper-soft', brand.accentSoft);
+    } catch (err) {
+      console.error('Could not load brand theme:', err);
+    }
+  }
+
   try {
     const data = await loadData();
+    await applyBrandTheme(data);
     wireDownloadPdf();
     wireReferButton();
     renderHero(data);

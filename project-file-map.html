@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project File Map — Push Checklist</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap');
+  :root{
+    --ink:#14171c; --surface:#1c2129; --surface-2:#242a34;
+    --copper:#b8763f; --copper-soft:#c98549;
+    --blue:#85a1b8; --blue-soft:#9db6c9;
+    --parchment:#ede6d6; --muted:#8b93a1; --line:#2e3542;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{
+    background: radial-gradient(circle at 50% 0%, #1a1f27 0%, var(--ink) 60%);
+    color: var(--parchment); font-family:'IBM Plex Sans', sans-serif; padding: 40px 32px;
+  }
+  .sheet{ max-width: 900px; margin: 0 auto; }
+  header{ text-align:center; margin-bottom: 22px; }
+  .kicker{
+    font-family:'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--copper); margin-bottom: 10px;
+  }
+  h1{ font-family:'Space Grotesk', sans-serif; font-weight: 700; font-size: 28px; letter-spacing: -0.01em; }
+  .sub{ color: var(--muted); font-size: 14px; margin-top: 8px; }
+
+  .legend{
+    display:flex; justify-content:center; gap: 18px; margin: 24px 0 28px;
+    flex-wrap: wrap;
+  }
+  .legend-item{ display:flex; align-items:center; gap: 8px; font-family:'IBM Plex Mono', monospace; font-size: 11.5px; }
+  .legend-swatch{ width: 14px; height: 14px; border-radius: 4px; flex-shrink:0; }
+  .sw-person{ background: var(--copper); }
+  .sw-property{ background: var(--blue); }
+  .sw-shared{ background: linear-gradient(135deg, var(--copper) 50%, var(--blue) 50%); }
+
+  .tree{
+    background: var(--surface); border: 1px solid var(--line); border-radius: 16px;
+    padding: 22px 24px; margin-bottom: 20px;
+  }
+  .tree-group-label{
+    font-family:'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted); margin: 18px 0 8px;
+  }
+  .tree-group-label:first-child{ margin-top: 0; }
+
+  .tline{
+    display:flex; align-items:flex-start; gap: 10px; padding: 7px 0 7px 12px;
+    border-left: 3px solid transparent; font-family:'IBM Plex Mono', monospace; font-size: 12.5px;
+  }
+  .tline .check{
+    width: 15px; height: 15px; border: 1.5px solid var(--muted); border-radius: 4px;
+    flex-shrink:0; margin-top: 1px;
+  }
+  .tline .path{ color: var(--parchment); }
+  .tline .desc{ color: var(--muted); font-size: 11px; display:block; margin-top: 1px; }
+  .tline.person{ border-left-color: var(--copper); }
+  .tline.property{ border-left-color: var(--blue); }
+  .tline.shared{ border-left-image: linear-gradient(var(--copper), var(--blue)) 1; }
+
+  .examples{ display:grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
+  .example{ border-radius: 14px; padding: 18px 20px; border: 1px solid var(--line); }
+  .ex-person{ background: linear-gradient(180deg, rgba(184,118,63,0.08), var(--surface) 40%); border-color: var(--copper); }
+  .ex-property{ background: linear-gradient(180deg, rgba(133,161,184,0.08), var(--surface) 40%); border-color: var(--blue); }
+  .example h4{ font-family:'Space Grotesk', sans-serif; font-size: 13.5px; margin-bottom: 10px; }
+  .ex-person h4{ color: var(--copper-soft); }
+  .ex-property h4{ color: var(--blue-soft); }
+  .example .line{ font-family:'IBM Plex Mono', monospace; font-size: 12px; color: var(--parchment); padding: 3px 0; }
+
+  .warning{
+    margin-top: 22px; background: var(--surface); border: 1px solid var(--line);
+    border-left: 2px solid var(--copper); border-radius: 12px; padding: 16px 20px;
+  }
+  .warning h4{ font-family:'Space Grotesk', sans-serif; font-size: 13px; margin-bottom: 8px; color: var(--copper-soft); }
+  .warning p{ font-size: 12px; color: var(--parchment); line-height: 1.6; margin-bottom: 6px; }
+  .warning p:last-child{ margin-bottom: 0; }
+  .warning code{
+    font-family:'IBM Plex Mono', monospace; font-size: 11px; background: var(--surface-2);
+    padding: 1px 5px; border-radius: 4px; color: var(--copper-soft);
+  }
+
+  footer{
+    text-align:center; margin-top: 26px; font-family:'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: #525a62;
+  }
+
+  @media (max-width: 720px){ .examples{ grid-template-columns: 1fr; } }
+  @media print{ body{ background: var(--ink); padding: 20px; -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+  <header>
+    <div class="kicker">Push Checklist</div>
+    <h1>Project File Map</h1>
+    <p class="sub">Every current file, where it belongs, and which system it's part of — check each off as you confirm it's in place</p>
+  </header>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-swatch sw-person"></div>Person system</div>
+    <div class="legend-item"><div class="legend-swatch sw-property"></div>Property system</div>
+    <div class="legend-item"><div class="legend-swatch sw-shared"></div>Shared by both</div>
+  </div>
+
+  <div class="tree">
+    <div class="tree-group-label">Shared Engine — At Project Root</div>
+    <div class="tline shared"><div class="check"></div><div><span class="path">assets/style.css</span><span class="desc">Visual design for every page — brand-line style, print-QR-only rules</span></div></div>
+    <div class="tline person"><div class="check"></div><div><span class="path">assets/app.js</span><span class="desc">Renders every person card — Refer a Friend, Collect Contact Info, brand theming, canonical-domain QR fix</span></div></div>
+    <div class="tline property"><div class="check"></div><div><span class="path">assets/property.js</span><span class="desc">Renders every property card — Refer a Friend, brand theming, canonical-domain QR fix</span></div></div>
+
+    <div class="tree-group-label">Person System — Your Tools (At Project Root)</div>
+    <div class="tline person"><div class="check"></div><div><span class="path">generator.html</span><span class="desc">Build/edit person cards — Save, New Person, Copy Folder Name, Tag URL, Brand field</span></div></div>
+    <div class="tline person"><div class="check"></div><div><span class="path">my-contact-info-form.html</span><span class="desc">Friends self-submit — collapsible, support message box, Black Hat LLC line</span></div></div>
+
+    <div class="tree-group-label">Property System — Your Tools (At Project Root)</div>
+    <div class="tline property"><div class="check"></div><div><span class="path">property-generator.html</span><span class="desc">Build/edit listings — Save, New Listing, Copy Folder Name, Tag URL</span></div></div>
+    <div class="tline property"><div class="check"></div><div><span class="path">property-intake-form.html</span><span class="desc">Realtors self-submit — support message box, Black Hat LLC line</span></div></div>
+
+    <div class="tree-group-label">Scaling Tools — Shared, At Project Root</div>
+    <div class="tline shared"><div class="check"></div><div><span class="path">brand-generator.html</span><span class="desc">Create/edit a business's color palette with a live preview — saves to brands/{slug}.json, referenced by any employee's Brand field</span></div></div>
+    <div class="tline shared"><div class="check"></div><div><span class="path">bulk-generator.html</span><span class="desc">Upload a CSV of names, preview with validation, write many new person folders at once (Chrome/Edge) — never overwrites an existing folder</span></div></div>
+
+    <div class="tree-group-label">Templates — Never Edited Per-Folder (At Project Root)</div>
+    <div class="tline person"><div class="check"></div><div><span class="path">person-template/index.html</span><span class="desc">Copied unedited into every NEW person folder — Payment after Contact, Scan last, Collect Contact Info</span></div></div>
+    <div class="tline person"><div class="check"></div><div><span class="path">person-template/data.json</span><span class="desc">Sample schema only — never copied as-is, just a reference</span></div></div>
+    <div class="tline property"><div class="check"></div><div><span class="path">property-template/index.html</span><span class="desc">Copied unedited into every NEW property folder</span></div></div>
+    <div class="tline property"><div class="check"></div><div><span class="path">property-template/data.json</span><span class="desc">Sample schema only — never copied as-is</span></div></div>
+  </div>
+
+  <div class="tree" style="margin-top:-6px;">
+    <div class="tree-group-label">Not Yet In Any Folder — Create This Once</div>
+    <div class="tline shared"><div class="check"></div><div><span class="path">brands/</span><span class="desc">New folder, empty until brand-generator.html downloads its first business file into it (e.g. brands/acme-corp.json)</span></div></div>
+  </div>
+
+  <div class="examples">
+    <div class="example ex-person">
+      <h4>A live PERSON folder looks like</h4>
+      <div class="line">jane-doe/</div>
+      <div class="line">├── index.html <span style="color:var(--muted);">(unedited copy)</span></div>
+      <div class="line">├── data.json</div>
+      <div class="line">└── photo.jpg</div>
+    </div>
+    <div class="example ex-property">
+      <h4>A live PROPERTY folder looks like</h4>
+      <div class="line">for-sale-123-main-st/</div>
+      <div class="line">├── index.html <span style="color:var(--muted);">(unedited copy)</span></div>
+      <div class="line">├── data.json</div>
+      <div class="line">├── hero.jpg</div>
+      <div class="line">└── photo1.jpg, photo2.jpg...</div>
+    </div>
+  </div>
+
+  <div class="warning">
+    <h4>Before you push — the one thing that bites most often</h4>
+    <p>Every file above must sit at your project's <strong>root</strong>, exactly one level above every person/property folder — never nested inside one.</p>
+    <p>Existing person/property folders already pushed do <strong>not</strong> automatically pick up template or style changes — only new folders get the current version. If you want an existing card to reflect today's changes (Refer button, moved sections, branding), its <code>index.html</code> needs to be manually replaced with the current template.</p>
+    <p><code>brand-generator.html</code> and <code>bulk-generator.html</code> work differently from the rest — both write directly to your local files via a folder picker (Chrome/Edge only), rather than downloading something to move yourself. <code>bulk-generator.html</code> specifically will never overwrite an existing person folder — it skips and logs it instead.</p>
+  </div>
+
+  <footer>NFC Cards Project · Push Checklist</footer>
+</div>
+
+</body>
+</html>
