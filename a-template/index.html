@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Contact</title>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 
 <!--
   ============================================================
@@ -125,6 +126,13 @@
       </svg>
       Collect Contact Info
     </button>
+    <button type="button" class="book-btn" id="scanVisitorCardBtn" style="display:none;">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 7V5a2 2 0 0 1 2-2h2M4 17v2a2 2 0 0 0 2 2h2M20 7V5a2 2 0 0 0-2-2h-2M20 17v2a2 2 0 0 1-2 2h-2"/>
+        <rect x="7" y="8" width="10" height="8" rx="1"/>
+      </svg>
+      Scan a Visitor's Card
+    </button>
     <button type="button" class="book-btn" id="pdfSaveBtn">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -146,7 +154,7 @@
   <p class="status" id="statusEl"></p>
 
   <footer>Tap · Connect · Build</footer>
-  <div class="brand-line">Black Hat LLC</div>
+  <div class="brand-line">Adette &amp; Bo LLC</div>
   <a id="editMyInfoLink" class="update-request-link" target="_blank" rel="noopener">Contact / Support / Updates</a>
 </div>
 
@@ -189,6 +197,40 @@
       Email
     </button>
     <button type="button" class="refer-modal-cancel" id="shareBackModalClose">Cancel</button>
+  </div>
+</div>
+
+<div class="qr-modal-overlay" id="scanVisitorModalOverlay">
+  <div class="scan-modal">
+    <div class="scan-modal-title">Scan a Visitor's Card</div>
+    <label>Take or choose a photo</label>
+    <input type="file" id="visitorCardScanInput" accept="image/*" capture="environment">
+    <div class="scan-modal-status" id="visitorScanStatus"></div>
+
+    <div id="visitorScanReview" style="display:none;">
+      <label>Name</label>
+      <input type="text" id="visitorName" placeholder="Their name">
+      <label>Phone</label>
+      <input type="tel" id="visitorPhone" placeholder="(555) 123-4567">
+      <label>Email</label>
+      <input type="email" id="visitorEmail" placeholder="them@example.com">
+      <label>Everything we could read off the card</label>
+      <textarea id="visitorRawText" readonly></textarea>
+      <div class="scan-modal-hint">Review before sending — check the name especially, since OCR can't reliably find it on its own.</div>
+
+      <div class="scan-modal-actions">
+        <button type="button" class="scan-modal-send-btn" id="visitorSendTextBtn" style="display:none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Text Myself
+        </button>
+        <button type="button" class="scan-modal-send-btn" id="visitorSendEmailBtn" style="display:none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 6 12 13 2 6"/><path d="M2 6h20v12H2z"/></svg>
+          Email Myself
+        </button>
+      </div>
+    </div>
+
+    <button type="button" class="refer-modal-cancel" id="scanVisitorModalClose">Cancel</button>
   </div>
 </div>
 
