@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Contact Card Generator</title>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
@@ -103,6 +104,16 @@
   .btn-secondary:hover{ border-color: var(--copper); }
 
   .hint{ font-size: 11.5px; color: var(--muted); margin-top: 6px; line-height:1.5; }
+  .scan-status{ font-size: 12px; color: var(--copper-soft); margin-top: 8px; min-height: 16px; }
+  .scan-result{
+    margin-top: 14px; background: var(--surface-2); border: 1px solid var(--line);
+    border-radius: 8px; padding: 12px;
+  }
+  .scan-result textarea{
+    width: 100%; min-height: 100px; background: var(--surface); border: 1px solid var(--line);
+    border-radius: 6px; padding: 8px 10px; color: var(--parchment); font-family:'IBM Plex Mono', monospace;
+    font-size: 12px; resize: vertical;
+  }
   .status{ text-align:center; font-family:'IBM Plex Mono', monospace; font-size: 12.5px; color: var(--copper-soft); margin-top: 10px; min-height: 18px; }
 
   /* ---- preview overlay ---- */
@@ -196,6 +207,18 @@
       </div>
       <button type="button" class="btn-secondary" id="newPersonBtn" style="white-space: nowrap;">New Person</button>
     </div>
+
+    <fieldset>
+      <legend>Scan a Business Card (optional)</legend>
+      <label>Take or choose a photo</label>
+      <input type="file" id="cardScanInput" accept="image/*" capture="environment">
+      <div class="scan-status" id="scanStatus"></div>
+      <div class="scan-result" id="scanResultBox" style="display:none;">
+        <label style="margin-top:0;">Everything we could read off the card</label>
+        <textarea id="scanRawText" readonly></textarea>
+        <div class="hint">Phone and email were auto-filled below if found. Copy anything else — name, title, company — into the right fields yourself.</div>
+      </div>
+    </fieldset>
 
     <fieldset>
       <legend>Identity</legend>
@@ -517,6 +540,54 @@
     return row;
   }
 
+  // Client-side OCR via Tesseract.js — no backend, nothing leaves the
+  // browser. Reliable at finding phone numbers and email addresses;
+  // everything else (name, title, company) shows as raw text to copy
+  // manually, since OCR has no real way to know which line is which.
+  function wireCardScan() {
+    const input = document.getElementById('cardScanInput');
+    if (!input) return;
+    input.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const statusEl = document.getElementById('scanStatus');
+      statusEl.textContent = 'Reading the card... this can take a few seconds.';
+      try {
+        const { data: { text } } = await Tesseract.recognize(file, 'eng');
+        const trimmed = text.trim();
+        document.getElementById('scanRawText').value = trimmed;
+        document.getElementById('scanResultBox').style.display = 'block';
+
+        const phoneMatch = trimmed.match(/(\+?1[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/);
+        const emailMatch = trimmed.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+
+        if (phoneMatch) {
+          const existingRow = document.querySelector('#phoneList .phone-number');
+          if (existingRow && !existingRow.value) {
+            existingRow.value = phoneMatch[0];
+            existingRow.dispatchEvent(new Event('input'));
+          } else if (!existingRow) {
+            addPhoneRow({ number: phoneMatch[0] });
+          }
+        }
+        if (emailMatch) {
+          const existingRow = document.querySelector('#emailList .email-address');
+          if (existingRow && !existingRow.value) {
+            existingRow.value = emailMatch[0];
+          } else if (!existingRow) {
+            addEmailRow({ address: emailMatch[0] });
+          }
+        }
+
+        statusEl.textContent = (phoneMatch || emailMatch)
+          ? 'Done — phone/email auto-filled below where found.'
+          : 'Done — no phone or email pattern found. Check the text below and fill in manually.';
+      } catch (err) {
+        statusEl.textContent = 'Could not read that image — try a clearer, well-lit photo.';
+      }
+    });
+  }
+
   function addWebsiteRow(prefill = {}) {
     const row = repeatRow(document.getElementById('websiteList'), `
       <div><label>Label</label><input type="text" class="website-label field-descriptor" placeholder="Website"></div>
@@ -577,6 +648,7 @@
   document.getElementById('addWebsite').addEventListener('click', () => addWebsiteRow());
   document.getElementById('addListing').addEventListener('click', () => addListingRow());
   document.getElementById('addExperience').addEventListener('click', () => addExperienceRow());
+  wireCardScan();
 
   // Start with one phone, one email, and one website row pre-added, since almost everyone needs at least one
   addPhoneRow();
@@ -885,6 +957,9 @@
   document.getElementById('newPersonBtn').addEventListener('click', () => {
     currentFileHandle = null;
     document.getElementById('saveBtn').style.display = 'none';
+    document.getElementById('scanResultBox').style.display = 'none';
+    document.getElementById('scanRawText').value = '';
+    document.getElementById('scanStatus').textContent = '';
     // Simple text/select fields, back to blank or their default
     ['prefix', 'firstName', 'lastName', 'title', 'org', 'tagline', 'about',
      'notes', 'calendlyUrl', 'address', 'skills', 'folderName', 'tagUrl', 'brand'].forEach(id => setVal(id, ''));

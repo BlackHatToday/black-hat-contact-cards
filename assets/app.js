@@ -410,6 +410,104 @@
     }
   }
 
+  // "Scan a Visitor's Card" — the card OWNER's own tool for the opposite
+  // direction: out in the field, scan a physical card someone hands them,
+  // review/correct it (OCR can't reliably find a name, only phone/email),
+  // then send it to THEIR OWN email or phone as a quick personal record.
+  // Deliberately requires a review step before sending — unlike Share
+  // Your Info, which goes straight to a draft — since an unreviewed OCR
+  // mistake here would be silently wrong with no one to catch it.
+  function wireScanVisitorCard(d) {
+    const btn = document.getElementById('scanVisitorCardBtn');
+    const overlay = document.getElementById('scanVisitorModalOverlay');
+    if (!btn || !overlay) return;
+
+    const ownerPhone = (d.phones && d.phones[0] && d.phones[0].number) || '';
+    const ownerEmail = (d.emails && d.emails[0] && d.emails[0].address) || '';
+    if (!ownerPhone && !ownerEmail) return; // nothing to send TO — stay hidden
+
+    btn.style.display = 'flex';
+    const textBtn = document.getElementById('visitorSendTextBtn');
+    const emailBtn = document.getElementById('visitorSendEmailBtn');
+    if (ownerPhone) textBtn.style.display = 'flex';
+    if (ownerEmail) emailBtn.style.display = 'flex';
+
+    function resetVisitorScan() {
+      document.getElementById('visitorCardScanInput').value = '';
+      document.getElementById('visitorScanStatus').textContent = '';
+      document.getElementById('visitorScanReview').style.display = 'none';
+      document.getElementById('visitorName').value = '';
+      document.getElementById('visitorPhone').value = '';
+      document.getElementById('visitorEmail').value = '';
+      document.getElementById('visitorRawText').value = '';
+    }
+
+    btn.addEventListener('click', () => overlay.classList.add('open'));
+    document.getElementById('scanVisitorModalClose').addEventListener('click', () => {
+      overlay.classList.remove('open');
+      resetVisitorScan();
+    });
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) { overlay.classList.remove('open'); resetVisitorScan(); }
+    });
+
+    document.getElementById('visitorCardScanInput').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const statusEl = document.getElementById('visitorScanStatus');
+      statusEl.textContent = 'Reading the card... this can take a few seconds.';
+      try {
+        const { data: { text } } = await Tesseract.recognize(file, 'eng');
+        const trimmed = text.trim();
+        document.getElementById('visitorRawText').value = trimmed;
+        document.getElementById('visitorScanReview').style.display = 'block';
+
+        const phoneMatch = trimmed.match(/(\+?1[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}/);
+        const emailMatch = trimmed.match(/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/);
+        if (phoneMatch) document.getElementById('visitorPhone').value = phoneMatch[0];
+        if (emailMatch) document.getElementById('visitorEmail').value = emailMatch[0];
+
+        statusEl.textContent = (phoneMatch || emailMatch)
+          ? 'Done — review below, especially the name, then send.'
+          : 'Done — no phone/email pattern found. Fill in below manually.';
+      } catch (err) {
+        statusEl.textContent = 'Could not read that image — try a clearer, well-lit photo.';
+      }
+    });
+
+    function buildVisitorMessage() {
+      const name = document.getElementById('visitorName').value || 'Unknown';
+      const phone = document.getElementById('visitorPhone').value;
+      const email = document.getElementById('visitorEmail').value;
+      const rawText = document.getElementById('visitorRawText').value;
+      const timestamp = new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
+      const lines = [`New contact: ${name}`, ''];
+      if (phone) lines.push(`Phone: ${phone}`);
+      if (email) lines.push(`Email: ${email}`);
+      lines.push('', `Met: ${timestamp}`);
+      if (rawText) lines.push('', '---', 'Scanned text:', rawText);
+      return lines.join('\n');
+    }
+
+    emailBtn.addEventListener('click', () => {
+      const name = document.getElementById('visitorName').value || 'New Contact';
+      const subject = encodeURIComponent(`New Contact: ${name}`);
+      const body = encodeURIComponent(buildVisitorMessage());
+      window.location.href = `mailto:${ownerEmail}?subject=${subject}&body=${body}`;
+      overlay.classList.remove('open');
+      resetVisitorScan();
+    });
+
+    textBtn.addEventListener('click', () => {
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      const separator = isIOS ? '&' : '?';
+      const cleanPhone = ownerPhone.replace(/[^+\d]/g, '');
+      window.location.href = `sms:${cleanPhone}${separator}body=${encodeURIComponent(buildVisitorMessage())}`;
+      overlay.classList.remove('open');
+      resetVisitorScan();
+    });
+  }
+
   // Sends the visitor to my-contact-info-form.html with their current info
   // already filled in, via a URL parameter — so they can see everything
   // laid out and edit it visually before sending, rather than typing a
@@ -536,6 +634,7 @@
     renderQR(data);
     wireSaveButton(data);
     renderShareBack(data);
+    wireScanVisitorCard(data);
     renderEditMyInfoLink(data);
   } catch (err) {
     document.querySelector('.page').innerHTML = `
