@@ -146,7 +146,7 @@ section{ padding: 0 28px; margin-top: 8px; }
 .qr-modal-close{
   width:100%; padding:12px; background:var(--copper); color:var(--ink);
   border:none; border-radius:10px; font-family:'Space Grotesk', sans-serif;
-  font-weight:600; font-size:14px; cursor:pointer;
+  font-weight:600; font-size:14px; cursor:pointer; text-transform:capitalize;
 }
 .qr-modal-close:hover{ background:var(--copper-soft); }
 
@@ -164,13 +164,14 @@ section{ padding: 0 28px; margin-top: 8px; }
   width:100%; padding:13px; margin-bottom:10px;
   background:var(--surface-2); border:1px solid var(--line); border-radius:12px;
   color:var(--parchment); font-family:'Space Grotesk', sans-serif; font-weight:500; font-size:14px;
-  cursor:pointer; transition:border-color .15s ease;
+  cursor:pointer; transition:border-color .15s ease; text-transform:capitalize;
 }
 .refer-modal-btn:hover{ border-color:var(--copper); }
 .refer-modal-btn svg{ width:17px; height:17px; color:var(--copper); }
 .refer-modal-cancel{
   width:100%; padding:11px; background:none; border:none;
   color:var(--muted); font-family:'IBM Plex Mono', monospace; font-size:12.5px; cursor:pointer;
+  text-transform:capitalize;
 }
 
 /* ---- scan modal (wider, holds a real form, left-aligned) ---- */
@@ -204,6 +205,7 @@ section{ padding: 0 28px; margin-top: 8px; }
   flex:1; display:flex; align-items:center; justify-content:center; gap:6px;
   padding:11px; background:var(--surface-2); border:1px solid var(--line); border-radius:10px;
   color:var(--parchment); font-family:'Space Grotesk', sans-serif; font-weight:500; font-size:12.5px; cursor:pointer;
+  text-transform:capitalize;
 }
 .scan-modal-send-btn:hover{ border-color:var(--copper); }
 .scan-modal-send-btn svg{ width:15px; height:15px; color:var(--copper); flex-shrink:0; }
@@ -253,17 +255,37 @@ section{ padding: 0 28px; margin-top: 8px; }
   margin-top:12px; padding:15px 20px; background:transparent; color:var(--copper-soft);
   border:1px solid var(--copper); border-radius:14px; text-decoration:none;
   font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:15px;
-  transition:background .15s ease; cursor:pointer;
+  transition:background .15s ease; cursor:pointer; text-transform:capitalize;
 }
 .book-btn:hover{ background: var(--surface); }
 .book-btn svg{ width:18px; height:18px; }
+
+/* ---- two-column button layout (person cards) — visitor actions on the
+   left, the card owner's own tools on the right, distinguished by a
+   header naming the owner so a visitor reads it as "not mine to use" ---- */
+.btn-columns{
+  display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:30px;
+}
+.btn-column{ display:flex; flex-direction:column; }
+.btn-column-label{
+  font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:0.08em;
+  text-transform:uppercase; color:var(--muted); text-align:center; margin-bottom:8px;
+}
+.btn-column .save-btn,
+.btn-column .book-btn{
+  margin-top:0; margin-bottom:8px; padding:11px 8px; font-size:11.5px; gap:6px;
+}
+.btn-column .save-btn svg,
+.btn-column .book-btn svg{ width:15px; height:15px; flex-shrink:0; }
+.btn-column .save-btn:last-child,
+.btn-column .book-btn:last-child{ margin-bottom:0; }
 
 /* ---- save button ---- */
 .save-btn{
   display:flex; align-items:center; justify-content:center; gap:10px; width:100%;
   margin-top:30px; padding:16px 20px; background:var(--copper); color:var(--ink);
   border:none; border-radius:14px; font-family:'Space Grotesk', sans-serif;
-  font-weight:600; font-size:16px; cursor:pointer;
+  font-weight:600; font-size:16px; cursor:pointer; text-transform:capitalize;
   transition:background .15s ease, transform .1s ease;
 }
 .save-btn:hover{ background:#c98549; }
@@ -365,7 +387,7 @@ footer{
   padding:16px 20px; background:var(--copper); color:var(--ink);
   border:none; border-radius:14px; text-decoration:none;
   font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:16px;
-  cursor:pointer; transition:background .15s ease, transform .1s ease;
+  cursor:pointer; transition:background .15s ease, transform .1s ease; text-transform:capitalize;
 }
 .book-showing-btn:hover{ background:#c98549; }
 .book-showing-btn:active{ transform:scale(0.98); }

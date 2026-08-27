@@ -76,6 +76,15 @@
     document.title = `${d.firstName} ${d.lastName}`.trim();
     document.getElementById('nameEl').textContent = fullName;
 
+    // Names the owner-tools column after the card owner (initials), so a
+    // visitor reads it as "not mine to use" at a glance rather than a
+    // generic "Your Tools" that doesn't say whose.
+    const ownerToolsLabel = document.getElementById('ownerToolsLabel');
+    if (ownerToolsLabel) {
+      const initials = `${(d.firstName || '')[0] || ''}${(d.lastName || '')[0] || ''}`.toUpperCase();
+      ownerToolsLabel.textContent = initials ? `${initials}'s Tools` : 'Your Tools';
+    }
+
     if (d.tagline) {
       const t = document.getElementById('taglineEl');
       t.textContent = d.tagline;

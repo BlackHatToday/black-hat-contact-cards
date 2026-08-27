@@ -26,7 +26,7 @@
     "cashapp": "$BlackHat",
     "venmo": "",
     "paypal": "",
-    "zelle": "2524337173"
+    "zelle": "252.433.7173"
   },
   "paymentSectionLabel": "Payment",
   "notes": "",
@@ -58,5 +58,6 @@
   "address": "P.O. Box 913 Oxford NC 27565",
   "photoFile": "photo.jpg",
   "accessToken": "7t9irvcj",
+  "brand": "",
   "showQR": true
 }
