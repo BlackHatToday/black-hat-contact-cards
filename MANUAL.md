@@ -1,0 +1,193 @@
+# Black Hat Contact Cards — Manual
+
+Task-first reference. If you need to know *how the system works and why*, see `PROJECT-NOTES.md` instead — this document is for *doing something right now*.
+
+---
+
+## Quick Reference
+
+| I need to... | Go to |
+|---|---|
+| Add one new person | §1 |
+| Add one new property listing | §2 |
+| Add many people at once from a spreadsheet | §3 |
+| Set up a new business's brand colors | §4 |
+| Let someone submit their own info | §5 |
+| Edit an existing person or listing | §6 |
+| Write a physical NFC tag | §7 |
+| Update existing cards after an engine change | §8 |
+| Push changes live | §9 |
+| Handle a lost or compromised card | §10 |
+| Check if an update request is real | §11 |
+| Fix something that's not working | §12 |
+| Do my weekly upkeep | §13 |
+| Understand which button does what, and why | §14 |
+
+---
+
+## 1. Adding a New Person (Solo)
+
+1. Open `generator.html`.
+2. Click **New Person** if you were previously editing someone else.
+3. Fill in Identity — Prefix, First/Last Name, Title, Org, Tagline. Leave **Brand** blank unless this person belongs to a business you've already set up (§4).
+4. Fill in Phone and Email — at least one, so Share Your Info and Collect Contact Info work.
+5. Click **Add more details** if you want About, Experience, Skills, Social, Payments, Address, Websites, or Calendly.
+6. Check the **Security Token** and **Folder Name** fields — Folder Name auto-fills from the person's name; edit it if you want something different.
+7. Click **Preview** to see the actual card before saving anything.
+8. Click **Copy** next to the **Tag URL** field — you'll need this in §7.
+9. Click **Save** (if you loaded an existing file) or **Download data.json**.
+10. Create a new folder at your project root named exactly like the Folder Name field. Copy `person-template/index.html` into it unedited, place the downloaded `data.json` inside, and add a photo named to match the `photoFile` field (default `photo.jpg`).
+
+---
+
+## 2. Adding a New Property Listing (Solo)
+
+Same shape as §1, using `property-generator.html` instead:
+
+1. Open `property-generator.html`. Click **New Listing** if needed.
+2. Fill in Address, Price, Sqft, Beds, Baths, Description.
+3. Fill in Agent info (Name, Phone, Email) and Booking link if applicable.
+4. Leave **Another Listing** blank unless a second listing's card already exists live.
+5. Preview, copy the Tag URL, Download/Save.
+6. Create the folder, copy `property-template/index.html` in unedited, add `data.json`, add `hero.jpg` plus any gallery photos.
+
+---
+
+## 3. Bulk-Adding Multiple People
+
+Use this when you receive a list of names all at once (a business, an event, etc.) rather than one at a time.
+
+1. Open `bulk-generator.html`.
+2. Click **Download CSV Template** and send it to whoever's collecting the names.
+3. Once it comes back, click **Choose CSV File** and load it.
+4. **Read the preview table before doing anything else.** Rows marked "Missing name" or "Duplicate in this file" get skipped automatically. Rows marked "No phone or email" still get created but flagged.
+5. Click **Create Folders**, and pick your project's root folder when asked.
+6. Read the log. Anything that already existed as a folder was **skipped, not overwritten** — check the log for those names specifically.
+7. Photos are not part of this process — add each new person's photo manually afterward.
+
+---
+
+## 4. Setting Up a Business Brand
+
+1. Open `brand-generator.html`.
+2. Enter the business name — the slug auto-fills.
+3. Pick an accent color. The hover/soft variant auto-generates; override it if you want a specific shade.
+4. Watch the **live preview** — this is the actual card design with your chosen colors, not a guess.
+5. Download the file, and place it in a `brands/` folder at your project root, named `{slug}.json`.
+6. For every employee at that business, put the same slug into their **Brand** field in `generator.html`.
+7. To rebrand later: **Load Brand File** in `brand-generator.html`, adjust colors, **Save** — every employee referencing that slug updates automatically.
+
+---
+
+## 5. Having Someone Self-Submit Their Own Info
+
+Use this instead of §1 when the person should type in their own details.
+
+1. Send them the plain link: `my-contact-info-form.html` (people) or `property-intake-form.html` (realtors) — text it, don't email an attachment.
+2. They fill it in and hit send — it becomes a `mailto:` draft **to you**, not a live submission.
+3. When it arrives, **retype it into the generator yourself** rather than forwarding it straight into a live folder. This manual step is your one review checkpoint before anything goes public.
+4. If the subject line starts with `[Verified]` or `[UNVERIFIED]`, see §11 before acting on it.
+
+---
+
+## 6. Editing an Existing Person or Listing
+
+1. Open the matching generator (`generator.html` or `property-generator.html`).
+2. Click **Load data.json**, and pick that person/listing's actual file.
+3. In Chrome/Edge, this remembers the file — edit anything, then click **Save**, and it writes straight back to that exact file. No re-picking, no manual moving.
+4. In any other browser, edit and click **Download data.json** instead, then manually replace the old file with the new one.
+
+---
+
+## 7. Writing a Physical NFC Tag
+
+1. In whichever generator you used, copy the **Tag URL** field — this already includes the person's or listing's unique security token.
+2. Open NFC Tools on your phone → **Write** → **Add a record** → **URL**.
+3. Paste the Tag URL exactly as copied. Do not use the plain folder link — the token only exists in the Tag URL.
+4. Write the tag, then **test it before locking** — tap it with both an iPhone and an Android phone if you can.
+5. **Only lock person tags.** Leave property tags unlocked — an unlocked tag can be wiped and reused for the next listing once one sells.
+
+---
+
+## 8. Refreshing Existing Cards After an Engine Update
+
+Any change to `person-template/index.html` or `property-template/index.html` only affects *new* folders automatically — existing ones need to be refreshed manually.
+
+1. Confirm exactly which folders need the update — don't guess. If any folder name is ambiguous (a business name instead of a person, a folder you're not sure is even live), ask before including it.
+2. Use Cowork (Claude Desktop) with an explicit prompt: name every folder individually, explicitly exclude `assets/` and the root-level `.html` tools, and require it to preserve each folder's `data.json` and photos untouched — only replace `index.html`.
+3. Spot-check 2–3 results afterward, especially any folder with a lot of custom data (Payments, Listings, About) — that's where a mismatch would most likely show up.
+
+---
+
+## 9. Deploying Changes
+
+1. Confirm every file that needs to move is sitting at your project's **root** — never nested inside a person or property folder.
+2. `git add .`
+3. `git commit -m "..."`
+4. `git push`
+5. Give Vercel about a minute, then check a live card to confirm.
+
+---
+
+## 10. Handling a Lost or Compromised Card
+
+1. Open the generator for that person/listing, load their file.
+2. Click **Generate New Token** — this instantly invalidates the old physical tag; anyone still holding it can no longer send a `[Verified]` update request.
+3. Save/Download, copy the new Tag URL.
+4. Get a new physical tag and write it with the new Tag URL — the old one is now permanently dead for verification purposes, even though the plain card page itself still loads.
+
+---
+
+## 11. Checking Whether an Update Request Is Real
+
+Every "Contact / Support / Updates" email carries a tag — read it before acting on anything in the message.
+
+- **`[Verified]`** — the request was sent using the actual physical tag's link, and its token matched what's on file. This is meaningful evidence the sender is who they claim to be, though not absolute proof (a screenshot or forwarded link could still carry a valid token).
+- **`[UNVERIFIED]`** — the token is missing or didn't match. This could mean someone typed the plain URL from memory (a legitimate person being lazy) or someone who only knows the person's name trying their luck. Don't assume malice, but don't skip verification either.
+- **No tag at all** — this person's card predates the token system, or their tag was never reissued. Neither `[Verified]` nor `[UNVERIFIED]` applies; fall back to manual judgment.
+
+**Regardless of the tag**, for any request touching **payment information specifically**, verify out-of-band (text or call) before making the change — the tag is a helpful signal, not a substitute for that check.
+
+---
+
+## 12. Troubleshooting
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Card shows only the raw skeleton (no styling) | `assets/` folder missing from the repo | Confirm `assets/style.css`, `app.js`, `property.js` are pushed |
+| 404 on a person's page | Folder name capitalized, or `Index.html` instead of `index.html` | Vercel is case-sensitive — check exact casing |
+| Photo doesn't load on the live site | Missing trailing slash on the URL | Folder URLs need a trailing `/` |
+| Card looks empty despite a filled-in `data.json` | Wrong template used — person data loaded into `property-template/index.html` or vice versa | Re-copy the correct matching template |
+| "Need to update" email has no `[Verified]`/`[UNVERIFIED]` tag | This card predates the token system | Reissue the tag per §10 if you want it covered |
+| Generator's Save button doesn't appear | Browser isn't Chrome/Edge, or nothing was loaded via Load first | Use Download instead, or switch browsers |
+
+---
+
+## 13. Weekly Checklist
+
+- [ ] Update `PROJECT-NOTES.md` with anything built or changed this week
+- [ ] Update `project-file-map.html` if any file was added, removed, or renamed
+- [ ] Update this manual if a new task type came up that isn't covered yet
+- [ ] Skim recent "Contact / Support / Updates" emails — confirm none were missed or left unactioned
+- [ ] Spot-check one live card end-to-end (tap, save contact, share info) to confirm nothing silently broke
+- [ ] Confirm the domain and any business `brands/` files are still accurate
+
+---
+
+## 14. Understanding the Card's Buttons
+
+The bottom of every person card has six buttons, split into two columns. This section is the "why," not a task — read it once to understand the intent, then the buttons themselves should be self-explanatory.
+
+**"For You" (left column) — built for whoever's looking at the card, not its owner:**
+- **Save to Contacts** — the obvious one. Downloads a vCard.
+- **Share Your Info** — a visitor sends *their own* info back to the card owner. This only appears if the owner has a phone or email on file to receive it.
+- **Save as PDF** — a printable copy of the whole card, for someone who wants a portable record beyond just tapping again later.
+
+**"[Owner's Initials]'s Tools" (right column) — built for the person whose card it is, not the visitor:**
+- **Collect Info** — the owner's own shortcut. Shows a QR that skips straight to the Share Your Info screen, bypassing the rest of the card entirely. The actual use case: you're in a crowd (after a talk, at a networking event) and want several people to hand you their info quickly without each of them scrolling past your whole profile — or someone's phone has NFC scanning turned off, and a QR is the only path that works for them at all.
+- **Scan a Card** — the reverse direction: *you* scan a physical business card someone hands *you*, and it sends the extracted info to your own email or phone. Deliberately requires a quick review before sending (name always has to be typed in manually) — OCR gets phone numbers and emails right most of the time, names almost never.
+- **Refer a Friend** — technically usable by anyone viewing the card, but realistically this is for the people you've already given a card to, so they can pass the idea along themselves. Don't expect to use this one on your own cards much — it's built for your clients, not for you.
+
+**Why the owner's initials sit above that column instead of a generic "Your Tools" label:** a stranger scanning someone else's card needs to immediately understand that column isn't meant for them. "Jane's Tools" or "JD's Tools" reads as *hers*, not a generic app menu — a small wording choice that does a lot of the disambiguating work on its own.
+
+**If you're ever unsure whether a new button belongs in the visitor column or the owner column**, the test that's been used so far: would a stranger tapping this card for the first time ever plausibly want to click it? If yes, it's a visitor button. If the honest answer is "only the card's actual owner would ever use this," it belongs in the owner's column — regardless of who's technically capable of clicking it.
