@@ -1,0 +1,43 @@
+{
+  "prefix": "",
+  "firstName": "Sheila ",
+  "lastName": "Campbell",
+  "title": "Marketing Director",
+  "org": "SCambell Productions LLC",
+  "tagline": "",
+  "about": "",
+  "experience": [],
+  "skills": [],
+  "social": {
+    "instagram": "",
+    "tiktok": "",
+    "facebook": "",
+    "linkedin": "",
+    "twitter": "",
+    "youtube": ""
+  },
+  "payments": {
+    "cashapp": "",
+    "venmo": "",
+    "paypal": "",
+    "zelle": ""
+  },
+  "paymentSectionLabel": "Payment",
+  "notes": "",
+  "phones": [
+    {
+      "type": "Mobile",
+      "number": "(240) 506-7435"
+    }
+  ],
+  "emails": [],
+  "websites": [],
+  "listings": [],
+  "calendlyUrl": "",
+  "bookingLabel": "Book a Time",
+  "address": "119 Melrose Creek Drive Stockbridge GA 30281 United States",
+  "photoFile": "photo.jpg",
+  "accessToken": "cv585j6x",
+  "brand": "",
+  "showQR": true
+}
