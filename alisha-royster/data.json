@@ -1,0 +1,43 @@
+{
+  "prefix": "",
+  "firstName": "Alisha",
+  "lastName": "Royster",
+  "title": "Owner Operator",
+  "org": "Lash Surgeon Beauty Bar",
+  "tagline": "",
+  "about": "",
+  "experience": [],
+  "skills": [],
+  "social": {
+    "instagram": "",
+    "tiktok": "",
+    "facebook": "",
+    "linkedin": "",
+    "twitter": "",
+    "youtube": ""
+  },
+  "payments": {
+    "cashapp": "",
+    "venmo": "",
+    "paypal": "",
+    "zelle": ""
+  },
+  "paymentSectionLabel": "Payment",
+  "notes": "",
+  "phones": [
+    {
+      "type": "Mobile",
+      "number": "(984) 288-5898"
+    }
+  ],
+  "emails": [],
+  "websites": [],
+  "listings": [],
+  "calendlyUrl": "https://thelashsurgeonllc.as.me/schedule/b56ebed3",
+  "bookingLabel": "Booking Link",
+  "address": "",
+  "photoFile": "photo.jpg",
+  "accessToken": "vd8ecjpm",
+  "brand": "",
+  "showQR": true
+}
