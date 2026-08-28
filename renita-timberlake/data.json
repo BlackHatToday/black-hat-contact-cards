@@ -1,0 +1,43 @@
+{
+  "prefix": "Evangelist",
+  "firstName": "Renita",
+  "lastName": "Timberlake",
+  "title": "",
+  "org": "",
+  "tagline": "",
+  "about": "",
+  "experience": [],
+  "skills": [],
+  "social": {
+    "instagram": "",
+    "tiktok": "",
+    "facebook": "",
+    "linkedin": "",
+    "twitter": "",
+    "youtube": ""
+  },
+  "payments": {
+    "cashapp": "",
+    "venmo": "",
+    "paypal": "",
+    "zelle": ""
+  },
+  "paymentSectionLabel": "Payment",
+  "notes": "",
+  "phones": [
+    {
+      "type": "Mobile",
+      "number": "(919) 939-7389"
+    }
+  ],
+  "emails": [],
+  "websites": [],
+  "listings": [],
+  "calendlyUrl": "",
+  "bookingLabel": "Book a Time",
+  "address": "",
+  "photoFile": "photo.jpg",
+  "accessToken": "2cuibk2q",
+  "brand": "",
+  "showQR": true
+}
