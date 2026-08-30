@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Black Hat Card — Animated Demo</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --navy:#16283f; --navy-2:#1e3a5a;
+    --blue-bright:#6db1ea; --blue-soft:#a9cdec;
+    --off-white:#f6f3ea; --muted:#8b93a1;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html, body{ background:#0e1826; font-family:'IBM Plex Sans', sans-serif; -webkit-font-smoothing:antialiased; height:100%; }
+  body{ display:flex; flex-direction:column; align-items:center; justify-content:center; padding:30px 16px; min-height:100vh; }
+
+  .stage{
+    width:100%; max-width:360px; aspect-ratio:9/16;
+    background: radial-gradient(circle at 50% 0%, var(--navy-2) 0%, var(--navy) 65%);
+    border-radius:20px; overflow:hidden; position:relative;
+    box-shadow:0 20px 60px rgba(0,0,0,0.4);
+  }
+
+  .frame{
+    position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:36px 30px; text-align:center; opacity:0; transition:opacity 0.5s ease;
+  }
+  .frame.active{ opacity:1; }
+
+  .frame-icon{ width:96px; height:96px; color:var(--blue-bright); margin-bottom:26px; }
+  .frame h2{ font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:22px; color:var(--off-white); margin-bottom:10px; }
+  .frame p{ font-size:13.5px; color:var(--muted); line-height:1.6; max-width:260px; }
+
+  /* phone + card tap illustration, reused for frame 1 */
+  .tap-illustration{ position:relative; width:150px; height:150px; margin-bottom:20px; }
+
+  /* progress dots */
+  .progress{ position:absolute; bottom:22px; left:0; right:0; display:flex; justify-content:center; gap:7px; }
+  .dot{ width:7px; height:7px; border-radius:50%; background:rgba(255,255,255,0.2); transition:background 0.3s ease; }
+  .dot.active{ background:var(--blue-bright); }
+
+  .kicker{
+    position:absolute; top:20px; left:0; right:0; text-align:center;
+    font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:0.18em;
+    text-transform:uppercase; color:var(--blue-bright); opacity:0.8;
+  }
+
+  .caption{ text-align:center; color:#5c6672; font-size:12px; margin-top:20px; font-family:'IBM Plex Mono', monospace; }
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <div class="kicker">Black Hat Community</div>
+
+  <div class="frame active" data-frame="0">
+    <svg class="frame-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="18" y="6" width="28" height="46" rx="6" stroke="currentColor" stroke-width="2.5"/>
+      <rect x="24" y="14" width="16" height="2.5" rx="1.25" fill="currentColor" opacity="0.7"/>
+      <path d="M8 30 A 14 14 0 0 1 8 44" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" opacity="0.55"/>
+      <path d="M2 26 A 22 22 0 0 1 2 48" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" opacity="0.3"/>
+    </svg>
+    <h2>Tap the card</h2>
+    <p>Hold their Black Hat Card to the back of your phone.</p>
+  </div>
+
+  <div class="frame" data-frame="1">
+    <svg class="frame-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="8" y="14" width="48" height="36" rx="6" stroke="currentColor" stroke-width="2.5"/>
+      <circle cx="24" cy="28" r="6" stroke="currentColor" stroke-width="2.5"/>
+      <path d="M16 42c0-6 5-9 8-9s8 3 8 9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+      <rect x="38" y="24" width="12" height="2.5" rx="1.25" fill="currentColor" opacity="0.6"/>
+      <rect x="38" y="30" width="12" height="2.5" rx="1.25" fill="currentColor" opacity="0.6"/>
+      <rect x="38" y="36" width="8" height="2.5" rx="1.25" fill="currentColor" opacity="0.6"/>
+    </svg>
+    <h2>Their card opens</h2>
+    <p>Photo, name, and contact info load instantly — no app needed.</p>
+  </div>
+
+  <div class="frame" data-frame="2">
+    <svg class="frame-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="10" y="8" width="44" height="48" rx="6" stroke="currentColor" stroke-width="2.5"/>
+      <path d="M22 30 L29 37 L44 20" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <rect x="18" y="44" width="28" height="4" rx="2" fill="currentColor" opacity="0.4"/>
+    </svg>
+    <h2>Save to contacts</h2>
+    <p>Quickest option — saves the basics straight into your phone.</p>
+  </div>
+
+  <div class="frame" data-frame="3">
+    <svg class="frame-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="14" y="6" width="36" height="46" rx="5" stroke="currentColor" stroke-width="2.5"/>
+      <path d="M32 6 L38 6 L38 16 L32 16 Z" fill="currentColor" opacity="0.5"/>
+      <rect x="20" y="24" width="24" height="2.5" rx="1.25" fill="currentColor" opacity="0.5"/>
+      <rect x="20" y="30" width="24" height="2.5" rx="1.25" fill="currentColor" opacity="0.5"/>
+      <rect x="20" y="36" width="16" height="2.5" rx="1.25" fill="currentColor" opacity="0.5"/>
+    </svg>
+    <h2>Or save as PDF</h2>
+    <p>Keeps everything — skills, payment info, and anything else that doesn't fit a contact card.</p>
+  </div>
+
+  <div class="frame" data-frame="4">
+    <svg class="frame-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="32" cy="32" r="24" stroke="currentColor" stroke-width="2.5"/>
+      <path d="M21 33 L28 40 L44 23" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <h2>Done</h2>
+    <p>No typing, no missed digits, no lost paper card.</p>
+  </div>
+
+  <div class="progress">
+    <div class="dot active" data-dot="0"></div>
+    <div class="dot" data-dot="1"></div>
+    <div class="dot" data-dot="2"></div>
+    <div class="dot" data-dot="3"></div>
+    <div class="dot" data-dot="4"></div>
+  </div>
+</div>
+
+<p class="caption">Auto-playing demo — loops every few seconds</p>
+
+<script>
+  const frames = document.querySelectorAll('.frame');
+  const dots = document.querySelectorAll('.dot');
+  let current = 0;
+
+  function showFrame(index) {
+    frames.forEach(f => f.classList.remove('active'));
+    dots.forEach(d => d.classList.remove('active'));
+    frames[index].classList.add('active');
+    dots[index].classList.add('active');
+  }
+
+  setInterval(() => {
+    current = (current + 1) % frames.length;
+    showFrame(current);
+  }, 2200);
+</script>
+
+</body>
+</html>

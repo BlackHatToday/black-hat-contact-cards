@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Use Your Black Hat Card</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --navy:#16283f; --navy-2:#1e3a5a;
+    --blue-bright:#6db1ea; --blue-soft:#a9cdec;
+    --off-white:#f6f3ea; --muted:#8b93a1; --line:#2e3a4d;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{
+    background: radial-gradient(circle at 50% 0%, var(--navy-2) 0%, var(--navy) 60%);
+    color: var(--off-white); font-family:'IBM Plex Sans', sans-serif;
+    padding: 40px 32px;
+  }
+  .sheet{ max-width: 900px; margin: 0 auto; }
+  header{ text-align:center; margin-bottom: 34px; }
+  .kicker{
+    font-family:'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--blue-bright); margin-bottom: 10px;
+  }
+  h1{ font-family:'Space Grotesk', sans-serif; font-weight: 700; font-size: 30px; letter-spacing: -0.01em; }
+  .sub{ color: var(--muted); font-size: 14.5px; margin-top: 8px; }
+
+  .pipeline{
+    display:flex; align-items:center; justify-content:center; gap: 8px;
+    margin: 30px 0 8px; flex-wrap: wrap;
+  }
+  .pipe-node{
+    font-family:'IBM Plex Mono', monospace; font-size: 11.5px; color: var(--off-white);
+    background: rgba(109,177,234,0.08); border: 1px solid var(--line);
+    padding: 8px 14px; border-radius: 999px;
+  }
+  .pipe-arrow{ color: var(--blue-bright); font-size: 14px; }
+
+  .steps{
+    display: grid; grid-template-columns: 1fr 1fr 1fr auto 1fr 1fr; gap: 10px; margin-top: 30px; align-items: stretch;
+  }
+  .or-divider{
+    display:flex; align-items:center; justify-content:center; padding: 0 2px;
+    font-family:'IBM Plex Mono', monospace; font-size: 11px; color: var(--muted);
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .step{
+    background: rgba(109,177,234,0.06); border: 1px solid var(--line);
+    border-radius: 14px; padding: 20px 18px; text-align:center;
+  }
+  .step-icon{
+    width: 52px; height: 52px; margin: 0 auto 14px; color: var(--blue-bright);
+  }
+  .step .num{
+    font-family:'Space Grotesk', sans-serif; font-weight: 700; font-size: 12px; color: var(--navy);
+    background: var(--blue-bright); width: 22px; height: 22px; border-radius: 50%;
+    display:flex; align-items:center; justify-content:center; margin: 0 auto 10px;
+  }
+  .step h3{
+    font-family:'Space Grotesk', sans-serif; font-size: 14.5px; font-weight: 600; margin-bottom: 7px;
+  }
+  .step p{ font-size: 12px; line-height: 1.5; color: var(--muted); }
+
+  .footer-note{
+    text-align:center; margin-top: 34px; padding: 20px; background: rgba(109,177,234,0.06);
+    border: 1px solid var(--line); border-radius: 14px;
+  }
+  .footer-note p{ font-size: 13px; color: var(--off-white); line-height: 1.6; }
+  .footer-note b{ color: var(--blue-bright); }
+
+  footer{
+    text-align:center; margin-top: 30px; font-family:'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: #4a5568;
+  }
+
+  @media (max-width: 720px){ .steps{ grid-template-columns: 1fr 1fr; } .or-divider{ grid-column: span 2; padding: 4px 0; } .pipeline{ flex-direction: column; } .pipe-arrow{ transform: rotate(90deg); } }
+  @media print{ body{ background: var(--navy); padding: 20px; -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+  <header>
+    <div class="kicker">Black Hat Community</div>
+    <h1>How to Use Your Black Hat Card</h1>
+    <p class="sub">No app, no login — just a tap</p>
+  </header>
+
+  <div class="pipeline">
+    <div class="pipe-node">Tap the card</div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-node">Card page opens</div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-node">Save to Contacts <i>or</i> Save as PDF</div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-node">Done</div>
+  </div>
+
+  <div class="steps">
+    <div class="step">
+      <div class="num">1</div>
+      <svg class="step-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="18" y="6" width="28" height="46" rx="6" stroke="currentColor" stroke-width="2.5"/>
+        <rect x="24" y="14" width="16" height="2.5" rx="1.25" fill="currentColor" opacity="0.7"/>
+        <path d="M8 30 A 14 14 0 0 1 8 44" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" opacity="0.55"/>
+        <path d="M2 26 A 22 22 0 0 1 2 48" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" opacity="0.3"/>
+      </svg>
+      <h3>Tap the Card</h3>
+      <p>Hold their Black Hat Card to the back of your phone — just like tapping to pay.</p>
+    </div>
+    <div class="step">
+      <div class="num">2</div>
+      <svg class="step-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="8" y="14" width="48" height="36" rx="6" stroke="currentColor" stroke-width="2.5"/>
+        <circle cx="24" cy="28" r="6" stroke="currentColor" stroke-width="2.5"/>
+        <path d="M16 42c0-6 5-9 8-9s8 3 8 9" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+        <rect x="38" y="24" width="12" height="2.5" rx="1.25" fill="currentColor" opacity="0.6"/>
+        <rect x="38" y="30" width="12" height="2.5" rx="1.25" fill="currentColor" opacity="0.6"/>
+        <rect x="38" y="36" width="8" height="2.5" rx="1.25" fill="currentColor" opacity="0.6"/>
+      </svg>
+      <h3>Their Card Opens</h3>
+      <p>Their photo, name, and contact info load instantly — right in your browser, no app needed.</p>
+    </div>
+    <div class="step">
+      <div class="num">3</div>
+      <svg class="step-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="8" width="44" height="48" rx="6" stroke="currentColor" stroke-width="2.5"/>
+        <path d="M22 30 L29 37 L44 20" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="18" y="44" width="28" height="4" rx="2" fill="currentColor" opacity="0.4"/>
+      </svg>
+      <h3>Save to Contacts</h3>
+      <p>Quickest option — saves their name, phone, and email straight into your phone.</p>
+    </div>
+    <div class="or-divider">or</div>
+    <div class="step">
+      <div class="num">3</div>
+      <svg class="step-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="14" y="6" width="36" height="46" rx="5" stroke="currentColor" stroke-width="2.5"/>
+        <path d="M14 6 L14 52" stroke="currentColor" stroke-width="0" opacity="0"/>
+        <path d="M32 6 L38 6 L38 16 L32 16 Z" fill="currentColor" opacity="0.5"/>
+        <rect x="20" y="24" width="24" height="2.5" rx="1.25" fill="currentColor" opacity="0.5"/>
+        <rect x="20" y="30" width="24" height="2.5" rx="1.25" fill="currentColor" opacity="0.5"/>
+        <rect x="20" y="36" width="16" height="2.5" rx="1.25" fill="currentColor" opacity="0.5"/>
+      </svg>
+      <h3>Save as PDF</h3>
+      <p>Keeps everything — skills, payment info, and anything else that doesn't fit a contact card.</p>
+    </div>
+    <div class="step">
+      <div class="num">4</div>
+      <svg class="step-icon" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="32" cy="32" r="24" stroke="currentColor" stroke-width="2.5"/>
+        <path d="M21 33 L28 40 L44 23" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <h3>Done</h3>
+      <p>They're saved for good — no typing, no missed digits, no lost paper card.</p>
+    </div>
+  </div>
+
+  <p style="text-align:center; font-size:12px; color:var(--muted); margin-top:16px; line-height:1.6;">Save to Contacts only captures the basics — a contact card format simply can't hold everything. Save as PDF instead if you want the complete picture.</p>
+
+  <div class="footer-note">
+    <p><b>Want your own?</b> Ask anyone with a Black Hat Card to tap "Refer a Friend" — or just scan the QR on any flyer to request one yourself.</p>
+  </div>
+
+  <footer>Black Hat Community · How-To Reference</footer>
+</div>
+
+</body>
+</html>

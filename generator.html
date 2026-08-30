@@ -831,8 +831,30 @@
     document.getElementById('miniCard').innerHTML = html;
   }
 
-  document.getElementById('previewBtn').addEventListener('click', () => {
+  async function applyPreviewBrandColors() {
+    const card = document.getElementById('miniCard');
+    const slug = document.getElementById('brand').value.trim();
+    // Always reset first — otherwise a brand color from a PREVIOUS preview
+    // this session (before New Person was clicked) could linger and be
+    // mistaken for this person's actual colors.
+    card.style.removeProperty('--copper');
+    card.style.removeProperty('--copper-soft');
+    if (!slug) return;
+    try {
+      const res = await fetch(`/brands/${slug}.json`, { cache: 'no-store' });
+      if (!res.ok) return;
+      const brand = await res.json();
+      if (brand.accent) card.style.setProperty('--copper', brand.accent);
+      if (brand.accentSoft) card.style.setProperty('--copper-soft', brand.accentSoft);
+    } catch (err) {
+      // Missing/typo'd brand file — silently fall back to default colors,
+      // same graceful behavior as the live card itself.
+    }
+  }
+
+  document.getElementById('previewBtn').addEventListener('click', async () => {
     renderPreview();
+    await applyPreviewBrandColors(); // after renderPreview, so colors apply to the freshly-built card
     document.getElementById('previewOverlay').classList.add('open');
   });
   document.getElementById('closePreview').addEventListener('click', () => {
