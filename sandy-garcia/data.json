@@ -1,0 +1,43 @@
+{
+  "prefix": "",
+  "firstName": "Sandy",
+  "lastName": "Garcia",
+  "title": "",
+  "org": "",
+  "tagline": "",
+  "about": "",
+  "experience": [],
+  "skills": [],
+  "social": {
+    "instagram": "",
+    "tiktok": "",
+    "facebook": "",
+    "linkedin": "",
+    "twitter": "",
+    "youtube": ""
+  },
+  "payments": {
+    "cashapp": "$AddYoursHere",
+    "venmo": "",
+    "paypal": "",
+    "zelle": ""
+  },
+  "paymentSectionLabel": "Payment",
+  "notes": "",
+  "phones": [
+    {
+      "type": "Mobile",
+      "number": "(201) 790-5597"
+    }
+  ],
+  "emails": [],
+  "websites": [],
+  "listings": [],
+  "calendlyUrl": "",
+  "bookingLabel": "Book a Time",
+  "address": "49 Birch Avenue Plainfield NJ 07062",
+  "photoFile": "photo.jpg",
+  "accessToken": "gw8xm4k5",
+  "brand": "",
+  "showQR": true
+}
