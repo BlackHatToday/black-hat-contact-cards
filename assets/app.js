@@ -182,7 +182,7 @@
     document.getElementById('listingsEl').innerHTML = listings.map(l => `
       <a class="field" href="${l.url}" target="_blank" rel="noopener">
         <span class="icon">${ICONS.home}</span>
-        <span class="meta"><div class="label">${l.label || 'Listing'}</div><div class="value">${l.url.replace(/^https?:\/\//, '')}</div></span>
+        <span class="meta"><div class="label">${l.label || 'Listing'}</div><div class="value">View Listing</div></span>
       </a>
     `).join('');
     document.getElementById('listingsSection').style.display = 'block';
