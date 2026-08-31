@@ -22,6 +22,7 @@ Task-first reference. If you need to know *how the system works and why*, see `P
 | Fix something that's not working | §12 |
 | Do my weekly upkeep | §13 |
 | Understand which button does what, and why | §14 |
+| Check whether a tool works on my phone/tablet | §15 |
 
 ---
 
@@ -30,7 +31,7 @@ Task-first reference. If you need to know *how the system works and why*, see `P
 1. Open `generator.html`.
 2. Click **New Person** if you were previously editing someone else.
 3. Fill in Identity — Prefix, First/Last Name, Title, Org, Tagline. Leave **Brand** blank unless this person belongs to a business you've already set up (§4).
-4. Fill in Phone and Email — at least one, so Share Your Info and Collect Contact Info work.
+4. Fill in Phone and Email — at least one, so Share Your Info and Collect Info work.
 5. Click **Add more details** if you want About, Experience, Skills, Social, Payments, Address, Websites, or Calendly.
 6. Check the **Security Token** and **Folder Name** fields — Folder Name auto-fills from the person's name; edit it if you want something different.
 7. Click **Preview** to see the actual card before saving anything.
@@ -46,7 +47,7 @@ Same shape as §1, using `property-generator.html` instead:
 
 1. Open `property-generator.html`. Click **New Listing** if needed.
 2. Fill in Address, Price, Sqft, Beds, Baths, Description.
-3. Fill in Agent info (Name, Phone, Email) and Booking link if applicable.
+3. Fill in Agent info (Name, Phone, Email), a **Brand** slug if this listing belongs to a branded business, and Booking link if applicable.
 4. Leave **Another Listing** blank unless a second listing's card already exists live.
 5. Preview, copy the Tag URL, Download/Save.
 6. Create the folder, copy `property-template/index.html` in unedited, add `data.json`, add `hero.jpg` plus any gallery photos.
@@ -55,7 +56,7 @@ Same shape as §1, using `property-generator.html` instead:
 
 ## 3. Bulk-Adding Multiple People
 
-Use this when you receive a list of names all at once (a business, an event, etc.) rather than one at a time.
+Use this when you receive a list of names all at once (a business, an event, etc.) rather than one at a time. **Desktop only** — see §15.
 
 1. Open `bulk-generator.html`.
 2. Click **Download CSV Template** and send it to whoever's collecting the names.
@@ -74,8 +75,9 @@ Use this when you receive a list of names all at once (a business, an event, etc
 3. Pick an accent color. The hover/soft variant auto-generates; override it if you want a specific shade.
 4. Watch the **live preview** — this is the actual card design with your chosen colors, not a guess.
 5. Download the file, and place it in a `brands/` folder at your project root, named `{slug}.json`.
-6. For every employee at that business, put the same slug into their **Brand** field in `generator.html`.
-7. To rebrand later: **Load Brand File** in `brand-generator.html`, adjust colors, **Save** — every employee referencing that slug updates automatically.
+6. For every employee at that business, put the same slug into their **Brand** field in `generator.html`. For any of their property listings, the same **Brand** field exists in `property-generator.html` too — same slug, same result.
+7. Click **Preview** in either generator — it fetches the real brand colors and applies them to the preview card, so what you see is what actually goes live, not the default palette.
+8. To rebrand later: **Load Brand File** in `brand-generator.html`, adjust colors, **Save** — every person and listing referencing that slug updates automatically.
 
 ---
 
@@ -94,8 +96,8 @@ Use this instead of §1 when the person should type in their own details.
 
 1. Open the matching generator (`generator.html` or `property-generator.html`).
 2. Click **Load data.json**, and pick that person/listing's actual file.
-3. In Chrome/Edge, this remembers the file — edit anything, then click **Save**, and it writes straight back to that exact file. No re-picking, no manual moving.
-4. In any other browser, edit and click **Download data.json** instead, then manually replace the old file with the new one.
+3. In Chrome/Edge **on desktop**, this remembers the file — edit anything, then click **Save**, and it writes straight back to that exact file. No re-picking, no manual moving.
+4. On mobile (any phone or tablet browser, Chrome included) or any other desktop browser, edit and click **Download data.json** instead, then manually replace the old file with the new one.
 
 ---
 
@@ -159,7 +161,7 @@ Every "Contact / Support / Updates" email carries a tag — read it before actin
 | Photo doesn't load on the live site | Missing trailing slash on the URL | Folder URLs need a trailing `/` |
 | Card looks empty despite a filled-in `data.json` | Wrong template used — person data loaded into `property-template/index.html` or vice versa | Re-copy the correct matching template |
 | "Need to update" email has no `[Verified]`/`[UNVERIFIED]` tag | This card predates the token system | Reissue the tag per §10 if you want it covered |
-| Generator's Save button doesn't appear | Browser isn't Chrome/Edge, or nothing was loaded via Load first | Use Download instead, or switch browsers |
+| Generator's Save button doesn't appear | Either: on mobile or a desktop browser other than Chrome/Edge, where the underlying feature doesn't exist at all — or nothing was loaded via Load first, so there's no file to save back to | Use Download instead (see §15 for which tools this affects), or Load a file first |
 
 ---
 
@@ -191,3 +193,27 @@ The bottom of every person card has six buttons, split into two columns. This se
 **Why the owner's initials sit above that column instead of a generic "Your Tools" label:** a stranger scanning someone else's card needs to immediately understand that column isn't meant for them. "Jane's Tools" or "JD's Tools" reads as *hers*, not a generic app menu — a small wording choice that does a lot of the disambiguating work on its own.
 
 **If you're ever unsure whether a new button belongs in the visitor column or the owner column**, the test that's been used so far: would a stranger tapping this card for the first time ever plausibly want to click it? If yes, it's a visitor button. If the honest answer is "only the card's actual owner would ever use this," it belongs in the owner's column — regardless of who's technically capable of clicking it.
+
+---
+
+## 15. Device Compatibility — What Works Where
+
+Every tool in this project is a plain web page, so all of them technically *open* on a phone or tablet browser. The real question is whether they behave identically to desktop — three don't, because of one specific browser limitation: mobile browsers, Chrome included, don't support the File System Access API (the thing that makes the **Save** button and Bulk Generator's direct folder-writing possible). This isn't a "some phones" limitation — it's every mobile browser, on every platform, full stop.
+
+**Identical everywhere, no compromises:**
+- `my-contact-info-form.html`
+- `property-intake-form.html`
+
+Plain forms, `mailto:` links — nothing in either one depends on the missing feature.
+
+**Works on mobile, but loses one convenience:**
+- `generator.html`
+- `property-generator.html`
+- `brand-generator.html`
+
+The **Save** button (writing straight back to a loaded file) doesn't work on mobile — falls back to **Download**, same end result, just one extra manual step (moving the downloaded file into place) that desktop skips. Everything else, including Preview and the branded-preview fetch, works identically. The **Scan a Card** / **Scan a Business Card** camera feature actually works *better* on mobile, since it opens your phone's real camera directly.
+
+**Effectively desktop-only:**
+- `bulk-generator.html`
+
+Its entire purpose — writing many folders directly into your project via a folder picker — needs the same missing feature, and there's no fallback path the way there is for Save. On mobile, clicking **Create Folders** just fails. If you need to bulk-import a roster while away from your desktop, it has to wait.

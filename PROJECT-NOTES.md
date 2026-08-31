@@ -42,8 +42,12 @@ your-project/
 │   └── property.js     ← renders every property card
 ├── generator.html              ← you build/edit person cards
 ├── property-generator.html     ← you build/edit listings
+├── brand-generator.html        ← create/edit a business's color palette
+├── bulk-generator.html         ← CSV → many new person folders at once
 ├── my-contact-info-form.html   ← friends self-submit their own info
 ├── property-intake-form.html   ← realtors self-submit a listing
+├── brands/
+│   └── {slug}.json             ← one file per business, referenced by the Brand field in either generator
 ├── person-template/
 │   ├── index.html       ← copied unedited into every NEW person folder
 │   └── data.json        ← sample schema only
@@ -107,6 +111,7 @@ Every person/listing's `data.json` gets built one of two ways:
 - **Scan a Card** (renamed from "Scan a Visitor's Card") — the card owner's own OCR tool (Tesseract.js, entirely client-side, no backend): scan a physical business card someone hands them, review the extracted phone/email (name is always manual — OCR can't reliably find it), then send it to their *own* email or phone as a personal record. Deliberately requires that review step before sending, unlike Share Your Info, since an unreviewed OCR mistake here would be silently wrong with no one to catch it. Notably absent from the two client-facing intake forms — that placement was tried and reverted, since a mis-scanned field there would just cause back-and-forth corrections with no upside.
 - **Refer a Friend** — lets *anyone* viewing a card (not just its owner) share a link to the general intake form, formatted as "Request a Black Hat Card." Deliberately points at a fixed URL (never derived from the current page's domain), so it's correct even if viewed via an old `.vercel.app` tag.
 - **Two-column button layout** — the six buttons above split into "For You" (Save to Contacts, Share Your Info, Save as PDF — things a *visitor* would use) and a column headed by the owner's own initials, e.g. "JD's Tools" (Collect Info, Scan a Card, Refer a Friend — things the *card owner* would use). The initials-based header is deliberate: a generic "Your Tools" label reads ambiguously to a visitor, but naming the actual owner makes "not mine to use" obvious at a glance. Every button in both columns shares a consistent minimum height, so whichever label happens to wrap to two lines on a given screen, its neighbor in the other column still lines up with it.
+- **Brand system** — `brand-generator.html` creates a `brands/{slug}.json` file (business name + accent color + soft variant). Any person's card *or* any property listing can reference that slug via a **Brand** field in `generator.html` / `property-generator.html`, and the live card fetches and applies those colors at runtime (`applyBrandTheme` in `app.js` and `property.js`). Both generators' own **Preview** button also fetches and applies the real brand colors before showing the card — not a simulation, the same fetch-and-override logic the live card itself uses, scoped to just the preview element. One brand file, edited once in `brand-generator.html`, updates every person and listing referencing it — no per-card edits needed to rebrand.
 - **Payment / Donate section** — Cash App, Venmo, and PayPal render as real tappable links with an optional QR popup; Zelle renders as plain text with an explicit "not clickable" caption, since Zelle has no public payment link. The section's title itself is configurable per person (defaults to "Payment," can be set to "Donate" or anything else).
 - **Book a Time** — a configurable-label button (defaults to "Book a Time," can become "Schedule a Showing" on a property card) linking to a Calendly URL.
 - **Listings** (person cards only, capped at 5) — lets a realtor's *personal* card link out to their active property listings. Deliberately not available on the friend-facing intake form, since a brand-new person filling out their own card wouldn't have live listing URLs to reference yet — this is a field you add after the fact, in the generator.
@@ -138,6 +143,7 @@ Every person/listing's `data.json` gets built one of two ways:
 - [ ] Periodically spot-check live cards after any `assets/` or template change
 - [ ] Real authentication/backend — explicitly deferred, revisit only if scale demands it
 - [ ] Watch whether the 5-listing cap and referral system actually get used the way they were designed, once there's real usage data via Analytics
+- [ ] First real test of the brand + realtor-team workflow end-to-end: Angela Hanks' real estate team (her own card, 2-3 teammates, at least one active listing, all sharing one brand). Worth revisiting this checklist once that's actually run through, to catch anything the workflow still doesn't handle cleanly.
 
 ---
 
