@@ -1,12 +1,15 @@
 {
-  "address": "0 Blacks RD, Macon, NC 27551",
+  "address": "Blacks RD, Macon, NC 27551",
   "price": "$47,000",
   "beds": null,
   "baths": null,
   "sqft": "",
   "description": "5 acres of land in Macon, NC \u2014 ideal for building, recreation, or investment.",
   "heroPhoto": "hero.jpg",
-  "photos": [],
+  "photos": [
+    "01.jpg",
+    "02.jpg"
+  ],
   "agentName": "Angela Hanks",
   "agentPhotoFile": "agent.jpg",
   "agentPhone": "(252) 433-7769",

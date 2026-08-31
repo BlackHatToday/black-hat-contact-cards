@@ -24,7 +24,17 @@
     facebook:  { label: 'Facebook',  abbr: 'FB', urlFor: h => `https://facebook.com/${h.replace(/^@/, '')}` },
     linkedin:  { label: 'LinkedIn',  abbr: 'IN', urlFor: h => `https://linkedin.com/in/${h.replace(/^@/, '')}` },
     twitter:   { label: 'X',         abbr: 'X',  urlFor: h => `https://x.com/${h.replace(/^@/, '')}` },
-    youtube:   { label: 'YouTube',   abbr: 'YT', urlFor: h => `https://youtube.com/@${h.replace(/^@/, '')}` }
+    youtube:   { label: 'YouTube',   abbr: 'YT', urlFor: h => {
+      const v = h.replace(/^@/, '').trim();
+      // A real channel ID is always exactly "UC" + 22 characters — build the
+      // /channel/ URL for that. Otherwise, only build an @handle URL if it's
+      // a plausible handle (YouTube's own allowed character set, sane length).
+      // Anything else is probably a copy-paste mistake, not a real identifier —
+      // skip it rather than publish a dead link.
+      if (/^UC[a-zA-Z0-9_-]{22}$/.test(v)) return `https://youtube.com/channel/${v}`;
+      if (/^[a-zA-Z0-9_.-]{3,30}$/.test(v)) return `https://youtube.com/@${v}`;
+      return null;
+    } }
   };
 
   // Payment handles. Most apps support a direct pay-link; Zelle doesn't
@@ -124,11 +134,14 @@
   function renderSocial(d) {
     const entries = Object.entries(d.social || {}).filter(([, handle]) => handle && String(handle).trim());
     if (!entries.length) return;
-    document.getElementById('socialEl').innerHTML = entries.map(([platform, handle]) => {
+    const html = entries.map(([platform, handle]) => {
       const cfg = SOCIAL_PLATFORMS[platform] || { label: platform, abbr: platform.slice(0, 2).toUpperCase(), urlFor: h => h };
       const url = cfg.urlFor(String(handle));
+      if (!url) return null; // malformed input for this platform — skip rather than publish a dead link
       return `<a class="social-pill" href="${url}" target="_blank" rel="noopener"><span class="social-badge">${cfg.abbr}</span>${cfg.label}</a>`;
-    }).join('');
+    }).filter(Boolean);
+    if (!html.length) return;
+    document.getElementById('socialEl').innerHTML = html.join('');
     document.getElementById('socialSection').style.display = 'block';
   }
 
