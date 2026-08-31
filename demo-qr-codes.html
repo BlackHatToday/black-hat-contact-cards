@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo QR Codes</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --navy:#16283f; --navy-2:#1e3a5a; --blue-bright:#6db1ea;
+    --off-white:#f6f3ea; --muted:#8b93a1;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{
+    background: radial-gradient(circle at 50% 0%, var(--navy-2) 0%, var(--navy) 60%);
+    color: var(--off-white); font-family:'IBM Plex Mono', monospace;
+    padding: 40px 20px; display:flex; justify-content:center;
+  }
+  .sheet{ max-width: 620px; width:100%; }
+  .kicker{
+    font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--blue-bright); text-align:center; margin-bottom: 8px;
+  }
+  h1{
+    font-family:'Space Grotesk', sans-serif; font-weight: 700; font-size: 24px;
+    text-align:center; margin-bottom: 34px;
+  }
+  .row{ display:flex; gap: 20px; flex-wrap: wrap; justify-content:center; }
+  .card{
+    background: rgba(109,177,234,0.06); border: 1px solid #2e3a4d; border-radius: 16px;
+    padding: 24px; text-align:center; flex: 1; min-width: 240px;
+  }
+  .qr-box{
+    background: #fff; border-radius: 8px; padding: 12px; width: 200px; height: 200px;
+    margin: 0 auto 16px; display:flex; align-items:center; justify-content:center;
+  }
+  .qr-box canvas, .qr-box img{ width:100% !important; height:100% !important; display:block; }
+  .card h3{
+    font-family:'Space Grotesk', sans-serif; font-size: 15px; font-weight: 600;
+    color: var(--off-white); margin-bottom: 6px;
+  }
+  .card .url{ font-size: 10.5px; color: var(--muted); word-break: break-all; }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+  <div class="kicker">Black Hat Community</div>
+  <h1>Demo QR Codes</h1>
+
+  <div class="row">
+    <div class="card">
+      <div class="qr-box" id="qr-howto"></div>
+      <h3>How to Use Your Card</h3>
+      <div class="url">blackhatcards.community/how-to-use.html</div>
+    </div>
+    <div class="card">
+      <div class="qr-box" id="qr-animated"></div>
+      <h3>Animated Demo</h3>
+      <div class="url">blackhatcards.community/animated-demo.html</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  new QRCode(document.getElementById("qr-howto"), {
+    text: "https://blackhatcards.community/how-to-use.html",
+    width: 180, height: 180,
+    colorDark: "#16283f", colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.M
+  });
+  new QRCode(document.getElementById("qr-animated"), {
+    text: "https://blackhatcards.community/animated-demo.html",
+    width: 180, height: 180,
+    colorDark: "#16283f", colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.M
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+{
+  "prefix": "",
+  "firstName": "Josefina",
+  "lastName": "Sanchez",
+  "title": "",
+  "org": "The NC Cleaning Ladies",
+  "tagline": "Deep Cleaning, Move-in /Move-outs, Airbnb Cleaning, One Time Cleaning, Residential & Commercial Cleaning",
+  "about": "Free estimates, Book with us weekly, Bi-Weekly or Monthly.",
+  "experience": [],
+  "skills": [],
+  "social": {
+    "instagram": "",
+    "tiktok": "",
+    "facebook": "",
+    "linkedin": "",
+    "twitter": "",
+    "youtube": ""
+  },
+  "payments": {
+    "cashapp": "$AddYoursHere",
+    "venmo": "$AddYoursHere",
+    "paypal": "",
+    "zelle": "123.456.7890"
+  },
+  "paymentSectionLabel": "Payment",
+  "notes": "",
+  "phones": [
+    {
+      "type": "Mobile",
+      "number": "(919) 824-0422"
+    }
+  ],
+  "emails": [],
+  "websites": [],
+  "listings": [],
+  "calendlyUrl": "",
+  "bookingLabel": "Book a Time",
+  "address": "",
+  "photoFile": "photo.jpg",
+  "accessToken": "pwimeut5",
+  "brand": "",
+  "showQR": true
+}
