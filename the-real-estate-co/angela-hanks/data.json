@@ -1,0 +1,73 @@
+{
+  "prefix": "",
+  "firstName": "Angela",
+  "lastName": "Hanks",
+  "title": "Broker-Owner",
+  "org": "The Real Estate Co. NC | VA",
+  "tagline": "Live, Work & Grow Where it Feels Like Home",
+  "about": "Angela Hanks, Broker/Owner of The Real Estate Co. NC | VA, specializes in rural luxury properties, new construction, and land sales \u2014 serving Southeastern Virginia and North Carolina's Piedmont and Triangle regions.",
+  "experience": [],
+  "skills": [
+    "Rural Luxury Properties",
+    "New Construction",
+    "Land Sales"
+  ],
+  "social": {
+    "instagram": "angelahanks_realtor",
+    "tiktok": "",
+    "facebook": "The-Real-Estate-Co--NC/VA-824326597427143",
+    "linkedin": "angela-mechelle-hanks-174687107",
+    "twitter": "",
+    "youtube": "UC7UCJsWWtfN11DK4dWKsOGw"
+  },
+  "payments": {},
+  "paymentSectionLabel": "Payment",
+  "listings": [
+    {
+      "label": "4098 Charlie Harris RD",
+      "url": "https://blackhatcards.community/the-real-estate-co/angela-hanks/4098-charlie-harris-rd/"
+    },
+    {
+      "label": "232 Burwell AVE",
+      "url": "https://blackhatcards.community/the-real-estate-co/angela-hanks/232-burwell-ave/"
+    },
+    {
+      "label": "2465 Averett Church Road",
+      "url": "https://blackhatcards.community/the-real-estate-co/angela-hanks/2465-averett-church-road/"
+    },
+    {
+      "label": "Church Road",
+      "url": "https://blackhatcards.community/the-real-estate-co/angela-hanks/church-road-clarksville/"
+    },
+    {
+      "label": "Blacks RD",
+      "url": "https://blackhatcards.community/the-real-estate-co/angela-hanks/blacks-rd/"
+    }
+  ],
+  "notes": "",
+  "phones": [
+    {
+      "type": "Work",
+      "number": "(252) 433-7769"
+    }
+  ],
+  "emails": [
+    {
+      "type": "Work",
+      "address": "ahanks@therealestate-co.com"
+    }
+  ],
+  "websites": [
+    {
+      "label": "Website",
+      "url": "https://therealestate-co.com/"
+    }
+  ],
+  "calendlyUrl": "",
+  "bookingLabel": "Book a Time",
+  "address": "PO Box 248, Oxford, NC 27565",
+  "photoFile": "photo.jpg",
+  "accessToken": "kamhxcwg",
+  "brand": "the-real-estate-co",
+  "showQR": true
+}

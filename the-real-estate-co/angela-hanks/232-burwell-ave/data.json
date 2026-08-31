@@ -1,0 +1,21 @@
+{
+  "address": "232 Burwell AVE, Henderson, NC 27536",
+  "price": "$150,000",
+  "beds": 6,
+  "baths": 3,
+  "sqft": "2,409",
+  "description": "A spacious 6-bedroom, 3-bath home in Henderson, NC, with 2,409 square feet of living space.",
+  "heroPhoto": "hero.jpg",
+  "photos": [],
+  "agentName": "Angela Hanks",
+  "agentPhotoFile": "agent.jpg",
+  "agentPhone": "(252) 433-7769",
+  "agentEmail": "ahanks@therealestate-co.com",
+  "bookingUrl": "",
+  "bookingLabel": "Schedule a Showing",
+  "otherPropertyUrl": "",
+  "otherPropertyLabel": "",
+  "accessToken": "i69znraj",
+  "brand": "the-real-estate-co",
+  "showQR": true
+}

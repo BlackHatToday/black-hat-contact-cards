@@ -23,6 +23,7 @@ Task-first reference. If you need to know *how the system works and why*, see `P
 | Do my weekly upkeep | §13 |
 | Understand which button does what, and why | §14 |
 | Check whether a tool works on my phone/tablet | §15 |
+| Organize a realtor team's folders | §16 |
 
 ---
 
@@ -217,3 +218,40 @@ The **Save** button (writing straight back to a loaded file) doesn't work on mob
 - `bulk-generator.html`
 
 Its entire purpose — writing many folders directly into your project via a folder picker — needs the same missing feature, and there's no fallback path the way there is for Save. On mobile, clicking **Create Folders** just fails. If you need to bulk-import a roster while away from your desktop, it has to wait.
+
+---
+
+## 16. Organizing a Realtor Team's Folders
+
+Use this any time a realtor has (or might grow) a team — not just a single agent with a single listing. Flat, root-level folders work fine for a one-off card, but get messy fast once a team and their listings start multiplying.
+
+**The pattern: agency → person → that person's listings, nested three deep.**
+
+```
+your-project/
+├── the-real-estate-co/              ← the agency itself, matches the brand slug
+│   ├── angela-hanks/                ← one agent, a peer within the agency
+│   │   ├── index.html
+│   │   ├── data.json
+│   │   ├── photo.jpg
+│   │   ├── 4098-charlie-harris-rd/  ← her listing, nested under her
+│   │   │   ├── index.html
+│   │   │   └── data.json
+│   │   └── another-listing/
+│   └── another-agent/               ← a second agent, peer to Angela
+│       ├── index.html
+│       ├── data.json
+│       └── their-listings/
+```
+
+**Why the agency sits at the top, not the team lead's name.** A teammate isn't "inside" the broker-owner's own folder — that would model the relationship as personal ownership when it's really shared agency membership. Everyone who works for the same agency is a peer underneath that agency's own folder, whether they're the owner or a brand-new agent.
+
+**Why each person's listings nest under *them* specifically, not the agency directly.** It keeps clear, at a glance, whose listing is whose — and it means the top-level agency folder only ever contains people, never a mix of people and properties.
+
+1. Create the agency folder first, named to match its brand slug from `brand-generator.html`.
+2. Inside it, one folder per person, built the normal way (§1).
+3. Inside each person's folder, one folder per listing they personally hold, built the normal way (§2) — just physically located one level deeper than usual.
+4. The Tag URL for anything nested this way is longer than a flat one — e.g. `blackhatcards.community/the-real-estate-co/angela-hanks/4098-charlie-harris-rd/` — but nothing else about writing or testing the tag changes.
+5. If that agent's own card has a `listings` field pointing at their properties, make sure those URLs match the full nested path — not the flat, unnested one generator tools might suggest by default.
+
+**Do this before any physical tags exist for that team**, if at all possible — moving folders and fixing the URLs inside them afterward is real cleanup work; doing it before anything's written to a chip costs almost nothing.

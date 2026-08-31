@@ -1,0 +1,21 @@
+{
+  "address": "2465 Averett Church Road, Nelson, VA 24580",
+  "price": "$125,000",
+  "beds": 2,
+  "baths": 1,
+  "sqft": "750",
+  "description": "A 2-bedroom, 1-bath home in Nelson, VA, offering 750 square feet \u2014 a great starter property or investment opportunity.",
+  "heroPhoto": "hero.jpg",
+  "photos": [],
+  "agentName": "Angela Hanks",
+  "agentPhotoFile": "agent.jpg",
+  "agentPhone": "(252) 433-7769",
+  "agentEmail": "ahanks@therealestate-co.com",
+  "bookingUrl": "",
+  "bookingLabel": "Schedule a Showing",
+  "otherPropertyUrl": "",
+  "otherPropertyLabel": "",
+  "accessToken": "dnmerpi4",
+  "brand": "the-real-estate-co",
+  "showQR": true
+}
