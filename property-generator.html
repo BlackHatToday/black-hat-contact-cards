@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Property Listing Generator</title>
+<link rel="icon" type="image/png" href="/assets/favicon.png">
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap');
@@ -259,6 +260,9 @@
         <div><label>Agent phone</label><input type="tel" id="agentPhone" placeholder="(555) 123-4567" inputmode="tel"></div>
         <div><label>Agent email</label><input type="email" id="agentEmail" placeholder="jane@realty.com"></div>
       </div>
+      <label>Brand (optional)</label>
+      <input type="text" id="brand" placeholder="acme-realty">
+      <div class="hint">Match this to a business's brand slug from brand-generator.html to apply their colors to this listing. Leave blank for the default Black Hat colors.</div>
     </fieldset>
 
     <fieldset>
@@ -491,7 +495,8 @@
       otherPropertyUrl: document.getElementById('otherPropertyUrl').value,
       otherPropertyLabel: document.getElementById('otherPropertyLabel').value || 'View Another Listing',
       showQR: document.getElementById('showQR').checked,
-      accessToken: document.getElementById('accessToken').value
+      accessToken: document.getElementById('accessToken').value,
+      brand: document.getElementById('brand').value
     };
   }
 
@@ -545,8 +550,30 @@
     document.getElementById('miniCard').innerHTML = html;
   }
 
-  document.getElementById('previewBtn').addEventListener('click', () => {
+  async function applyPreviewBrandColors() {
+    const card = document.getElementById('miniCard');
+    const slug = document.getElementById('brand').value.trim();
+    // Always reset first — otherwise a brand color from a PREVIOUS preview
+    // this session (before New Listing was clicked) could linger and be
+    // mistaken for this listing's actual colors.
+    card.style.removeProperty('--copper');
+    card.style.removeProperty('--copper-soft');
+    if (!slug) return;
+    try {
+      const res = await fetch(`/brands/${slug}.json`, { cache: 'no-store' });
+      if (!res.ok) return;
+      const brand = await res.json();
+      if (brand.accent) card.style.setProperty('--copper', brand.accent);
+      if (brand.accentSoft) card.style.setProperty('--copper-soft', brand.accentSoft);
+    } catch (err) {
+      // Missing/typo'd brand file — silently fall back to default colors,
+      // same graceful behavior as the live card itself.
+    }
+  }
+
+  document.getElementById('previewBtn').addEventListener('click', async () => {
     renderPreview();
+    await applyPreviewBrandColors(); // after renderPreview, so colors apply to the freshly-built card
     document.getElementById('previewOverlay').classList.add('open');
   });
   document.getElementById('closePreview').addEventListener('click', () => {
@@ -577,6 +604,7 @@
     setVal('bookingLabel', d.bookingLabel || 'Schedule a Showing');
     setVal('otherPropertyUrl', d.otherPropertyUrl);
     setVal('otherPropertyLabel', d.otherPropertyLabel || 'View Another Listing');
+    setVal('brand', d.brand);
     document.getElementById('showQR').checked = d.showQR !== false;
     setVal('accessToken', d.accessToken || generateToken());
 
@@ -654,7 +682,7 @@
     document.getElementById('scanStatus').textContent = '';
     ['address', 'price', 'sqft', 'beds', 'baths', 'description', 'agentName',
      'agentPhone', 'agentEmail', 'bookingUrl', 'otherPropertyUrl',
-     'folderName', 'tagUrl'].forEach(id => setVal(id, ''));
+     'folderName', 'tagUrl', 'brand'].forEach(id => setVal(id, ''));
     setVal('heroPhoto', 'hero.jpg');
     setVal('agentPhotoFile', 'agent.jpg');
     setVal('bookingLabel', 'Schedule a Showing');

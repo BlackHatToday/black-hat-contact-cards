@@ -141,6 +141,7 @@ Every person/listing's `data.json` gets built one of two ways:
 
 *(Also tracked separately in ongoing memory — this is the durable snapshot as of this write-up.)*
 
+- [ ] **Bulk-refreshing existing folders after a template/engine change doesn't scale** — currently means manually typing out every affected folder name into a Cowork prompt (or doing it by hand), split by person vs. property type. Fine at today's folder count; genuinely painful once the list is much longer. Worth a real fix eventually — e.g., a small script that auto-discovers every person/property folder by checking for a marker in each `data.json`, rather than requiring a hand-maintained list every time.
 - [ ] Keep a private log (Name/Address → Folder → Token → Tag issued date) — not stored anywhere in this repo
 - [ ] Set a calendar reminder for domain renewal
 - [ ] Periodically spot-check live cards after any `assets/` or template change

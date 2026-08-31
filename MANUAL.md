@@ -24,6 +24,7 @@ Task-first reference. If you need to know *how the system works and why*, see `P
 | Understand which button does what, and why | §14 |
 | Check whether a tool works on my phone/tablet | §15 |
 | Organize a realtor team's folders | §16 |
+| Change an existing card's color palette | §17 |
 
 ---
 
@@ -256,3 +257,24 @@ your-project/
 5. If that agent's own card has a `listings` field pointing at their properties, make sure those URLs match the full nested path — not the flat, unnested one generator tools might suggest by default.
 
 **Do this before any physical tags exist for that team**, if at all possible — moving folders and fixing the URLs inside them afterward is real cleanup work; doing it before anything's written to a chip costs almost nothing.
+
+---
+
+## 17. Changing an Existing Card's Color Palette
+
+Use this for a person or listing that's already live and already has a physical tag out in the world. Nothing about the tag needs to change — brand colors are fetched fresh every time the card loads, never baked into the tag or its token, so the existing tag keeps working exactly as it always has. The very next tap just happens to pull in the new colors.
+
+**First, figure out which of two situations you're in:**
+- The brand you want already exists as a file in `brands/` — skip to the steps below.
+- It doesn't exist yet — build it first in `brand-generator.html` (§4), then come back here.
+
+**Then, to actually attach it to the existing card:**
+
+1. Open `generator.html` for a person, or `property-generator.html` for a listing — not `brand-generator.html`, which only ever touches brand files, never a specific card.
+2. Click **Load data.json**, and pick that exact person's or listing's file — not `index.html`.
+3. Confirm the form filled in with their real, current info — that's confirmation you loaded the right file.
+4. Find the **Brand** field and type in the new brand's slug — the filename minus `.json` (e.g. `biz-the-real-estate-co`).
+5. Click **Preview** if you want to see it first — this fetches the real colors, so what you see is what goes live.
+6. **Save** (Chrome/Edge desktop, writes straight back to the loaded file) or **Download data.json** (any browser, then manually replace the old file).
+7. Push it live the normal way — `git add .`, `git commit -m "..."`, `git push`.
+8. Confirm it by actually visiting that card's live URL and checking the new colors are there.
