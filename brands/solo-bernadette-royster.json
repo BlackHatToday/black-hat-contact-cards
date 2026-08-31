@@ -1,38 +1,7 @@
 {
-  "prefix": "",
-  "firstName": "",
-  "lastName": "",
-  "title": "",
-  "org": "",
-  "tagline": "",
-  "about": "",
-  "experience": [],
-  "skills": [],
-  "social": {
-    "instagram": "",
-    "tiktok": "",
-    "facebook": "",
-    "linkedin": "",
-    "twitter": "",
-    "youtube": ""
-  },
-  "payments": {
-    "cashapp": "",
-    "venmo": "",
-    "paypal": "",
-    "zelle": ""
-  },
-  "paymentSectionLabel": "Payment",
-  "notes": "",
-  "phones": [],
-  "emails": [],
-  "websites": [],
-  "listings": [],
-  "calendlyUrl": "",
-  "bookingLabel": "Book a Time",
-  "address": "",
-  "photoFile": "photo.jpg",
-  "accessToken": "5xsumekx",
-  "brand": "solo-bernadette-royster",
-  "showQR": true
+  "businessName": "solo-bernadette-royster",
+  "brandSlug": "solo-bernadette-royster",
+  "accent": "#192E25",
+  "accentSoft": "#CDB682",
+  "background": "#E1EBE5"
 }
