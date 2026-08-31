@@ -2,14 +2,14 @@
   "prefix": "",
   "firstName": "Monica",
   "lastName": "Lacey",
-  "title": "Security Professional",
+  "title": "Marketing Director",
   "org": "Mo Tea LLC",
   "tagline": "",
   "about": "",
   "experience": [],
   "skills": [],
   "social": {
-    "instagram": "",
+    "instagram": "https://www.instagram.com/moteajar/",
     "tiktok": "",
     "facebook": "",
     "linkedin": "",
@@ -17,26 +17,45 @@
     "youtube": ""
   },
   "payments": {
-    "cashapp": "",
+    "cashapp": "$AddYoursHere",
     "venmo": "",
     "paypal": "",
     "zelle": ""
   },
-  "notes": "",
+  "paymentSectionLabel": "Payment",
+  "notes": "From Love to Legacy — Mo Tea.  Mo Tea is a handcrafted tea in a jar made with three simple, powerful ingredients — Honey, Lemon & Ginger. Great hot or cold. Soothing when you're under the weather. Delicious any time of day.",
   "phones": [
     {
       "type": "Mobile",
       "number": "(484) 368-1293"
+    },
+    {
+      "type": "Work",
+      "number": "(484) 366-1818"
     }
   ],
   "emails": [
     {
       "type": "Personal",
       "address": "LaceyMonica.ML@GMail.com"
+    },
+    {
+      "type": "Work",
+      "address": "Monica@MoTeaJar.com"
     }
   ],
-  "websites": [],
+  "websites": [
+    {
+      "label": "Mo Tea",
+      "url": "https://moteajar.com/"
+    }
+  ],
+  "listings": [],
   "calendlyUrl": "",
+  "bookingLabel": "Book a Time",
+  "address": "",
   "photoFile": "photo.jpg",
+  "accessToken": "f5svcpga",
+  "brand": "",
   "showQR": true
 }
