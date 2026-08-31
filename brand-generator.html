@@ -165,6 +165,14 @@
         <input type="text" class="color-hex" id="accentSoftHex" value="#c98549">
       </div>
       <div class="hint">Auto-filled as a lighter version of the accent color — adjust it yourself if you'd like a different hover shade.</div>
+
+      <label style="margin-top:18px;">Background color (optional)</label>
+      <div class="color-row">
+        <input type="color" id="backgroundPicker" value="#14171c">
+        <input type="text" class="color-hex" id="backgroundHex" value="">
+      </div>
+      <div class="hint">Leave blank for the default dark background. If set, text color and panel shades adjust automatically to stay readable — nothing else to configure.</div>
+      <div class="hint" id="contrastNote" style="color:var(--copper-soft);"></div>
     </fieldset>
 
   </form>
@@ -219,6 +227,53 @@
     const card = document.getElementById('previewCard');
     card.style.setProperty('--copper', accent);
     card.style.setProperty('--copper-soft', accentSoft);
+
+    const bg = document.getElementById('backgroundHex').value;
+    if (/^#[0-9a-fA-F]{6}$/.test(bg)) {
+      const theme = computeThemeFromBackground(bg);
+      card.style.setProperty('--ink', bg);
+      card.style.setProperty('--parchment', theme.text);
+      card.style.setProperty('--muted', theme.muted);
+      card.style.setProperty('--surface', theme.surface);
+      card.style.setProperty('--surface-2', theme.surface2);
+      card.style.setProperty('--line', theme.line);
+      document.getElementById('contrastNote').textContent = `Text auto-set to ${theme.text === '#1a1a1a' ? 'near-black' : 'off-white'} for readability.`;
+    } else {
+      // blank — remove the overrides so the preview falls back to the
+      // default dark theme, same as any brand file with no background set
+      ['--ink', '--parchment', '--muted', '--surface', '--surface-2', '--line'].forEach(v => card.style.removeProperty(v));
+      document.getElementById('contrastNote').textContent = '';
+    }
+  }
+
+  // Same color-derivation math as assets/app.js and assets/property.js —
+  // kept in sync so this preview always matches what actually goes live.
+  function hexToRgb(hex) {
+    const c = hex.replace('#', '');
+    return [0, 2, 4].map(i => parseInt(c.substr(i, 2), 16));
+  }
+  function rgbToHex(rgb) {
+    return '#' + rgb.map(v => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')).join('');
+  }
+  function relativeLuminance(hex) {
+    const rgb = hexToRgb(hex).map(v => {
+      v /= 255;
+      return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+    });
+    return 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2];
+  }
+  function adjustBrightness(hex, amount) {
+    return rgbToHex(hexToRgb(hex).map(v => v + amount));
+  }
+  function computeThemeFromBackground(bgHex) {
+    const isLight = relativeLuminance(bgHex) > 0.4;
+    return {
+      text: isLight ? '#1a1a1a' : '#ede6d6',
+      muted: isLight ? '#5a5a55' : '#8b93a1',
+      surface: adjustBrightness(bgHex, isLight ? -18 : 14),
+      surface2: adjustBrightness(bgHex, isLight ? -30 : 24),
+      line: adjustBrightness(bgHex, isLight ? -45 : 32),
+    };
   }
 
   // Keep the color picker and hex text field in sync, whichever one changes
@@ -245,6 +300,12 @@
     updatePreview();
   });
 
+  document.getElementById('backgroundPicker').addEventListener('input', () => {
+    document.getElementById('backgroundHex').value = document.getElementById('backgroundPicker').value;
+    updatePreview();
+  });
+  document.getElementById('backgroundHex').addEventListener('input', updatePreview);
+
   let slugAutoFilled = true;
   function autoFillSlug() {
     if (!slugAutoFilled) return;
@@ -260,12 +321,15 @@
   document.getElementById('brandSlug').addEventListener('input', () => { slugAutoFilled = false; });
 
   function collectData() {
-    return {
+    const d = {
       businessName: document.getElementById('businessName').value,
       brandSlug: document.getElementById('brandSlug').value,
       accent: document.getElementById('accentHex').value,
       accentSoft: document.getElementById('accentSoftHex').value
     };
+    const bg = document.getElementById('backgroundHex').value;
+    if (/^#[0-9a-fA-F]{6}$/.test(bg)) d.background = bg;
+    return d;
   }
 
   function setVal(id, value) {
@@ -280,6 +344,8 @@
     setVal('accentHex', d.accent || '#b8763f');
     setVal('accentSoftPicker', d.accentSoft || '#c98549');
     setVal('accentSoftHex', d.accentSoft || '#c98549');
+    setVal('backgroundPicker', d.background || '#14171c');
+    setVal('backgroundHex', d.background || '');
     document.getElementById('pvOrgName').textContent = d.businessName || 'Acme Corp';
     slugAutoFilled = false;
     accentSoftAutoFilled = false;

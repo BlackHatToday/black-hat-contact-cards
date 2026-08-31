@@ -234,16 +234,57 @@
     });
   }
 
+  // Same color-derivation math as assets/app.js — kept in sync so what
+  // gets previewed always matches what goes live, for both card types.
+  function hexToRgb(hex) {
+    const c = hex.replace('#', '');
+    return [0, 2, 4].map(i => parseInt(c.substr(i, 2), 16));
+  }
+  function rgbToHex(rgb) {
+    return '#' + rgb.map(v => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')).join('');
+  }
+  function relativeLuminance(hex) {
+    const rgb = hexToRgb(hex).map(v => {
+      v /= 255;
+      return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+    });
+    return 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2];
+  }
+  function adjustBrightness(hex, amount) {
+    return rgbToHex(hexToRgb(hex).map(v => v + amount));
+  }
+  function computeThemeFromBackground(bgHex) {
+    const isLight = relativeLuminance(bgHex) > 0.4;
+    return {
+      text: isLight ? '#1a1a1a' : '#ede6d6',
+      muted: isLight ? '#5a5a55' : '#8b93a1',
+      surface: adjustBrightness(bgHex, isLight ? -18 : 14),
+      surface2: adjustBrightness(bgHex, isLight ? -30 : 24),
+      line: adjustBrightness(bgHex, isLight ? -45 : 32),
+    };
+  }
+
   // Same brand-theming mechanism as the person card — see the matching
-  // comment in assets/app.js.
+  // comment in assets/app.js. Background is optional — a brand with just
+  // an accent color behaves exactly as before.
   async function applyBrandTheme(d) {
     if (!d.brand) return;
     try {
       const res = await fetch(`/brands/${d.brand}.json`, { cache: 'no-store' });
       if (!res.ok) return;
       const brand = await res.json();
-      if (brand.accent) document.documentElement.style.setProperty('--copper', brand.accent);
-      if (brand.accentSoft) document.documentElement.style.setProperty('--copper-soft', brand.accentSoft);
+      const root = document.documentElement.style;
+      if (brand.accent) root.setProperty('--copper', brand.accent);
+      if (brand.accentSoft) root.setProperty('--copper-soft', brand.accentSoft);
+      if (brand.background) {
+        const theme = computeThemeFromBackground(brand.background);
+        root.setProperty('--ink', brand.background);
+        root.setProperty('--parchment', theme.text);
+        root.setProperty('--muted', theme.muted);
+        root.setProperty('--surface', theme.surface);
+        root.setProperty('--surface-2', theme.surface2);
+        root.setProperty('--line', theme.line);
+      }
     } catch (err) {
       console.error('Could not load brand theme:', err);
     }

@@ -14,7 +14,7 @@
 *{ box-sizing:border-box; margin:0; padding:0; }
 
 html, body{
-  background: radial-gradient(circle at 50% 0%, #1a1f27 0%, var(--ink) 60%);
+  background: var(--ink);
   color: var(--parchment);
   font-family:'IBM Plex Sans', sans-serif;
   -webkit-font-smoothing:antialiased;
