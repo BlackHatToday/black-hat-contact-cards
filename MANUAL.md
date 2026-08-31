@@ -72,13 +72,14 @@ Use this when you receive a list of names all at once (a business, an event, etc
 ## 4. Setting Up a Business Brand
 
 1. Open `brand-generator.html`.
-2. Enter the business name — the slug auto-fills.
+2. Enter the business name — the slug auto-fills. **Prefix it** — `biz-` for an actual business or team (e.g. `biz-the-real-estate-co`), `solo-` for one person's own personal variety with no business behind it (e.g. `solo-boris`). Purely a naming convention, no code depends on it — but it means anyone scanning the `brands/` folder later can tell the two apart at a glance without opening a single file.
 3. Pick an accent color. The hover/soft variant auto-generates; override it if you want a specific shade.
-4. Watch the **live preview** — this is the actual card design with your chosen colors, not a guess.
-5. Download the file, and place it in a `brands/` folder at your project root, named `{slug}.json`.
-6. For every employee at that business, put the same slug into their **Brand** field in `generator.html`. For any of their property listings, the same **Brand** field exists in `property-generator.html` too — same slug, same result.
-7. Click **Preview** in either generator — it fetches the real brand colors and applies them to the preview card, so what you see is what actually goes live, not the default palette.
-8. To rebrand later: **Load Brand File** in `brand-generator.html`, adjust colors, **Save** — every person and listing referencing that slug updates automatically.
+4. **Background color is optional** — leave it blank for the default dark theme. If set, text color and panel shades adjust automatically to stay readable; nothing else to configure. Works the same for a `biz-` or `solo-` brand.
+5. Watch the **live preview** — this is the actual card design with your chosen colors, not a guess. A note under the background field confirms which text color got auto-selected.
+6. Download the file, and place it in a `brands/` folder at your project root, named `{slug}.json` — including the prefix, e.g. `brands/biz-the-real-estate-co.json`.
+7. Put that same full slug (prefix included) into the **Brand** field — in `generator.html` for a person, `property-generator.html` for a listing. A `solo-` brand is just as valid here as a `biz-` one; nothing restricts a brand file to only being used by multiple people.
+8. Click **Preview** in either generator — it fetches the real brand colors and applies them to the preview card, so what you see is what actually goes live, not the default palette.
+9. To rebrand later: **Load Brand File** in `brand-generator.html`, adjust colors, **Save** — every person and listing referencing that slug updates automatically.
 
 ---
 
