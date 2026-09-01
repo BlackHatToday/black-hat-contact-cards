@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Onboarding Journey — Ad to Opened Letter</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --navy:#16283f; --navy-2:#1e3a5a;
+    --blue-bright:#6db1ea; --off-white:#f6f3ea; --muted:#8b93a1; --line:#2e3a4d;
+    --warn:#d4a24a; --warn-bg:rgba(212,162,74,0.1);
+    --good:#5fb88a; --good-bg:rgba(95,184,138,0.1);
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{
+    background: radial-gradient(circle at 50% 0%, var(--navy-2) 0%, var(--navy) 60%);
+    color: var(--off-white); font-family:'IBM Plex Sans', sans-serif;
+    padding: 40px 32px;
+  }
+  .sheet{ max-width: 760px; margin: 0 auto; }
+  header{ text-align:center; margin-bottom: 36px; }
+  .kicker{
+    font-family:'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--blue-bright); margin-bottom: 10px;
+  }
+  h1{ font-family:'Space Grotesk', sans-serif; font-weight: 700; font-size: 28px; }
+  .sub{ color: var(--muted); font-size: 14px; margin-top: 8px; }
+
+  .timeline{ position: relative; padding-left: 40px; margin-top: 20px; }
+  .timeline::before{
+    content:''; position:absolute; left: 15px; top: 8px; bottom: 8px;
+    width: 2px; background: var(--line);
+  }
+
+  .stage{ position: relative; margin-bottom: 22px; }
+  .stage-dot{
+    position: absolute; left: -40px; top: 2px; width: 32px; height: 32px;
+    border-radius: 50%; background: var(--navy-2); border: 2px solid var(--blue-bright);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Space Grotesk', sans-serif; font-weight: 700; font-size: 13px; color: var(--blue-bright);
+  }
+  .stage.gap .stage-dot{ border-color: var(--warn); color: var(--warn); background: var(--warn-bg); }
+
+  .stage-card{
+    background: rgba(109,177,234,0.05); border: 1px solid var(--line); border-radius: 12px;
+    padding: 14px 18px;
+  }
+  .stage.gap .stage-card{ border-color: rgba(212,162,74,0.35); background: var(--warn-bg); }
+
+  .stage h3{ font-family:'Space Grotesk', sans-serif; font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+  .stage p{ font-size: 12.5px; line-height: 1.55; color: var(--muted); }
+  .stage .tool{
+    font-family:'IBM Plex Mono', monospace; font-size: 10.5px; color: var(--blue-bright);
+    background: rgba(109,177,234,0.1); padding: 2px 7px; border-radius: 4px; display:inline-block; margin-top: 6px;
+  }
+  .stage.gap .tool{ color: var(--warn); background: rgba(212,162,74,0.15); }
+
+  .gap-label{
+    font-family:'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--warn); margin-top: 8px; padding-top: 8px; border-top: 1px dashed rgba(212,162,74,0.35);
+  }
+
+  .stage.fixed .stage-dot{ border-color: var(--good); color: var(--good); background: var(--good-bg); }
+  .stage.fixed .stage-card{ border-color: rgba(95,184,138,0.35); background: var(--good-bg); }
+  .stage.fixed .tool{ color: var(--good); background: rgba(95,184,138,0.15); }
+  .fixed-label{
+    font-family:'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--good); margin-top: 8px; padding-top: 8px; border-top: 1px dashed rgba(95,184,138,0.35);
+  }
+
+  footer{
+    text-align:center; margin-top: 34px; font-family:'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: #4a5568;
+  }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+  <header>
+    <div class="kicker">Black Hat Community · Journey Map</div>
+    <h1>From Scanned Ad to Opened Letter</h1>
+    <p class="sub">The full current path — three early gaps identified and resolved, marked in green</p>
+  </header>
+
+  <div class="timeline">
+
+    <div class="stage">
+      <div class="stage-dot">1</div>
+      <div class="stage-card">
+        <h3>Sees the advertisement</h3>
+        <p>A flyer with a QR code — "Tap to share your contact information. $20 — Unlimited uses." Minimal context by design; the whole pitch is the tagline and the price.</p>
+        <div class="tool">ad-flyer.html / ad-flyer-bracelet.html</div>
+      </div>
+    </div>
+
+    <div class="stage fixed">
+      <div class="stage-dot">2</div>
+      <div class="stage-card">
+        <h3>Scans it, sees what this actually is first</h3>
+        <p>A short intro sits above the form now — what a Black Hat Card is, what happens next, and a link to a quick demo — before asking for a single field of personal info.</p>
+        <div class="tool">my-contact-info-form.html</div>
+        <div class="fixed-label">Resolved — context now precedes data collection, for cold traffic and referred friends alike</div>
+      </div>
+    </div>
+
+    <div class="stage fixed">
+      <div class="stage-dot">3</div>
+      <div class="stage-card">
+        <h3>Fills it in, chooses Text or Email</h3>
+        <p>Two real send options now, not one. If mailto: fails to open anything on their phone, Text is right there as a genuine second path, not a dead end.</p>
+        <div class="fixed-label">Resolved — a real fallback exists if the first method doesn't work</div>
+      </div>
+    </div>
+
+    <div class="stage fixed">
+      <div class="stage-dot">4</div>
+      <div class="stage-card">
+        <h3>Sees "You're All Set!" immediately</h3>
+        <p>A real confirmation screen replaces the form the instant they send — what happens next, a concrete timeline, and a visible way to try the other send option if nothing opened.</p>
+        <div class="fixed-label">Resolved — immediate reassurance no longer depends on you checking your inbox</div>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="stage-dot">5</div>
+      <div class="stage-card">
+        <h3>Same fix, same form — for realtors too</h3>
+        <p>property-intake-form.html got the identical Text/Email choice and confirmation panel, minus the cold-traffic intro (realtors aren't usually strangers off a flyer).</p>
+        <div class="tool">property-intake-form.html</div>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="stage-dot">6</div>
+      <div class="stage-card">
+        <h3>You reply</h3>
+        <p>Confirms receipt, asks for their mailing address, sets expectations — 7-10 days, payment isn't due until they've tried it.</p>
+        <div class="tool">Reply to a Black Hat Card Request</div>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="stage-dot">7</div>
+      <div class="stage-card">
+        <h3>You build their card</h3>
+        <p>Retyped from their email — your one deliberate review checkpoint. Brand applied if relevant, folder created, pushed live.</p>
+        <div class="tool">generator.html</div>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="stage-dot">8</div>
+      <div class="stage-card">
+        <h3>You write the physical tag, mail it</h3>
+        <p>Card or bracelet, plus the printed Welcome letter — test steps, the animated demo QR, payment options.</p>
+        <div class="tool">card-letter.html / bracelet-letter.html</div>
+      </div>
+    </div>
+
+    <div class="stage">
+      <div class="stage-dot">9</div>
+      <div class="stage-card">
+        <h3>They open the letter</h3>
+        <p>First physical touchpoint with the actual product. The journey mapped here ends the moment this happens.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>Black Hat Community · Onboarding Journey Reference</footer>
+</div>
+
+</body>
+</html>
