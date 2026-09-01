@@ -129,12 +129,12 @@
 
 <div class="wrap">
   <h1>Brand Generator</h1>
-  <p class="sub">Create or edit a business's color palette. Every employee card that references this brand's slug picks up these colors automatically.</p>
+  <p class="sub">Create or edit a color palette for a business or team, or for one person's own personal variety. Every card that references this brand's slug picks up these colors automatically.</p>
 
   <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
     <div>
-      <div style="font-family:'Space Grotesk', sans-serif; font-weight: 600; font-size: 13.5px;">Editing an existing business?</div>
-      <div class="hint" style="margin-top: 3px;">Load their brand file, adjust colors, Save writes changes back to it.</div>
+      <div style="font-family:'Space Grotesk', sans-serif; font-weight: 600; font-size: 13.5px;">Editing an existing brand?</div>
+      <div class="hint" style="margin-top: 3px;">Load its brand file, adjust colors, Save writes changes back to it.</div>
     </div>
     <button type="button" class="btn-secondary" id="loadFileBtn" style="white-space: nowrap;">Load Brand File</button>
     <input type="file" id="loadFileInput" accept="application/json" style="display: none;">
@@ -143,12 +143,12 @@
   <form id="brandForm">
 
     <fieldset>
-      <legend>Business</legend>
-      <label>Business name</label>
-      <input type="text" id="businessName" placeholder="Acme Corp">
+      <legend>Business or Person</legend>
+      <label>Business or person name</label>
+      <input type="text" id="businessName" placeholder="Acme Corp — or a person's own name">
       <label>Brand slug</label>
-      <input type="text" id="brandSlug" placeholder="acme-corp">
-      <div class="hint">This is what you'll type into each employee's "Brand" field in generator.html — auto-filled from the name above, editable if needed.</div>
+      <input type="text" id="brandSlug" placeholder="biz-acme-corp or solo-jane-doe">
+      <div class="hint">This is what you'll type into the <b>Brand</b> field for anyone who uses it — a whole team, or just one person — in generator.html or property-generator.html. Auto-filled from the name above, editable if needed. Prefix it yourself: <code>biz-</code> for an actual business/team, <code>solo-</code> for one person's own personal variety.</div>
     </fieldset>
 
     <fieldset>
@@ -182,7 +182,7 @@
     <div class="preview-label">Live Preview</div>
     <div class="preview-card" id="previewCard">
       <div class="pv-avatar" id="pvAvatar">AC</div>
-      <div class="pv-name">Sample Employee</div>
+      <div class="pv-name">Sample Person</div>
       <div class="pv-role">Marketing Director · <span id="pvOrgName">Acme Corp</span></div>
 
       <div class="pv-section-label">Skills</div>
@@ -411,7 +411,7 @@
   document.getElementById('downloadBtn').addEventListener('click', () => {
     const data = collectData();
     if (!data.brandSlug) {
-      document.getElementById('statusEl').textContent = 'Please enter a business name or slug first.';
+      document.getElementById('statusEl').textContent = 'Please enter a name or slug first.';
       return;
     }
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });

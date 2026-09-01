@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Creating or Updating a Brand — Quick Reference</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --ink:        #14171c;
+    --surface:    #1c2129;
+    --surface-2:  #242a34;
+    --copper:     #b8763f;
+    --copper-soft:#c98549;
+    --parchment:  #ede6d6;
+    --muted:      #8b93a1;
+    --line:       #2e3542;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  body{
+    background: radial-gradient(circle at 50% 0%, #1a1f27 0%, var(--ink) 60%);
+    color: var(--parchment);
+    font-family:'IBM Plex Sans', sans-serif;
+    padding: 40px 32px;
+  }
+
+  .sheet{ max-width: 900px; margin: 0 auto; }
+
+  header{ text-align:center; margin-bottom: 34px; }
+
+  .kicker{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--copper);
+    margin-bottom: 10px;
+  }
+
+  h1{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 30px;
+    letter-spacing: -0.01em;
+  }
+
+  .sub{ color: var(--muted); font-size: 14.5px; margin-top: 8px; }
+
+  .pipeline{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap: 8px;
+    margin: 30px 0 8px;
+    flex-wrap: wrap;
+  }
+  .pipe-node{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    color: var(--parchment);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    padding: 8px 14px;
+    border-radius: 999px;
+  }
+  .pipe-arrow{ color: var(--copper); font-size: 14px; }
+
+  .phase-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--copper);
+    margin: 30px 0 12px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .phase-label::after{
+    content:'';
+    flex:1;
+    height:1px;
+    background: var(--line);
+  }
+
+  .steps{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+
+  .step{
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 18px 18px;
+  }
+
+  .step .num{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--ink);
+    background: var(--copper);
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    display:flex; align-items:center; justify-content:center;
+    margin-bottom: 12px;
+  }
+
+  .step h3{
+    font-family:'Space Grotesk', sans-serif;
+    font-size: 14.5px;
+    font-weight: 600;
+    margin-bottom: 7px;
+    line-height: 1.3;
+  }
+
+  .step p{
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  .step code{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11px;
+    background: var(--surface-2);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--copper-soft);
+  }
+
+  .or-divider{
+    grid-column: 1 / -1;
+    display:flex; align-items:center; gap: 10px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--muted);
+    margin: -2px 0;
+  }
+  .or-divider::before, .or-divider::after{
+    content:''; flex:1; height:1px; background: var(--line);
+  }
+
+  .panel{
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 20px 22px;
+    margin-top: 30px;
+  }
+
+  .panel h4{
+    font-family:'Space Grotesk', sans-serif;
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+
+  .panel ul{ list-style:none; }
+  .panel li{
+    font-size: 12.5px;
+    color: var(--parchment);
+    line-height: 1.7;
+    padding-left: 16px;
+    position: relative;
+    margin-bottom: 6px;
+  }
+  .panel li::before{
+    content:'—';
+    position:absolute;
+    left:0;
+    color: var(--copper);
+  }
+  .panel li code{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    background: var(--surface-2);
+    padding: 1px 5px;
+    border-radius: 4px;
+    color: var(--copper-soft);
+  }
+
+  footer{
+    text-align:center;
+    margin-top: 30px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #525a68;
+  }
+
+  @media (max-width: 720px){
+    .steps{ grid-template-columns: 1fr; }
+    .pipeline{ flex-direction: column; }
+    .pipe-arrow{ transform: rotate(90deg); }
+  }
+
+  @media print{
+    body{ background: var(--ink); padding: 20px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+  <header>
+    <div class="kicker">Black Hat Community · Quick Reference</div>
+    <h1>Creating or Updating a Brand</h1>
+    <p class="sub">Two starting points, one shared path from there</p>
+  </header>
+
+  <div class="pipeline">
+    <div class="pipe-node">New or Load</div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-node">Pick colors</div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-node">Preview</div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-node">Save</div>
+    <div class="pipe-arrow">→</div>
+    <div class="pipe-node">Attach to a card</div>
+  </div>
+
+  <div class="phase-label">Start — Pick One</div>
+  <div class="steps">
+    <div class="step">
+      <div class="num">1</div>
+      <h3>Creating a brand nobody's used before</h3>
+      <p>Open <code>brand-generator.html</code>. Type the name — the slug auto-fills. Prefix it yourself: <code>biz-</code> for an actual business or team, <code>solo-</code> for one person's own personal variety with no business behind it.</p>
+    </div>
+    <div class="step">
+      <div class="num">1</div>
+      <h3>Updating a brand that already exists</h3>
+      <p>Same page. Click <b>Load Brand File</b> and pick the existing <code>brands/{slug}.json</code> you want to change. Every field fills in with its current colors.</p>
+    </div>
+  </div>
+
+  <div class="phase-label">Pick Colors</div>
+  <div class="steps">
+    <div class="step">
+      <div class="num">2</div>
+      <h3>Accent color</h3>
+      <p>Every button, icon, and highlight across the card. The hover/soft variant auto-generates — override it yourself for a specific shade.</p>
+    </div>
+    <div class="step">
+      <div class="num">3</div>
+      <h3>Background color — optional</h3>
+      <p>Leave it blank for the default dark theme. If set, text color and panel shades adjust automatically to stay readable — nothing else to configure.</p>
+    </div>
+  </div>
+
+  <div class="phase-label">Confirm &amp; Save</div>
+  <div class="steps">
+    <div class="step">
+      <div class="num">4</div>
+      <h3>Watch the live preview</h3>
+      <p>This is the actual card design with your chosen colors — not a guess. A note under the background field confirms which text color got auto-selected.</p>
+    </div>
+    <div class="step">
+      <div class="num">5</div>
+      <h3>Save or Download</h3>
+      <p>Writes to <code>brands/{slug}.json</code> at your project root — filename includes the <code>biz-</code>/<code>solo-</code> prefix.</p>
+    </div>
+  </div>
+
+  <div class="phase-label">Attach It — the Step It's Easy to Forget</div>
+  <div class="steps" style="grid-template-columns: 1fr;">
+    <div class="step">
+      <div class="num">6</div>
+      <h3>Creating the file alone changes nothing yet</h3>
+      <p>Open <code>generator.html</code> for a person, or <code>property-generator.html</code> for a listing. <b>Load</b> their existing <code>data.json</code>, type the brand's full slug — prefix included — into the <b>Brand</b> field, then <b>Save</b>. Click <b>Preview</b> first if you want to see it before committing; it fetches the real colors, so what you see is what goes live.</p>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h4>Reminders</h4>
+    <ul>
+      <li>One brand file can be attached to any number of people or listings, or just one — nothing distinguishes a shared team brand from a single person's own personal variety except which prefix you gave it</li>
+      <li>Rebranding later is just <b>Load Brand File</b> → adjust → <b>Save</b> — everyone referencing that slug updates automatically, no per-card edits</li>
+      <li>A brand change never touches a physical NFC tag — colors are fetched fresh on every tap, never baked into the tag or its token</li>
+      <li>Both generators' own <b>Preview</b> button fetches the real brand colors before showing the card — if Preview looks wrong, the live card will too</li>
+    </ul>
+  </div>
+
+  <footer>Black Hat Community · Brand Quick Reference</footer>
+</div>
+
+</body>
+</html>

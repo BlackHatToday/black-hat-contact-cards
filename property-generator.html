@@ -121,7 +121,7 @@
   }
   .mini-card{
     width: 100%; max-width: 380px;
-    background: radial-gradient(circle at 50% 0%, #1a1f27 0%, var(--ink) 55%);
+    background: var(--ink);
     border: 1px solid var(--line); border-radius: 20px;
     padding: 22px; margin: 0 auto;
     font-family:'IBM Plex Sans', sans-serif; color: var(--parchment);
@@ -550,14 +550,43 @@
     document.getElementById('miniCard').innerHTML = html;
   }
 
+  // Same color-derivation math as assets/app.js and assets/property.js —
+  // kept in sync so this preview always matches what the live card shows.
+  function hexToRgb(hex) {
+    const c = hex.replace('#', '');
+    return [0, 2, 4].map(i => parseInt(c.substr(i, 2), 16));
+  }
+  function rgbToHex(rgb) {
+    return '#' + rgb.map(v => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')).join('');
+  }
+  function relativeLuminance(hex) {
+    const rgb = hexToRgb(hex).map(v => {
+      v /= 255;
+      return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+    });
+    return 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2];
+  }
+  function adjustBrightness(hex, amount) {
+    return rgbToHex(hexToRgb(hex).map(v => v + amount));
+  }
+  function computeThemeFromBackground(bgHex) {
+    const isLight = relativeLuminance(bgHex) > 0.4;
+    return {
+      text: isLight ? '#1a1a1a' : '#ede6d6',
+      muted: isLight ? '#5a5a55' : '#8b93a1',
+      surface: adjustBrightness(bgHex, isLight ? -18 : 14),
+      surface2: adjustBrightness(bgHex, isLight ? -30 : 24),
+      line: adjustBrightness(bgHex, isLight ? -45 : 32),
+    };
+  }
+
   async function applyPreviewBrandColors() {
     const card = document.getElementById('miniCard');
     const slug = document.getElementById('brand').value.trim();
     // Always reset first — otherwise a brand color from a PREVIOUS preview
     // this session (before New Listing was clicked) could linger and be
     // mistaken for this listing's actual colors.
-    card.style.removeProperty('--copper');
-    card.style.removeProperty('--copper-soft');
+    ['--copper', '--copper-soft', '--ink', '--parchment', '--muted', '--surface', '--surface-2', '--line'].forEach(v => card.style.removeProperty(v));
     if (!slug) return;
     try {
       const res = await fetch(`/brands/${slug}.json`, { cache: 'no-store' });
@@ -565,6 +594,15 @@
       const brand = await res.json();
       if (brand.accent) card.style.setProperty('--copper', brand.accent);
       if (brand.accentSoft) card.style.setProperty('--copper-soft', brand.accentSoft);
+      if (brand.background) {
+        const theme = computeThemeFromBackground(brand.background);
+        card.style.setProperty('--ink', brand.background);
+        card.style.setProperty('--parchment', theme.text);
+        card.style.setProperty('--muted', theme.muted);
+        card.style.setProperty('--surface', theme.surface);
+        card.style.setProperty('--surface-2', theme.surface2);
+        card.style.setProperty('--line', theme.line);
+      }
     } catch (err) {
       // Missing/typo'd brand file — silently fall back to default colors,
       // same graceful behavior as the live card itself.
