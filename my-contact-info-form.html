@@ -112,16 +112,31 @@
   }
   .btn-secondary:hover{ border-color: var(--copper); }
 
-  .intro-panel{
-    background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
-    padding: 18px 20px; margin-bottom: 22px; text-align: center;
+  .landing{
+    text-align: center; padding: 20px 4px 30px;
   }
-  .intro-panel p{ font-size: 13.5px; line-height: 1.65; color: var(--parchment); }
-  .intro-panel a{ color: var(--copper-soft); }
-  .intro-kicker{
-    font-family:'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.14em;
-    text-transform: uppercase; color: var(--copper); margin-bottom: 8px;
+  .landing-kicker{
+    font-family:'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--copper); margin-bottom: 12px;
   }
+  .landing h1{
+    font-size: 26px; margin-bottom: 14px;
+  }
+  .landing p{
+    font-size: 14px; line-height: 1.65; color: var(--muted); max-width: 380px; margin: 0 auto 28px;
+  }
+  .landing-btn-outline{
+    width: 100%; padding: 15px; background: transparent; border: 1px solid var(--copper);
+    border-radius: 12px; color: var(--copper-soft); font-family:'Space Grotesk', sans-serif;
+    font-weight: 600; font-size: 14.5px; cursor: pointer; margin-bottom: 10px;
+  }
+  .landing-btn-outline:hover{ background: var(--surface); }
+  .landing-btn-fill{
+    width: 100%; padding: 15px; background: var(--copper); border: none;
+    border-radius: 12px; color: var(--ink); font-family:'Space Grotesk', sans-serif;
+    font-weight: 700; font-size: 14.5px; cursor: pointer;
+  }
+  .landing-btn-fill:hover{ background: var(--copper-soft); }
 
   .send-choice{ display: flex; gap: 10px; }
   .send-choice .btn-primary{ display: flex; align-items: center; justify-content: center; gap: 8px; }
@@ -222,13 +237,18 @@
 <body>
 
 <div class="wrap">
+
+  <div class="landing" id="landingScreen">
+    <div class="landing-kicker">Black Hat Community</div>
+    <h1>Get a Black Hat Card</h1>
+    <p>A small card or bracelet with a chip inside. Hold it to the back of any smartphone, and your contact info appears instantly — no app required.</p>
+    <button type="button" class="landing-btn-outline" id="seeHowBtn">See how it works first</button>
+    <button type="button" class="landing-btn-fill" id="imReadyBtn">I'm ready — let's get started</button>
+  </div>
+
+  <div id="formSection" style="display:none;">
   <h1>My Contact Info</h1>
   <p class="sub">Fill in whatever applies to you (skip anything you don't want on your card), then choose Text or Email at the bottom to send it over.</p>
-
-  <div class="intro-panel">
-    <div class="intro-kicker">What this is</div>
-    <p>You're setting up a Black Hat Card — tap it to instantly share your contact info with anyone, no app required. Fill this in, send it to me, and I'll build yours and mail it to you. Curious what it actually looks like first? <a href="/animated-demo.html" target="_blank">See a quick demo</a>.</p>
-  </div>
 
   <form id="cardForm">
 
@@ -369,6 +389,8 @@
     <p class="muted">Didn't see an app open? <a href="#" id="tryOtherWay" style="color:var(--copper-soft);">Try the other option</a> instead.</p>
   </div>
 
+  </div>
+
   <div class="brand-line">Adette &amp; Bo LLC</div>
 </div>
 
@@ -381,6 +403,15 @@
 </div>
 
 <script>
+  document.getElementById('seeHowBtn').addEventListener('click', () => {
+    window.open('/animated-demo.html', '_blank');
+  });
+  document.getElementById('imReadyBtn').addEventListener('click', () => {
+    document.getElementById('landingScreen').style.display = 'none';
+    document.getElementById('formSection').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
   function repeatRow(container, fields, gridClass = 'row-dc') {
     const div = document.createElement('div');
     div.className = 'repeat-item';
