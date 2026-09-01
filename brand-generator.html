@@ -202,6 +202,7 @@
     <button type="button" class="btn-primary" id="saveBtn" style="display:none;">Save</button>
     <button type="button" class="btn-primary" id="downloadBtn">Download Brand File</button>
     <button type="button" class="btn-secondary" id="copyBtn">Copy JSON</button>
+    <button type="button" class="btn-secondary" id="resetBtn">Reset to Defaults</button>
   </div>
   <p class="status" id="statusEl"></p>
 </div>
@@ -305,7 +306,11 @@
     document.getElementById('backgroundHex').value = document.getElementById('backgroundPicker').value;
     updatePreview();
   });
-  document.getElementById('backgroundHex').addEventListener('input', updatePreview);
+  document.getElementById('backgroundHex').addEventListener('input', () => {
+    const hex = document.getElementById('backgroundHex').value;
+    if (/^#[0-9a-fA-F]{6}$/.test(hex)) document.getElementById('backgroundPicker').value = hex;
+    updatePreview();
+  });
 
   let slugAutoFilled = true;
   function autoFillSlug() {
@@ -443,6 +448,25 @@
       catch (e2) { document.getElementById('statusEl').textContent = 'Could not copy automatically — select and copy the text manually.'; }
       document.body.removeChild(ta);
     }
+  });
+
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    currentFileHandle = null;
+    document.getElementById('saveBtn').style.display = 'none';
+    setVal('businessName', '');
+    setVal('brandSlug', '');
+    setVal('accentPicker', '#b8763f');
+    setVal('accentHex', '#b8763f');
+    setVal('accentSoftPicker', '#c98549');
+    setVal('accentSoftHex', '#c98549');
+    setVal('backgroundPicker', '#14171c');
+    setVal('backgroundHex', '');
+    document.getElementById('pvOrgName').textContent = 'Acme Corp';
+    document.getElementById('pvAvatar').textContent = 'AC';
+    slugAutoFilled = true;
+    accentSoftAutoFilled = true;
+    updatePreview();
+    document.getElementById('statusEl').textContent = 'Reset to default colors — nothing saved yet.';
   });
 
   updatePreview();

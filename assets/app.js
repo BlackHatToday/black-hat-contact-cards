@@ -316,8 +316,8 @@
     (d.phones || []).forEach(p => rows.push({ icon: 'phone', label: p.type || 'Phone', value: p.number, href: `tel:${String(p.number).replace(/[^+\d]/g, '')}` }));
     (d.emails || []).forEach(e => rows.push({ icon: 'email', label: e.type || 'Email', value: e.address, href: `mailto:${e.address}` }));
     if (d.address) rows.push({ icon: 'location', label: 'Address', value: d.address, href: `https://maps.google.com/?q=${encodeURIComponent(d.address)}` });
-    if (d.website) rows.push({ icon: 'website', label: 'Website', value: d.website.replace(/^https?:\/\//, ''), href: d.website }); // legacy single-website support
-    (d.websites || []).forEach(w => rows.push({ icon: 'website', label: w.label || 'Website', value: w.url.replace(/^https?:\/\//, ''), href: w.url }));
+    if (d.website) rows.push({ icon: 'website', label: 'Website', value: 'View Site', href: d.website }); // legacy single-website support
+    (d.websites || []).forEach(w => rows.push({ icon: 'website', label: w.label || 'Website', value: 'View Site', href: w.url }));
     document.getElementById('fieldsEl').innerHTML = rows.map(r => `
       <a class="field" href="${r.href}" target="_blank" rel="noopener">
         <span class="icon">${ICONS[r.icon]}</span>
