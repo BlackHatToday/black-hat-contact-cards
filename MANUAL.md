@@ -22,7 +22,7 @@ Task-first reference. If you need to know *how the system works and why*, see `P
 | Fix something that's not working | §12 |
 | Do my weekly upkeep | §13 |
 | Understand which button does what, and why | §14 |
-| Check whether a tool works on my phone/tablet | §15 |
+| Check whether a tool works in a given browser | §15 |
 | Organize a realtor team's folders | §16 |
 | Change an existing card's color palette | §17 |
 
@@ -58,7 +58,7 @@ Same shape as §1, using `property-generator.html` instead:
 
 ## 3. Bulk-Adding Multiple People
 
-Use this when you receive a list of names all at once (a business, an event, etc.) rather than one at a time. **Desktop only** — see §15.
+Use this when you receive a list of names all at once (a business, an event, etc.) rather than one at a time. **Chrome/Edge only** — see §15.
 
 1. Open `bulk-generator.html`.
 2. Click **Download CSV Template** and send it to whoever's collecting the names.
@@ -164,7 +164,7 @@ Every "Contact / Support / Updates" email carries a tag — read it before actin
 | Photo doesn't load on the live site | Missing trailing slash on the URL | Folder URLs need a trailing `/` |
 | Card looks empty despite a filled-in `data.json` | Wrong template used — person data loaded into `property-template/index.html` or vice versa | Re-copy the correct matching template |
 | "Need to update" email has no `[Verified]`/`[UNVERIFIED]` tag | This card predates the token system | Reissue the tag per §10 if you want it covered |
-| Generator's Save button doesn't appear | Either: on mobile or a desktop browser other than Chrome/Edge, where the underlying feature doesn't exist at all — or nothing was loaded via Load first, so there's no file to save back to | Use Download instead (see §15 for which tools this affects), or Load a file first |
+| Generator's Save button doesn't appear | Either: browser is Safari, Firefox, or anything other than Chrome/Edge (any device — this includes Safari on a Mac, not just mobile), where the underlying feature doesn't exist at all — or nothing was loaded via Load first, so there's no file to save back to | Use Download instead (see §15 for which tools this affects), or Load a file first |
 
 ---
 
@@ -199,9 +199,11 @@ The bottom of every person card has six buttons, split into two columns. This se
 
 ---
 
-## 15. Device Compatibility — What Works Where
+## 15. Browser Compatibility — What Works Where
 
-Every tool in this project is a plain web page, so all of them technically *open* on a phone or tablet browser. The real question is whether they behave identically to desktop — three don't, because of one specific browser limitation: mobile browsers, Chrome included, don't support the File System Access API (the thing that makes the **Save** button and Bulk Generator's direct folder-writing possible). This isn't a "some phones" limitation — it's every mobile browser, on every platform, full stop.
+Every tool in this project is a plain web page, so all of them technically *open* in any browser, on any device. The real dividing line isn't mobile vs. desktop — it's **Chromium-based browsers vs. everything else**. Chrome and Edge, on any device, support the File System Access API (the thing that makes the **Save** button and Bulk Generator's direct folder-writing possible). Safari and Firefox don't support it at all, on any platform — that includes Safari on a Mac, not just an iPhone or iPad. If you ever use Safari instead of Chrome on your own computer, you'd lose the same two things you'd lose on mobile.
+
+**This entire limitation lives on the production/admin side — it never reaches anyone using their actual card.** Save and Bulk Generator are tools *you* use to build and manage cards; nothing about viewing, tapping, or using a live card — Save to Contacts, Share Your Info, Scan a Card, brand colors, any of it — touches this API at all. A client viewing their card in Safari on an iPhone gets the identical experience they'd get in Chrome. The gap only matters when *you're* the one sitting down to build or bulk-import cards, and only if you're doing that from a non-Chromium browser.
 
 **Identical everywhere, no compromises:**
 - `my-contact-info-form.html`
@@ -209,17 +211,17 @@ Every tool in this project is a plain web page, so all of them technically *open
 
 Plain forms, `mailto:` links — nothing in either one depends on the missing feature.
 
-**Works on mobile, but loses one convenience:**
+**Works everywhere, but loses one convenience outside Chrome/Edge:**
 - `generator.html`
 - `property-generator.html`
 - `brand-generator.html`
 
-The **Save** button (writing straight back to a loaded file) doesn't work on mobile — falls back to **Download**, same end result, just one extra manual step (moving the downloaded file into place) that desktop skips. Everything else, including Preview and the branded-preview fetch, works identically. The **Scan a Card** / **Scan a Business Card** camera feature actually works *better* on mobile, since it opens your phone's real camera directly.
+The **Save** button (writing straight back to a loaded file) only works in Chrome or Edge — falls back to **Download** everywhere else (Safari, Firefox, any mobile browser), same end result, just one extra manual step (moving the downloaded file into place) that Chrome/Edge skips. Everything else, including Preview and the branded-preview fetch, works identically regardless of browser. The **Scan a Card** / **Scan a Business Card** camera feature actually works *better* on mobile, since it opens your phone's real camera directly.
 
-**Effectively desktop-only:**
+**Effectively Chrome/Edge-only:**
 - `bulk-generator.html`
 
-Its entire purpose — writing many folders directly into your project via a folder picker — needs the same missing feature, and there's no fallback path the way there is for Save. On mobile, clicking **Create Folders** just fails. If you need to bulk-import a roster while away from your desktop, it has to wait.
+Its entire purpose — writing many folders directly into your project via a folder picker — needs the same missing feature, and there's no fallback path the way there is for Save. Outside Chrome or Edge, clicking **Create Folders** just fails. If you need to bulk-import a roster from a browser or device that doesn't support this, it has to wait until you're back on Chrome or Edge.
 
 ---
 

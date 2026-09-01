@@ -69,6 +69,22 @@
   }
   .btn-secondary:hover{ border-color: var(--copper); }
 
+  .send-choice{ display: flex; gap: 10px; }
+  .send-choice .btn-primary{ display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .send-choice svg{ width: 17px; height: 17px; }
+
+  .confirm-panel{
+    display: none; text-align: center; padding: 10px 4px 20px;
+  }
+  .confirm-panel .check-icon{
+    width: 52px; height: 52px; margin: 0 auto 16px; color: var(--copper);
+  }
+  .confirm-panel h2{
+    font-family:'Space Grotesk', sans-serif; font-size: 22px; margin-bottom: 10px;
+  }
+  .confirm-panel p{ font-size: 14px; line-height: 1.7; color: var(--parchment); max-width: 420px; margin: 0 auto 12px; }
+  .confirm-panel .muted{ color: var(--muted); font-size: 12.5px; }
+
   .status{ text-align:center; font-family:'IBM Plex Mono', monospace; font-size: 12.5px; color: var(--copper-soft); margin-top: 10px; min-height: 18px; }
   .brand-line{ text-align:center; margin-top: 24px; font-family:'IBM Plex Mono', monospace; font-size: 9px; letter-spacing:0.04em; color: #3a3f4a; }
 
@@ -145,7 +161,7 @@
 
 <div class="wrap">
   <h1>Listing Info</h1>
-  <p class="sub">Fill in the details for this property, then tap the button at the bottom — it'll open your email app with everything filled in, ready to send.</p>
+  <p class="sub">Fill in the details for this property, then choose Text or Email at the bottom to send it over.</p>
 
   <form id="listingForm">
 
@@ -197,11 +213,29 @@
 
   </form>
 
-  <div class="actions">
+  <div class="actions" id="actionsArea">
     <button type="button" class="btn-secondary" id="previewBtn">Preview Card</button>
-    <button type="button" class="btn-primary" id="emailBtn">Email This to Me</button>
+  </div>
+  <div class="send-choice" id="sendChoice" style="margin-top:10px;">
+    <button type="button" class="btn-primary" id="textBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Text It
+    </button>
+    <button type="button" class="btn-primary" id="emailBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 6 12 13 2 6"/><path d="M2 6h20v12H2z"/></svg>
+      Email It
+    </button>
   </div>
   <p class="status" id="statusEl"></p>
+
+  <div class="confirm-panel" id="confirmPanel">
+    <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+    <h2>You're All Set!</h2>
+    <p>This listing's info is ready to send in the app that just opened — go ahead and hit send there if it hasn't already gone out.</p>
+    <p>Once it comes through, I'll get the card built and reply with next steps.</p>
+    <p class="muted">Didn't see an app open? <a href="#" id="tryOtherWay" style="color:var(--copper-soft);">Try the other option</a> instead.</p>
+  </div>
+
   <div class="brand-line">Adette &amp; Bo LLC</div>
 </div>
 
@@ -336,6 +370,7 @@
 
   // Set this to your own email address before sending this form out.
   const RECIPIENT_EMAIL = "BlackHatToday+BHCC@Gmail.com";
+  const RECIPIENT_PHONE = "12524337173";
 
   function formatAsText(d) {
     const lines = [];
@@ -374,6 +409,27 @@
     return lines.join('\n');
   }
 
+  function showConfirmPanel() {
+    document.getElementById('actionsArea').style.display = 'none';
+    document.getElementById('sendChoice').style.display = 'none';
+    document.getElementById('listingForm').style.display = 'none';
+    document.getElementById('statusEl').textContent = '';
+    document.getElementById('confirmPanel').style.display = 'block';
+    document.getElementById('confirmPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function showSendChoiceAgain() {
+    document.getElementById('actionsArea').style.display = 'flex';
+    document.getElementById('sendChoice').style.display = 'flex';
+    document.getElementById('listingForm').style.display = 'block';
+    document.getElementById('confirmPanel').style.display = 'none';
+  }
+
+  document.getElementById('tryOtherWay').addEventListener('click', (e) => {
+    e.preventDefault();
+    showSendChoiceAgain();
+  });
+
   document.getElementById('emailBtn').addEventListener('click', () => {
     const data = collectData();
     if (!data.address) {
@@ -384,7 +440,21 @@
     const subject = encodeURIComponent(`${subjectPrefix}Contact / Support — ${data.address}`);
     const body = encodeURIComponent(formatAsText(data));
     window.location.href = `mailto:${RECIPIENT_EMAIL}?subject=${subject}&body=${body}`;
-    document.getElementById('statusEl').textContent = 'Your email app should be opening now — just hit send (and attach the photos!).';
+    showConfirmPanel();
+  });
+
+  document.getElementById('textBtn').addEventListener('click', () => {
+    const data = collectData();
+    if (!data.address) {
+      document.getElementById('statusEl').textContent = 'Please enter at least the property address.';
+      return;
+    }
+    const subjectPrefix = tokenStatus === 'verified' ? '[Verified] ' : tokenStatus === 'unverified' ? '[UNVERIFIED] ' : '';
+    const body = encodeURIComponent(`${subjectPrefix}Contact / Support — ${data.address}\n\n${formatAsText(data)}`);
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const separator = isIOS ? '&' : '?';
+    window.location.href = `sms:${RECIPIENT_PHONE}${separator}body=${body}`;
+    showConfirmPanel();
   });
 </script>
 
