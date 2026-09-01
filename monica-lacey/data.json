@@ -26,25 +26,29 @@
   "notes": "From Love to Legacy — Mo Tea.  Mo Tea is a handcrafted tea in a jar made with three simple, powerful ingredients — Honey, Lemon & Ginger. Great hot or cold. Soothing when you're under the weather. Delicious any time of day.",
   "phones": [
     {
-      "type": "Mobile",
-      "number": "(484) 368-1293"
-    },
-    {
       "type": "Work",
       "number": "(484) 366-1818"
+    },
+    {
+      "type": "Mobile",
+      "number": "(484) 368-1293"
     }
   ],
   "emails": [
     {
-      "type": "Personal",
-      "address": "LaceyMonica.ML@GMail.com"
-    },
-    {
       "type": "Work",
       "address": "Monica@MoTeaJar.com"
+    },
+    {
+      "type": "Personal",
+      "address": "LaceyMonica.ML@GMail.com"
     }
   ],
   "websites": [
+    {
+      "label": "A Warm Cup!",
+      "url": "https://blackhatcards.community/mo-tea-how-to-use.html"
+    },
     {
       "label": "Mo Tea",
       "url": "https://moteajar.com/"
@@ -56,10 +60,6 @@
     {
       "label": "Large Jars - $45",
       "url": "https://checkout.square.site/merchant/MLZKHZQSX3T6Y/checkout/HWCGF4XXH7OLADEIPGQQ7O6N"
-    },
-    {
-      "label": "How To Enjoy!",
-      "url": "https://blackhatcards.community/mo-tea-how-to-use.html"
     }
   ],
   "listings": [],
