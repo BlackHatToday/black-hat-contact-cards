@@ -34,43 +34,43 @@
   "websites": [],
   "gallery": [
     {
-      "photo": "photo1",
+      "photo": "photo1.jpg",
       "caption": ""
     },
     {
-      "photo": "photo2",
+      "photo": "photo2.jpg",
       "caption": ""
     },
     {
-      "photo": "photo3",
+      "photo": "photo3.jpg",
       "caption": ""
     },
     {
-      "photo": "photo4",
+      "photo": "photo4.jpg",
       "caption": ""
     },
     {
-      "photo": "photo5",
+      "photo": "photo5.jpg",
       "caption": ""
     },
     {
-      "photo": "photo6",
+      "photo": "photo6.jpg",
       "caption": ""
     },
     {
-      "photo": "photo7",
+      "photo": "photo7.jpg",
       "caption": ""
     },
     {
-      "photo": "photo8",
+      "photo": "photo8.jpg",
       "caption": ""
     },
     {
-      "photo": "photo9",
+      "photo": "photo9.jpg",
       "caption": "Before"
     },
     {
-      "photo": "photo10",
+      "photo": "photo10.jpg",
       "caption": "After"
     }
   ],
