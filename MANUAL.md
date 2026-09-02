@@ -25,6 +25,7 @@ Task-first reference. If you need to know *how the system works and why*, see `P
 | Check whether a tool works in a given browser | §15 |
 | Organize a realtor team's folders | §16 |
 | Change an existing card's color palette | §17 |
+| Handle a photo or gallery update request | §18 |
 
 ---
 
@@ -280,3 +281,23 @@ Use this for a person or listing that's already live and already has a physical 
 6. **Save** (Chrome/Edge desktop, writes straight back to the loaded file) or **Download data.json** (any browser, then manually replace the old file).
 7. Push it live the normal way — `git add .`, `git commit -m "..."`, `git push`.
 8. Confirm it by actually visiting that card's live URL and checking the new colors are there.
+
+---
+
+## 18. Handling a Photo or Gallery Update Request
+
+Use this whenever someone asks to change their profile photo, or add/update Gallery photos with captions. This is deliberately **not** self-service — there's no upload or hosting service anywhere in this project, so every image has to physically exist as a file in that person's folder, placed there by you. That's been true for the profile photo since the very beginning; Gallery photos just extend the same reality to a second feature.
+
+**How the request actually reaches you:**
+
+1. On `my-contact-info-form.html`, the photo hint specifically tells people to choose **Email It**, not **Text It** — only email supports attachments. If someone used Text and mentions a photo, you'll need to follow up and ask them to email it instead.
+2. Any captions they want come through as plain text, either in the **Message** field or the body of their email — there's no dedicated captions field on the form itself, since the existing Message field already covers it without adding more fields to fill out.
+
+**Then, to actually apply it:**
+
+1. Save the attached photo(s) from their email.
+2. Open `generator.html`, **Load** that person's existing `data.json`.
+3. For a profile photo swap: replace the physical file in their folder with the new one, keeping the same filename referenced in `photoFile` — no data.json edit needed if the filename doesn't change.
+4. For Gallery photos: place the new image file(s) in their folder, then in the **Gallery** fieldset, add a row per photo (or edit an existing one) with the filename and whatever caption they described. **Save** or **Download** as usual.
+5. Push it live — `git add .`, `git commit -m "..."`, `git push`.
+6. Confirm by visiting their live card and checking the photo or gallery looks right.

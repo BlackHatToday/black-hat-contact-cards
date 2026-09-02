@@ -295,6 +295,13 @@
     </fieldset>
 
     <fieldset>
+      <legend>Gallery (optional — up to 10 photos)</legend>
+      <div id="galleryList"></div>
+      <button type="button" class="add-btn" id="addGalleryPhoto">+ Add Photo</button>
+      <div class="hint">Work samples, family photos, whatever fits — each photo can have a short caption. Photos aren't uploaded here; just list the filename and place the actual file in this person's folder, same as the profile photo.</div>
+    </fieldset>
+
+    <fieldset>
       <legend>Social (optional — leave any blank to hide it)</legend>
       <div class="row3">
         <div><label>Instagram</label><input type="text" id="social_instagram" placeholder="handle"></div>
@@ -642,6 +649,16 @@
     return row;
   }
 
+  function addGalleryRow(prefill = {}) {
+    const row = repeatRow(document.getElementById('galleryList'), `
+      <div><label>Photo filename</label><input type="text" class="gallery-photo field-descriptor" placeholder="photo1.jpg"></div>
+      <div><label>Caption (optional)</label><input type="text" class="gallery-caption field-content" placeholder="Kitchen deep clean"></div>
+    `);
+    if (prefill.photo) row.querySelector('.gallery-photo').value = prefill.photo;
+    if (prefill.caption) row.querySelector('.gallery-caption').value = prefill.caption;
+    return row;
+  }
+
   function updateAddListingButtonState() {
     const count = document.querySelectorAll('#listingsList .repeat-item').length;
     const btn = document.getElementById('addListing');
@@ -690,6 +707,10 @@
   document.getElementById('addPhone').addEventListener('click', () => addPhoneRow());
   document.getElementById('addEmail').addEventListener('click', () => addEmailRow());
   document.getElementById('addWebsite').addEventListener('click', () => addWebsiteRow());
+  document.getElementById('addGalleryPhoto').addEventListener('click', () => {
+    if (document.querySelectorAll('#galleryList .repeat-item').length >= 10) return;
+    addGalleryRow();
+  });
   document.getElementById('addListing').addEventListener('click', () => addListingRow());
   document.getElementById('addExperience').addEventListener('click', () => addExperienceRow());
   wireCardScan();
@@ -725,6 +746,11 @@
       url: item.querySelector('.website-url').value
     })).filter(w => w.url);
 
+    const gallery = [...document.querySelectorAll('#galleryList .repeat-item')].map(item => ({
+      photo: item.querySelector('.gallery-photo').value.trim(),
+      caption: item.querySelector('.gallery-caption').value.trim()
+    })).filter(g => g.photo).slice(0, 10);
+
     const listings = [...document.querySelectorAll('#listingsList .repeat-item')].map(item => ({
       label: item.querySelector('.listing-label').value || 'Listing',
       url: item.querySelector('.listing-url').value
@@ -757,6 +783,7 @@
       phones,
       emails,
       websites,
+      gallery,
       listings,
       calendlyUrl: document.getElementById('calendlyUrl').value,
       bookingLabel: document.getElementById('bookingLabel').value || 'Book a Time',
@@ -983,6 +1010,7 @@
     document.getElementById('websiteList').innerHTML = '';
     document.getElementById('listingsList').innerHTML = '';
     document.getElementById('experienceList').innerHTML = '';
+    document.getElementById('galleryList').innerHTML = '';
 
     (d.phones && d.phones.length ? d.phones : [{}]).forEach(p => addPhoneRow(p));
     (d.emails && d.emails.length ? d.emails : [{}]).forEach(e => addEmailRow(e));
@@ -990,6 +1018,7 @@
     (d.listings || []).forEach(l => addListingRow(l));
     updateAddListingButtonState();
     (d.experience || []).forEach(e => addExperienceRow(e));
+    (d.gallery || []).forEach(g => addGalleryRow(g));
 
     folderNameAutoFilled = true;
     autoFillFolderName();
@@ -1080,6 +1109,7 @@
     document.getElementById('websiteList').innerHTML = '';
     document.getElementById('listingsList').innerHTML = '';
     document.getElementById('experienceList').innerHTML = '';
+    document.getElementById('galleryList').innerHTML = '';
     addPhoneRow();
     addEmailRow();
     addWebsiteRow();

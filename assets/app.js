@@ -131,6 +131,18 @@
     document.getElementById('skillsSection').style.display = 'block';
   }
 
+  function renderGallery(d) {
+    const items = (d.gallery || []).filter(g => g.photo).slice(0, 10); // hard cap at 10, even if more sneak into the data
+    if (!items.length) return;
+    document.getElementById('galleryGrid').innerHTML = items.map(g => `
+      <a href="${resolveAsset(g.photo)}" target="_blank" rel="noopener" class="gallery-item">
+        <img src="${resolveAsset(g.photo)}" alt="${g.caption || 'Photo'}" loading="lazy">
+        ${g.caption ? `<div class="gallery-caption">${g.caption}</div>` : ''}
+      </a>
+    `).join('');
+    document.getElementById('gallerySection').style.display = 'block';
+  }
+
   function renderSocial(d) {
     const entries = Object.entries(d.social || {}).filter(([, handle]) => handle && String(handle).trim());
     if (!entries.length) return;
@@ -690,6 +702,7 @@
     renderAbout(data);
     renderExperience(data);
     renderSkills(data);
+    renderGallery(data);
     renderSocial(data);
     renderPayments(data);
     renderListings(data);
