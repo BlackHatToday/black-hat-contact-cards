@@ -539,6 +539,15 @@
   const prefillData = urlParams.get('data');
   let tokenStatus = 'none'; // set below if this was opened via the card's "Need to update" link
 
+  // This is someone editing a card they already have (opened via "Contact /
+  // Support / Updates"), not a stranger deciding whether to get one — the
+  // "get a card" landing pitch doesn't apply to them at all. Skip straight
+  // to the form, already filled in with their current info.
+  if (prefillData) {
+    document.getElementById('landingScreen').style.display = 'none';
+    document.getElementById('formSection').style.display = 'block';
+  }
+
   if (!prefillData) {
     addPhoneRow();
     addEmailRow();
