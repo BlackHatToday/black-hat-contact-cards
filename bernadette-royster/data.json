@@ -42,6 +42,40 @@
       "url": "AdetteAndBo.com"
     }
   ],
+  "gallery": [
+    {
+      "photo": "photo1.jpg",
+      "caption": "Same Baby?"
+    },
+    {
+      "photo": "photo2.jpg",
+      "caption": "What is that?"
+    },
+    {
+      "photo": "photo3.jpg",
+      "caption": "BK2"
+    },
+    {
+      "photo": "photo4.jpg",
+      "caption": "Bryce"
+    },
+    {
+      "photo": "photo5.jpg",
+      "caption": "The girls"
+    },
+    {
+      "photo": "photo6.jpg",
+      "caption": "C'mon now"
+    },
+    {
+      "photo": "photo7.jpg",
+      "caption": "Too cute!"
+    },
+    {
+      "photo": "photo8.jpg",
+      "caption": "WHAT!"
+    }
+  ],
   "listings": [],
   "calendlyUrl": "",
   "bookingLabel": "Book a Time",
