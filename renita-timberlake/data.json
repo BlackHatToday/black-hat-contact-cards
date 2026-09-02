@@ -32,12 +32,18 @@
   ],
   "emails": [],
   "websites": [],
+  "gallery": [
+    {
+      "photo": "photo1.jpg",
+      "caption": "Women's Day - May 10th, 2026"
+    }
+  ],
   "listings": [],
   "calendlyUrl": "",
   "bookingLabel": "Book a Time",
   "address": "",
   "photoFile": "photo.jpg",
   "accessToken": "2cuibk2q",
-  "brand": "",
+  "brand": "solo-renita-timberlake",
   "showQR": true
 }

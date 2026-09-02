@@ -652,7 +652,7 @@
   function addGalleryRow(prefill = {}) {
     const row = repeatRow(document.getElementById('galleryList'), `
       <div><label>Photo filename</label><input type="text" class="gallery-photo field-descriptor" placeholder="photo1.jpg"></div>
-      <div><label>Caption (optional)</label><input type="text" class="gallery-caption field-content" placeholder="Kitchen deep clean"></div>
+      <div><label>Caption (optional)</label><input type="text" class="gallery-caption field-content" placeholder="What's this a photo of?"></div>
     `);
     if (prefill.photo) row.querySelector('.gallery-photo').value = prefill.photo;
     if (prefill.caption) row.querySelector('.gallery-caption').value = prefill.caption;

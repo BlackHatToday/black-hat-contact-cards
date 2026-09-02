@@ -135,12 +135,30 @@
     const items = (d.gallery || []).filter(g => g.photo).slice(0, 10); // hard cap at 10, even if more sneak into the data
     if (!items.length) return;
     document.getElementById('galleryGrid').innerHTML = items.map(g => `
-      <a href="${resolveAsset(g.photo)}" target="_blank" rel="noopener" class="gallery-item">
+      <a href="#" class="gallery-item" data-photo="${resolveAsset(g.photo)}" data-caption="${g.caption || ''}">
         <img src="${resolveAsset(g.photo)}" alt="${g.caption || 'Photo'}" loading="lazy">
         ${g.caption ? `<div class="gallery-caption">${g.caption}</div>` : ''}
       </a>
     `).join('');
     document.getElementById('gallerySection').style.display = 'block';
+  }
+
+  // Tapping a Gallery thumbnail opens it full-screen in an in-page
+  // overlay rather than a new tab — see the matching CSS comment for why.
+  function wireGalleryLightbox() {
+    const overlay = document.getElementById('galleryLightbox');
+    const grid = document.getElementById('galleryGrid');
+    if (!overlay || !grid) return;
+    grid.addEventListener('click', (e) => {
+      const item = e.target.closest('.gallery-item');
+      if (!item) return;
+      e.preventDefault();
+      document.getElementById('galleryLightboxImg').src = item.dataset.photo;
+      document.getElementById('galleryLightboxCaption').textContent = item.dataset.caption || '';
+      overlay.classList.add('open');
+    });
+    document.getElementById('galleryLightboxClose').addEventListener('click', () => overlay.classList.remove('open'));
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('open'); });
   }
 
   function renderSocial(d) {
@@ -694,6 +712,7 @@
     }
 
     wireQrModal();
+    wireGalleryLightbox();
     wireDownloadPdf();
     wirePrintQrOnly();
     wireReferButton();

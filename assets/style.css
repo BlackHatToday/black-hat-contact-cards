@@ -133,6 +133,26 @@ section{ padding: 0 28px; margin-top: 8px; }
   z-index:100; align-items:center; justify-content:center; padding:20px;
 }
 .qr-modal-overlay.open{ display:flex; }
+
+/* Full-screen photo viewer for tapping a Gallery thumbnail — an in-page
+   overlay with an explicit close button, deliberately not opening the
+   image in a new tab. A new tab means relying on the browser's own
+   tab-switcher to get back, which isn't obvious to everyone (same
+   reasoning as the demo-page "back" fix). */
+.lightbox-overlay{
+  display:none; position:fixed; inset:0; background:rgba(10,11,14,0.92);
+  z-index:110; align-items:center; justify-content:center; padding:24px;
+  flex-direction:column;
+}
+.lightbox-overlay.open{ display:flex; }
+.lightbox-overlay img{ max-width:100%; max-height:75vh; border-radius:10px; object-fit:contain; }
+.lightbox-caption{ color:var(--parchment); font-size:14px; margin-top:16px; text-align:center; max-width:400px; }
+.lightbox-close{
+  position:absolute; top:20px; right:20px; background:var(--surface); border:1px solid var(--line);
+  color:var(--parchment); width:40px; height:40px; border-radius:50%; font-size:16px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+}
+.lightbox-close:hover{ border-color:var(--copper); color:var(--copper); }
 .qr-modal{
   background:var(--surface); border:1px solid var(--line); border-radius:16px;
   padding:28px 24px; text-align:center; max-width:260px; width:100%;
