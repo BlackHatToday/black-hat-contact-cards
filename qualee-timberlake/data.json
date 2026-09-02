@@ -1,0 +1,44 @@
+{
+  "prefix": "",
+  "firstName": "Qualee ",
+  "lastName": "Timberlake ",
+  "title": "",
+  "org": "Qlake Productions ",
+  "tagline": "",
+  "about": "",
+  "experience": [],
+  "skills": [],
+  "social": {
+    "instagram": "@qualeeceo",
+    "tiktok": "",
+    "facebook": "",
+    "linkedin": "",
+    "twitter": "",
+    "youtube": ""
+  },
+  "payments": {
+    "cashapp": "",
+    "venmo": "",
+    "paypal": "",
+    "zelle": ""
+  },
+  "paymentSectionLabel": "Payment",
+  "notes": "",
+  "phones": [
+    {
+      "type": "Mobile",
+      "number": "(919) 939-6094"
+    }
+  ],
+  "emails": [],
+  "websites": [],
+  "gallery": [],
+  "listings": [],
+  "calendlyUrl": "",
+  "bookingLabel": "Book a Time",
+  "address": "",
+  "photoFile": "photo.jpg",
+  "accessToken": "y73kyb6h",
+  "brand": "",
+  "showQR": true
+}
