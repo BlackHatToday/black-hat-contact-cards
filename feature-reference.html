@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Black Hat Community — Feature Reference</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --ink:#14171c; --surface:#1c2129; --surface-2:#242a34;
+    --copper:#b8763f; --copper-soft:#c98549; --parchment:#ede6d6;
+    --muted:#8b93a1; --line:#2e3542;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{
+    background: var(--ink); color: var(--parchment);
+    font-family:'IBM Plex Sans', sans-serif; padding: 32px 24px;
+  }
+  .sheet{ max-width: 900px; margin: 0 auto; }
+
+  header{ text-align:center; margin-bottom: 22px; }
+  .kicker{
+    font-family:'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--copper); margin-bottom: 8px;
+  }
+  h1{ font-family:'Space Grotesk', sans-serif; font-weight: 700; font-size: 24px; }
+  .sub{ color: var(--muted); font-size: 12.5px; margin-top: 6px; }
+
+  .columns{ column-count: 2; column-gap: 22px; }
+  .tool-block{
+    break-inside: avoid; background: var(--surface); border: 1px solid var(--line);
+    border-radius: 12px; padding: 14px 16px; margin-bottom: 14px;
+  }
+  .tool-name{
+    font-family:'IBM Plex Mono', monospace; font-size: 11.5px; color: var(--copper);
+    margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--line);
+  }
+  .feature{ margin-bottom: 7px; font-size: 12px; line-height: 1.45; }
+  .feature:last-child{ margin-bottom: 0; }
+  .feature b{ color: var(--parchment); font-weight: 500; }
+  .feature span{ color: var(--muted); }
+
+  footer{
+    text-align:center; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line);
+    font-family:'IBM Plex Mono', monospace; font-size: 10px; letter-spacing: 0.06em;
+    text-transform: uppercase; color: #525a68;
+  }
+
+  @media print{
+    body{
+      background: #f6f3ea; color: #2b2620; padding: 16px;
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+    .kicker{ color: #9c6535; }
+    .sub{ color: #6b6259; }
+    .tool-block{ background: #fdfcf8; border-color: #ddd4c4; }
+    .tool-name{ color: #9c6535; border-color: #ddd4c4; }
+    .feature b{ color: #2b2620; }
+    .feature span{ color: #6b6259; }
+    footer{ border-color: #ddd4c4; color: #6b6259; }
+    @page{ size: letter; margin: 0.4in; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+  <header>
+    <div class="kicker">Black Hat Community · Admin Reference</div>
+    <h1>Every Feature, By Tool</h1>
+    <p class="sub">A reminder of what's actually possible — see MANUAL.md for step-by-step instructions on any of these</p>
+  </header>
+
+  <div class="columns">
+
+    <div class="tool-block">
+      <div class="tool-name">Every Card, Always</div>
+      <div class="feature"><b>Save to Contacts</b> <span>— one-tap vCard download</span></div>
+      <div class="feature"><b>Share Your Info</b> <span>— visitor sends you theirs, Text or Email</span></div>
+      <div class="feature"><b>Save as PDF</b> <span>— the full card as a printable page</span></div>
+      <div class="feature"><b>Print QR Code Only</b> <span>— minimal name/address + QR printout</span></div>
+      <div class="feature"><b>Contact / Support / Updates</b> <span>— self-edit link, pre-fills the intake form</span></div>
+    </div>
+
+    <div class="tool-block">
+      <div class="tool-name">generator.html — Person Cards</div>
+      <div class="feature"><b>Brand field</b> <span>— apply a business or personal color palette</span></div>
+      <div class="feature"><b>Gallery</b> <span>— up to 10 photos with captions, reorderable, opens in an in-page viewer</span></div>
+      <div class="feature"><b>Listings</b> <span>— link up to 5 property cards from your own card</span></div>
+      <div class="feature"><b>Websites</b> <span>— multiple, reorderable, shows "View Site" not a raw URL</span></div>
+      <div class="feature"><b>Social</b> <span>— malformed input is skipped, never publishes a dead link</span></div>
+      <div class="feature"><b>Collect Info</b> <span>— QR for crowds or NFC-disabled phones</span></div>
+      <div class="feature"><b>Scan a Card</b> <span>— OCR a business card, review before sending to yourself</span></div>
+      <div class="feature"><b>Refer a Friend</b> <span>— shares the intake form link directly</span></div>
+      <div class="feature"><b>Move ↑↓ buttons</b> <span>— reorder any repeatable field: phones, emails, websites, listings, experience, gallery</span></div>
+      <div class="feature"><b>Load / Save / Download</b> <span>— edit an existing person's file directly</span></div>
+    </div>
+
+    <div class="tool-block">
+      <div class="tool-name">property-generator.html — Listings</div>
+      <div class="feature"><b>Photo gallery</b> <span>— any number of photos, no cap</span></div>
+      <div class="feature"><b>Agent card</b> <span>— auto-initials avatar if no agent photo given</span></div>
+      <div class="feature"><b>Schedule a Showing</b> <span>— a real booking link</span></div>
+      <div class="feature"><b>Link to Another Listing</b> <span>— cross-reference a second property</span></div>
+      <div class="feature"><b>Brand field</b> <span>— same mechanism as person cards</span></div>
+      <div class="feature"><b>Print QR Code Only</b> <span>— side-by-side QR + address, built for a flyer or yard sign</span></div>
+    </div>
+
+    <div class="tool-block">
+      <div class="tool-name">brand-generator.html</div>
+      <div class="feature"><b>Accent color</b> <span>— auto-generates a matching soft/hover variant</span></div>
+      <div class="feature"><b>Background color (optional)</b> <span>— auto text-contrast, auto panel shading, safe for any color</span></div>
+      <div class="feature"><b>Live preview</b> <span>— the real colors, fetched live — not a simulation</span></div>
+      <div class="feature"><b>Reset to Defaults</b> <span>— one click back to the starting palette</span></div>
+      <div class="feature"><b>Load Brand File</b> <span>— edit an existing business or personal brand</span></div>
+      <div class="feature"><b>biz- / solo- naming</b> <span>— team brand vs. one person's own variety, at a glance</span></div>
+    </div>
+
+    <div class="tool-block">
+      <div class="tool-name">bulk-generator.html</div>
+      <div class="feature"><b>CSV import</b> <span>— many new person folders written at once</span></div>
+      <div class="feature"><b>Never overwrites</b> <span>— skips any folder that already exists</span></div>
+    </div>
+
+    <div class="tool-block">
+      <div class="tool-name">Intake Forms</div>
+      <div class="feature"><b>Landing choice screen</b> <span>— "see how it works" vs. "I'm ready," before any field is asked</span></div>
+      <div class="feature"><b>Text It / Email It</b> <span>— a genuine fallback if one method doesn't work on their phone</span></div>
+      <div class="feature"><b>"You're All Set!" panel</b> <span>— immediate confirmation, not a wait for your reply</span></div>
+      <div class="feature"><b>Auto-skip on edit</b> <span>— the landing screen never shows when opened via an existing person's edit link</span></div>
+    </div>
+
+  </div>
+
+  <footer>Black Hat Community · Feature Reference · See MANUAL.md for full instructions</footer>
+</div>
+
+</body>
+</html>

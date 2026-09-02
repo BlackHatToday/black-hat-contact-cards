@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What Your Black Hat Card Can Do</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --navy:#16283f; --navy-2:#1e3a5a;
+    --blue-bright:#6db1ea; --blue-soft:#a9cdec;
+    --off-white:#f6f3ea; --muted:#8b93a1; --line:#2e3a4d;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{
+    background: radial-gradient(circle at 50% 0%, var(--navy-2) 0%, var(--navy) 60%);
+    color: var(--off-white); font-family:'IBM Plex Sans', sans-serif;
+    padding: 40px 28px;
+  }
+  .sheet{ max-width: 760px; margin: 0 auto; }
+
+  header{ text-align:center; margin-bottom: 30px; }
+  .kicker{
+    font-family:'IBM Plex Mono', monospace; font-size: 11.5px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--blue-bright); margin-bottom: 10px;
+  }
+  h1{ font-family:'Space Grotesk', sans-serif; font-weight: 700; font-size: 27px; }
+  .sub{ color: var(--muted); font-size: 14px; margin-top: 8px; max-width: 480px; margin-left:auto; margin-right:auto; }
+
+  .segment{
+    background: rgba(109,177,234,0.05); border: 1px solid var(--line); border-radius: 16px;
+    padding: 22px 24px; margin-bottom: 16px;
+  }
+  .segment-head{ display:flex; align-items:center; gap: 12px; margin-bottom: 14px; }
+  .segment-icon{
+    width: 40px; height: 40px; border-radius: 50%; background: rgba(109,177,234,0.12);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .segment-icon svg{ width: 20px; height: 20px; color: var(--blue-bright); }
+  .segment h2{ font-family:'Space Grotesk', sans-serif; font-size: 17px; font-weight: 600; }
+  .segment .tagline{ color: var(--blue-soft); font-size: 12.5px; margin-top: 2px; }
+
+  .segment ul{ list-style:none; }
+  .segment li{
+    font-size: 13px; line-height: 1.6; padding-left: 20px; position:relative; margin-bottom: 7px;
+  }
+  .segment li::before{ content:'→'; position:absolute; left:0; color: var(--blue-bright); }
+
+  footer{
+    text-align:center; margin-top: 26px; padding-top: 20px; border-top: 1px solid var(--line);
+  }
+  .pricing{ font-family:'Space Grotesk', sans-serif; font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+  .footer-note{ color: var(--muted); font-size: 12px; }
+
+  @media print{
+    body{
+      background: #f6f3ea; color: #2b2620; padding: 20px;
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+    .kicker{ color: #9c6535; }
+    .sub{ color: #6b6259; }
+    .segment{ background: #fdfcf8; border-color: #ddd4c4; }
+    .segment-icon{ background: rgba(184,118,63,0.12); }
+    .segment-icon svg{ color: #9c6535; }
+    .segment .tagline{ color: #9c6535; }
+    .segment li::before{ color: #b8763f; }
+    footer{ border-color: #ddd4c4; }
+    .footer-note{ color: #6b6259; }
+    @page{ size: letter; margin: 0.5in; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+  <header>
+    <div class="kicker">Black Hat Community</div>
+    <h1>One Card. However You Use It.</h1>
+    <p class="sub">A Black Hat Card works differently depending on what you actually need it for — here's what it does for you.</p>
+  </header>
+
+  <div class="segment">
+    <div class="segment-head">
+      <div class="segment-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M8 4v16"/></svg>
+      </div>
+      <div>
+        <h2>For Realtors</h2>
+        <div class="tagline">Your card, your listings, your whole team</div>
+      </div>
+    </div>
+    <ul>
+      <li>Tap your card to share your contact info instantly — no app needed on either end</li>
+      <li>Link up to 5 active listings right from your own card</li>
+      <li>Each listing shows photos, price, and a direct way to schedule a showing</li>
+      <li>Brand your whole team with matching colors — one consistent look, every agent</li>
+    </ul>
+  </div>
+
+  <div class="segment">
+    <div class="segment-head">
+      <div class="segment-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>
+      </div>
+      <div>
+        <h2>For Networking</h2>
+        <div class="tagline">Work, personal, or dating — same tap, no typos</div>
+      </div>
+    </div>
+    <ul>
+      <li>One tap saves your info straight into their phone's contacts</li>
+      <li>Show your socials, a short bio, whatever tells your story</li>
+      <li>Make it yours — your own colors, your own vibe</li>
+      <li>Works exactly the same whether it's a coworker, a friend, or a first date</li>
+    </ul>
+  </div>
+
+  <div class="segment">
+    <div class="segment-head">
+      <div class="segment-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>
+      </div>
+      <div>
+        <h2>For Side Jobs &amp; Services</h2>
+        <div class="tagline">Painters, cleaners, contractors — show, don't just tell</div>
+      </div>
+    </div>
+    <ul>
+      <li>A photo gallery with captions — show finished work, not just a name and number</li>
+      <li>One tap shares your contact info instantly, even mid-job</li>
+      <li>Refer a Friend built right in — word-of-mouth, made effortless</li>
+      <li>Add new work samples anytime as new jobs come in</li>
+    </ul>
+  </div>
+
+  <footer>
+    <div class="pricing">Cards $20 &middot; Bracelets $25</div>
+    <div class="footer-note">Scan to request yours, or just ask</div>
+  </footer>
+</div>
+
+</body>
+</html>
