@@ -163,8 +163,8 @@
   <p class="status" id="statusEl"></p>
 
   <footer>Tap · Connect · Build</footer>
-  <div class="brand-line">Adette &amp; Bo LLC</div>
   <a id="editMyInfoLink" class="update-request-link" target="_blank" rel="noopener">Contact / Support / Updates</a>
+  <div class="brand-line">Adette &amp; Bo LLC</div>
 </div>
 
 <div class="qr-modal-overlay" id="qrModalOverlay">
@@ -212,7 +212,8 @@
 <div class="qr-modal-overlay" id="scanVisitorModalOverlay">
   <div class="scan-modal">
     <div class="scan-modal-title">Scan a Card</div>
-    <label>Take or choose a photo</label>
+    <p class="scan-modal-intro">Snap a photo of a business card someone hands you — we'll pull the phone and email, and send it to yourself as a record.</p>
+    <label>Photo of their business card</label>
     <input type="file" id="visitorCardScanInput" accept="image/*" capture="environment">
     <div class="scan-modal-status" id="visitorScanStatus"></div>
 
@@ -225,7 +226,7 @@
       <input type="email" id="visitorEmail" placeholder="them@example.com">
       <label>Everything we could read off the card</label>
       <textarea id="visitorRawText" readonly></textarea>
-      <div class="scan-modal-hint">Review before sending — check the name especially, since OCR can't reliably find it on its own.</div>
+      <div class="scan-modal-hint">Review before sending — copy their name from the text above into the Name field, since OCR can't reliably find it on its own.</div>
 
       <div class="scan-modal-actions">
         <button type="button" class="scan-modal-send-btn" id="visitorSendTextBtn" style="display:none;">
@@ -237,6 +238,7 @@
           Email Myself
         </button>
       </div>
+      <div class="scan-modal-hint" style="text-align:center; margin-top:8px;">Sends to your own phone or email — not theirs.</div>
     </div>
 
     <button type="button" class="refer-modal-cancel" id="scanVisitorModalClose">Cancel</button>
