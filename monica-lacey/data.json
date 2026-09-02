@@ -62,6 +62,20 @@
       "url": "https://checkout.square.site/merchant/MLZKHZQSX3T6Y/checkout/HWCGF4XXH7OLADEIPGQQ7O6N"
     }
   ],
+  "gallery": [
+    {
+      "photo": "photo1.jpg",
+      "caption": "Which one?"
+    },
+    {
+      "photo": "photo2.jpg",
+      "caption": "Smart man!"
+    },
+    {
+      "photo": "photo3.jpg",
+      "caption": "Come by!"
+    }
+  ],
   "listings": [],
   "calendlyUrl": "",
   "bookingLabel": "Book a Time",
