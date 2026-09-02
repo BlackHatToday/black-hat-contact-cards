@@ -40,6 +40,7 @@
   function renderIdentity(d) {
     document.title = d.address || 'Property';
     document.getElementById('propAddress').textContent = d.address || '';
+    document.getElementById('printQrAddress').textContent = d.address || '';
     if (d.price) document.getElementById('propPrice').textContent = d.price;
   }
 
@@ -177,6 +178,23 @@
     btn.addEventListener('click', () => window.print());
   }
 
+  // Same mechanism as the person card's Print QR Code Only — see the
+  // matching comment in assets/app.js. Strips the page down to just the
+  // address and the QR code, for a clean minimal printout separate from
+  // the full Save-as-PDF listing above (e.g. a yard-sign insert).
+  function wirePrintQrOnly() {
+    const link = document.getElementById('printQrLink');
+    if (!link) return;
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      document.body.classList.add('print-qr-only');
+      window.print();
+    });
+    window.addEventListener('afterprint', () => {
+      document.body.classList.remove('print-qr-only');
+    });
+  }
+
   // Same referral mechanism as the person card — always points at the
   // general "get your own card" intake form, regardless of listing.
   //
@@ -295,6 +313,7 @@
     await applyBrandTheme(data);
     wireDownloadPdf();
     wireReferButton();
+    wirePrintQrOnly();
     renderHero(data);
     renderIdentity(data);
     renderStats(data);

@@ -514,7 +514,47 @@ body.quick-share-mode #quickShareIntro{
   body.print-qr-only section:not(#qrSection),
   body.print-qr-only .qr-block .text,
   body.print-qr-only #printQrLink,
+  body.print-qr-only .btn-columns,
+  body.print-qr-only .brand-line,
   body.print-qr-only footer{
     display:none !important;
+  }
+
+  /* Property-only additions — the person-card rules above already cover
+     everything shared. This makes the QR and address sit side by side
+     (QR left, address right) with a dashed line between them, so a
+     realtor can print this as-is for a flyer, or cut the two apart if
+     only the QR is needed (e.g. a yard sign insert). Scoped to
+     .property-page specifically — person cards keep their existing
+     vertical name-then-QR stacking untouched. */
+  body.print-qr-only.property-page #propHero,
+  body.print-qr-only.property-page #propAddress,
+  body.print-qr-only.property-page #propPrice,
+  body.print-qr-only.property-page #bookShowingBtn{
+    display:none !important;
+  }
+  body.print-qr-only.property-page #qrSection .section-label{
+    display:none !important;
+  }
+  body.print-qr-only.property-page{
+    display:flex !important;
+    align-items:center;
+    justify-content:center;
+  }
+  body.print-qr-only.property-page #qrSection{
+    display:block !important;
+  }
+  body.print-qr-only.property-page #printQrAddress{
+    display:flex !important;
+    align-items:center;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:19px;
+    line-height:1.3;
+    color: var(--parchment);
+    max-width:200px;
+    padding-left:24px;
+    margin-left:24px;
+    border-left:1.5px dashed var(--line);
   }
 }

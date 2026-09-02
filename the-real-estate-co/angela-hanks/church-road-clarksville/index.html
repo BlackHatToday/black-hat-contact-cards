@@ -25,7 +25,7 @@
 </script>
 <script defer src="/_vercel/insights/script.js"></script>
 </head>
-<body>
+<body class="property-page">
 
 <div class="page">
 
@@ -81,7 +81,14 @@
         <div class="caption">Point a camera here to open this listing on another phone.</div>
       </div>
     </div>
+    <a id="printQrLink" class="update-request-link" style="margin-top:10px;">Print QR Code Only</a>
   </section>
+
+  <!-- Populated with the same address text as the hero above, purely for
+       the minimal print-QR layout — kept as its own element rather than
+       reaching into the hero section, since that section mixes the
+       address with the photo and price, which stay hidden in this mode. -->
+  <div id="printQrAddress" style="display:none;"></div>
 
   <div style="padding: 0 28px;">
     <a class="book-showing-btn" id="bookShowingBtn" style="display:none;" target="_blank" rel="noopener">
