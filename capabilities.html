@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>What Your Black Hat Card Can Do</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
@@ -53,6 +54,16 @@
   .pricing{ font-family:'Space Grotesk', sans-serif; font-weight: 700; font-size: 15px; margin-bottom: 4px; }
   .footer-note{ color: var(--muted); font-size: 12px; }
 
+  .footer-qr{
+    width: 84px; height: 84px; background: #fff; border-radius: 8px;
+    padding: 6px; margin: 14px auto 10px;
+  }
+  .footer-qr canvas, .footer-qr img{ width:100% !important; height:100% !important; display:block; }
+  .footer-contact{
+    font-family:'IBM Plex Mono', monospace; font-size: 12px; color: var(--blue-soft);
+    margin-top: 6px;
+  }
+
   @media print{
     body{
       background: #f6f3ea; color: #2b2620; padding: 20px;
@@ -67,6 +78,7 @@
     .segment li::before{ color: #b8763f; }
     footer{ border-color: #ddd4c4; }
     .footer-note{ color: #6b6259; }
+    .footer-contact{ color: #9c6535; }
     @page{ size: letter; margin: 0.5in; }
   }
 </style>
@@ -135,10 +147,21 @@
   </div>
 
   <footer>
-    <div class="pricing">Cards $20 &middot; Bracelets $25</div>
-    <div class="footer-note">Scan to request yours, or just ask</div>
+    <div class="pricing">Cards or Bracelets $25 Personal / $50 Business</div>
+    <div class="footer-note">Scan to request yours, or reach out</div>
+    <div class="footer-qr" id="footerQr"></div>
+    <div class="footer-contact">(252) 433-7173 &middot; BlackHatToday+BHCC@Gmail.com</div>
   </footer>
 </div>
+
+<script>
+  new QRCode(document.getElementById("footerQr"), {
+    text: "https://blackhatcards.community/my-contact-info-form.html",
+    width: 140, height: 140,
+    colorDark: "#16283f", colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.M
+  });
+</script>
 
 </body>
 </html>

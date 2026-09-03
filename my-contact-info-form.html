@@ -138,9 +138,32 @@
   }
   .landing-btn-fill:hover{ background: var(--copper-soft); }
 
-  .send-choice{ display: flex; gap: 10px; }
+  .send-choice{ display: flex; flex-direction: column; gap: 10px; }
   .send-choice .btn-primary{ display: flex; align-items: center; justify-content: center; gap: 8px; }
   .send-choice svg{ width: 17px; height: 17px; }
+
+  .choice-label{ font-size: 12px; color: var(--muted); margin-top: 16px; margin-bottom: 6px; }
+  .choice-group{ display: flex; gap: 10px; }
+  .choice-btn{
+    flex:1; padding: 12px 10px; background: var(--surface); border: 1px solid var(--line);
+    border-radius: 12px; color: var(--parchment); font-family:'Space Grotesk', sans-serif;
+    font-weight: 600; font-size: 13px; cursor: pointer; text-align: center;
+  }
+  .choice-btn:hover{ border-color: var(--copper); }
+  .choice-btn.selected{ background: var(--copper); border-color: var(--copper); color: var(--ink); }
+
+  .payment-reveal{
+    display:none; background: var(--surface); border: 1px solid var(--copper); border-radius: 12px;
+    padding: 14px 16px; margin-top: 10px;
+  }
+  .payment-reveal.show{ display:block; }
+  .pay-row{
+    display:flex; justify-content:space-between; align-items:center;
+    padding: 8px 0; border-bottom: 1px solid var(--line); font-size: 13px;
+  }
+  .pay-row:last-child{ border-bottom:none; }
+  .pay-label{ color: var(--muted); font-family:'IBM Plex Mono', monospace; font-size: 11px; text-transform: uppercase; }
+  .pay-value{ font-family:'IBM Plex Mono', monospace; font-weight: 500; }
 
   .confirm-panel{
     display: none; text-align: center; padding: 10px 4px 20px;
@@ -369,14 +392,34 @@
   <div class="actions" id="actionsArea">
     <button type="button" class="btn-secondary" id="previewBtn">Preview My Card</button>
   </div>
-  <div class="send-choice" id="sendChoice" style="margin-top:10px;">
-    <button type="button" class="btn-primary" id="textBtn">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      Text It
-    </button>
+
+  <div class="choice-label">Which type of card is this?</div>
+  <div class="choice-group" id="tierChoice">
+    <button type="button" class="choice-btn" id="tierPersonal" data-tier="personal" data-price="25">Personal — $25</button>
+    <button type="button" class="choice-btn" id="tierBusiness" data-tier="business" data-price="50">Business — $50</button>
+  </div>
+
+  <div class="choice-label">When would you like to pay?</div>
+  <div class="choice-group" id="timingChoice">
+    <button type="button" class="choice-btn" id="payNow" data-timing="now">Pay Now</button>
+    <button type="button" class="choice-btn" id="payLater" data-timing="later">Wait Until It Arrives</button>
+  </div>
+
+  <div class="payment-reveal" id="paymentReveal">
+    <div class="hint" id="paymentRevealHint" style="margin-bottom:8px;">Pick a card type above to see the amount.</div>
+    <div class="pay-row"><span class="pay-label">Cash App</span><span class="pay-value">$BlackHatToday</span></div>
+    <div class="pay-row"><span class="pay-label">Zelle</span><span class="pay-value">252.433.7173</span></div>
+    <div class="hint" style="margin-top:8px;">Once you send it, mention that in your message below so I know it's already taken care of.</div>
+  </div>
+
+  <div class="send-choice" id="sendChoice" style="margin-top:14px;">
     <button type="button" class="btn-primary" id="emailBtn">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 6 12 13 2 6"/><path d="M2 6h20v12H2z"/></svg>
       Email It
+    </button>
+    <button type="button" class="btn-primary" id="textBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      Text It
     </button>
   </div>
   <p class="status" id="statusEl"></p>
@@ -538,6 +581,8 @@
   const urlParams = new URLSearchParams(window.location.search);
   const prefillData = urlParams.get('data');
   let tokenStatus = 'none'; // set below if this was opened via the card's "Need to update" link
+  let selectedTier = null;   // 'personal' or 'business' — set by the choice buttons below
+  let selectedTiming = null; // 'now' or 'later' — set by the choice buttons below
 
   // This is someone editing a card they already have (opened via "Contact /
   // Support / Updates"), not a stranger deciding whether to get one — the
@@ -653,6 +698,15 @@
 
   function formatAsText(d) {
     const lines = [];
+
+    if (selectedTier) {
+      const tierLabel = selectedTier === 'personal' ? 'Personal ($25)' : 'Business ($50)';
+      lines.push(`Card type: ${tierLabel}`);
+    }
+    if (selectedTiming) {
+      lines.push(`Payment: ${selectedTiming === 'now' ? 'Paying now — check for it' : 'Will pay once the card arrives'}`);
+    }
+    if (selectedTier || selectedTiming) lines.push('');
 
     if (tokenStatus === 'verified') {
       lines.push('✓ VERIFIED — sent via the actual card link, token matches what\'s on file.');
@@ -847,6 +901,48 @@
   document.getElementById('tryOtherWay').addEventListener('click', (e) => {
     e.preventDefault();
     showSendChoiceAgain();
+  });
+
+  function updatePaymentReveal() {
+    const reveal = document.getElementById('paymentReveal');
+    const hint = document.getElementById('paymentRevealHint');
+    if (selectedTiming !== 'now') {
+      reveal.classList.remove('show');
+      return;
+    }
+    reveal.classList.add('show');
+    if (selectedTier === 'personal') {
+      hint.textContent = 'Personal card — $25. Send it however works best for you:';
+    } else if (selectedTier === 'business') {
+      hint.textContent = 'Business card — $50. Send it however works best for you:';
+    } else {
+      hint.textContent = 'Pick a card type above to see the amount.';
+    }
+  }
+
+  document.getElementById('tierPersonal').addEventListener('click', () => {
+    selectedTier = 'personal';
+    document.getElementById('tierPersonal').classList.add('selected');
+    document.getElementById('tierBusiness').classList.remove('selected');
+    updatePaymentReveal();
+  });
+  document.getElementById('tierBusiness').addEventListener('click', () => {
+    selectedTier = 'business';
+    document.getElementById('tierBusiness').classList.add('selected');
+    document.getElementById('tierPersonal').classList.remove('selected');
+    updatePaymentReveal();
+  });
+  document.getElementById('payNow').addEventListener('click', () => {
+    selectedTiming = 'now';
+    document.getElementById('payNow').classList.add('selected');
+    document.getElementById('payLater').classList.remove('selected');
+    updatePaymentReveal();
+  });
+  document.getElementById('payLater').addEventListener('click', () => {
+    selectedTiming = 'later';
+    document.getElementById('payLater').classList.add('selected');
+    document.getElementById('payNow').classList.remove('selected');
+    updatePaymentReveal();
   });
 
   document.getElementById('emailBtn').addEventListener('click', () => {
