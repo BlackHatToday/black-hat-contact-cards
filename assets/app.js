@@ -373,11 +373,11 @@
     (d.emails || []).forEach(e => rows.push({ icon: 'email', label: e.type || 'Email', value: e.address, href: `mailto:${e.address}` }));
     if (d.address) rows.push({ icon: 'location', label: 'Address', value: d.address, href: `https://maps.google.com/?q=${encodeURIComponent(d.address)}` });
     if (d.website) rows.push({ icon: 'website', label: 'Website', value: 'View Site', href: d.website }); // legacy single-website support
-    (d.websites || []).forEach(w => rows.push({ icon: 'website', label: w.label || 'Website', value: 'View Site', href: w.url }));
+    (d.websites || []).forEach(w => rows.push({ icon: 'website', label: w.label || 'Website', value: w.label ? '' : 'View Site', href: w.url }));
     document.getElementById('fieldsEl').innerHTML = rows.map(r => `
       <a class="field" href="${r.href}" target="_blank" rel="noopener">
         <span class="icon">${ICONS[r.icon]}</span>
-        <span class="meta"><div class="label">${r.label}</div><div class="value">${r.value}</div></span>
+        <span class="meta"><div class="label">${r.label}</div>${r.value ? `<div class="value">${r.value}</div>` : ''}</span>
       </a>
     `).join('');
   }
