@@ -17,7 +17,7 @@
     "youtube": ""
   },
   "payments": {
-    "cashapp": "",
+    "cashapp": "$QLakeCeo",
     "venmo": "",
     "paypal": "",
     "zelle": ""
@@ -32,7 +32,12 @@
   ],
   "emails": [],
   "websites": [],
-  "gallery": [],
+  "gallery": [
+    {
+      "photo": "photo1.jpg",
+      "caption": "QLake Productions"
+    }
+  ],
   "listings": [],
   "calendlyUrl": "",
   "bookingLabel": "Book a Time",
