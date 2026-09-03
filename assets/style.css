@@ -273,12 +273,12 @@ section{ padding: 0 28px; margin-top: 8px; }
 /* ---- book-a-time button ---- */
 .book-btn{
   display:flex; align-items:center; justify-content:center; gap:10px; width:100%;
-  margin-top:12px; padding:15px 20px; background:transparent; color:var(--copper-soft);
+  margin-top:12px; padding:15px 20px; background:var(--surface); color:var(--copper-soft);
   border:1px solid var(--copper); border-radius:14px; text-decoration:none;
   font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:15px;
   transition:background .15s ease; cursor:pointer; text-transform:capitalize;
 }
-.book-btn:hover{ background: var(--surface); }
+.book-btn:hover{ background: var(--surface-2); }
 .book-btn svg{ width:18px; height:18px; }
 
 /* ---- two-column button layout (person cards) — visitor actions on the
