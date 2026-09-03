@@ -23,7 +23,7 @@
     "youtube": ""
   },
   "payments": {
-    "cashapp": "$BlackHat",
+    "cashapp": "$BlackHatToday",
     "venmo": "",
     "paypal": "",
     "zelle": "252.433.7173"
@@ -50,8 +50,21 @@
     {
       "label": "Website",
       "url": "https://christquarter.buzzsprout.com/"
+    },
+    {
+      "label": "Get A Black Hat Card",
+      "url": "https://blackhatcards.community/my-contact-info-form.html"
+    },
+    {
+      "label": "Demo",
+      "url": "https://blackhatcards.community/animated-demo.html"
+    },
+    {
+      "label": "One Card",
+      "url": "https://blackhatcards.community/capabilities.html"
     }
   ],
+  "gallery": [],
   "listings": [],
   "calendlyUrl": "",
   "bookingLabel": "Book a Time",
