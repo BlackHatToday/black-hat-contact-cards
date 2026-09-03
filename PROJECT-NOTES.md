@@ -65,7 +65,7 @@ your-project/
     └── photo1.jpg, photo2.jpg...
 ```
 
-**Domain constants live in multiple places, deliberately** (not centralized, since these are independent static files with no shared config): `PROJECT_BASE_URL` in `app.js`, `property.js`, `generator.html`, and `property-generator.html`; `RECIPIENT_EMAIL` in both intake forms. All currently point to `blackhatcards.community` and `BlackHatToday+BHCC@Gmail.com` respectively. **If either the domain or the intake email ever changes, all of these need to be updated individually** — there is no single source of truth for them.
+**Domain constants live in multiple places, deliberately** (not centralized, since these are independent static files with no shared config): `PROJECT_BASE_URL` in `app.js`, `property.js`, `generator.html`, and `property-generator.html`; `RECIPIENT_EMAIL` in both intake forms. All currently point to `blackhatcards.community` and `BlackHatToday@Gmail.com` respectively — the email dropped its `+BHCC` tag after reports that the `+` character was causing issues on some systems; the same "BHCC" filtering purpose now lives in the subject line instead (`(BHCC)` appended to every submission, see the subject-line logic in both intake forms). **If either the domain or the intake email ever changes, all of these need to be updated individually** — there is no single source of truth for them.
 
 ---
 

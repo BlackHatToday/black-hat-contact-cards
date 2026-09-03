@@ -587,10 +587,17 @@
   // This is someone editing a card they already have (opened via "Contact /
   // Support / Updates"), not a stranger deciding whether to get one — the
   // "get a card" landing pitch doesn't apply to them at all. Skip straight
-  // to the form, already filled in with their current info.
+  // to the form, already filled in with their current info. The tier and
+  // payment-timing choices don't apply here either — those are for a new
+  // order, not someone fixing a typo in their phone number — so hide them
+  // entirely rather than asking an existing customer to re-declare either.
   if (prefillData) {
     document.getElementById('landingScreen').style.display = 'none';
     document.getElementById('formSection').style.display = 'block';
+    document.getElementById('tierChoice').style.display = 'none';
+    document.getElementById('timingChoice').style.display = 'none';
+    document.getElementById('paymentReveal').style.display = 'none';
+    document.querySelectorAll('.choice-label').forEach(el => el.style.display = 'none');
   }
 
   if (!prefillData) {
@@ -693,8 +700,8 @@
   }
 
   // Set this to your own email address before sending this form to friends.
-  const RECIPIENT_EMAIL = "BlackHatToday+BHCC@Gmail.com";
-  const RECIPIENT_PHONE = "12524337173";
+  const RECIPIENT_EMAIL = "BlackHatToday@Gmail.com";
+  const RECIPIENT_PHONE = "19195947639";
 
   function formatAsText(d) {
     const lines = [];
@@ -945,15 +952,42 @@
     updatePaymentReveal();
   });
 
-  document.getElementById('emailBtn').addEventListener('click', () => {
-    const data = collectData();
+  // Shared between Email (a real subject line) and Text (prepended to the
+  // body, since SMS has no subject field) — keeps both channels consistent.
+  function buildSubjectLine(name) {
+    const kind = tokenStatus === 'none' ? 'New Card Request' : 'Support / Update';
+    const verifiedTag = tokenStatus === 'verified' ? '[Verified] ' : tokenStatus === 'unverified' ? '[UNVERIFIED] ' : '';
+    return `${verifiedTag}${kind} — ${name} (BHCC)`;
+  }
+
+  function validateBeforeSend(data) {
     if (!data.firstName || !data.lastName) {
       document.getElementById('statusEl').textContent = 'Please enter at least your first and last name.';
-      return;
+      return false;
     }
+    // Tier and payment timing only apply to a new order — an existing
+    // person editing their card (tokenStatus set) never sees those
+    // choices at all, so don't require them either.
+    if (tokenStatus === 'none') {
+      if (!selectedTier) {
+        document.getElementById('statusEl').textContent = 'Please choose whether this is a Personal or Business card above.';
+        document.getElementById('tierChoice').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return false;
+      }
+      if (!selectedTiming) {
+        document.getElementById('statusEl').textContent = 'Please choose when you\'d like to pay above.';
+        document.getElementById('timingChoice').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return false;
+      }
+    }
+    return true;
+  }
+
+  document.getElementById('emailBtn').addEventListener('click', () => {
+    const data = collectData();
+    if (!validateBeforeSend(data)) return;
     const name = `${data.firstName} ${data.lastName}`;
-    const subjectPrefix = tokenStatus === 'verified' ? '[Verified] ' : tokenStatus === 'unverified' ? '[UNVERIFIED] ' : '';
-    const subject = encodeURIComponent(`${subjectPrefix}Contact / Support — ${name}`);
+    const subject = encodeURIComponent(buildSubjectLine(name));
     const body = encodeURIComponent(formatAsText(data));
     window.location.href = `mailto:${RECIPIENT_EMAIL}?subject=${subject}&body=${body}`;
     showConfirmPanel();
@@ -961,13 +995,9 @@
 
   document.getElementById('textBtn').addEventListener('click', () => {
     const data = collectData();
-    if (!data.firstName || !data.lastName) {
-      document.getElementById('statusEl').textContent = 'Please enter at least your first and last name.';
-      return;
-    }
+    if (!validateBeforeSend(data)) return;
     const name = `${data.firstName} ${data.lastName}`;
-    const subjectPrefix = tokenStatus === 'verified' ? '[Verified] ' : tokenStatus === 'unverified' ? '[UNVERIFIED] ' : '';
-    const body = encodeURIComponent(`${subjectPrefix}Contact / Support — ${name}\n\n${formatAsText(data)}`);
+    const body = encodeURIComponent(`${buildSubjectLine(name)}\n\n${formatAsText(data)}`);
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
     const separator = isIOS ? '&' : '?';
     window.location.href = `sms:${RECIPIENT_PHONE}${separator}body=${body}`;
