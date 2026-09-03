@@ -669,6 +669,66 @@
     };
   }
 
+  // Contrast ratio per the standard WCAG formula — used only to check
+  // whether the accent color (used as text/border/icon color, not as a
+  // button fill) actually reads against whatever background it's sitting
+  // on. Independent of computeThemeFromBackground, which only handles
+  // the background's own derived text/panel colors.
+  function contrastRatio(hex1, hex2) {
+    const l1 = relativeLuminance(hex1), l2 = relativeLuminance(hex2);
+    const lighter = Math.max(l1, l2), darker = Math.min(l1, l2);
+    return (lighter + 0.05) / (darker + 0.05);
+  }
+  function rgbToHsl(r, g, b) {
+    r /= 255; g /= 255; b /= 255;
+    const mx = Math.max(r, g, b), mn = Math.min(r, g, b);
+    let h, s; const l = (mx + mn) / 2;
+    if (mx === mn) { h = s = 0; }
+    else {
+      const d = mx - mn;
+      s = l > 0.5 ? d / (2 - mx - mn) : d / (mx + mn);
+      if (mx === r) h = (g - b) / d + (g < b ? 6 : 0);
+      else if (mx === g) h = (b - r) / d + 2;
+      else h = (r - g) / d + 4;
+      h /= 6;
+    }
+    return [h, s, l];
+  }
+  function hslToRgb(h, s, l) {
+    if (s === 0) { const v = l * 255; return [v, v, v]; }
+    const hue2rgb = (p, q, t) => {
+      if (t < 0) t += 1;
+      if (t > 1) t -= 1;
+      if (t < 1 / 6) return p + (q - p) * 6 * t;
+      if (t < 1 / 2) return q;
+      if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+      return p;
+    };
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    const p = 2 * l - q;
+    return [hue2rgb(p, q, h + 1 / 3) * 255, hue2rgb(p, q, h) * 255, hue2rgb(p, q, h - 1 / 3) * 255];
+  }
+  // If the given color doesn't have enough contrast against the
+  // background to read as text/border/icon color, nudge its lightness
+  // (same hue, same saturation — still recognizably the chosen brand
+  // color) until it does. Leaves already-good colors untouched, so this
+  // never changes anything for the vast majority of brands that already
+  // picked a reasonably contrasting accent.
+  function ensureContrast(fgHex, bgHex, minRatio = 3.5) {
+    if (contrastRatio(fgHex, bgHex) >= minRatio) return fgHex;
+    const [h, s, l0] = rgbToHsl(...hexToRgb(fgHex));
+    const bgIsLight = relativeLuminance(bgHex) > 0.4;
+    const step = bgIsLight ? -0.02 : 0.02;
+    let l = l0, result = fgHex;
+    for (let i = 0; i < 50; i++) {
+      l = Math.max(0, Math.min(1, l + step));
+      result = rgbToHex(hslToRgb(h, s, l));
+      if (contrastRatio(result, bgHex) >= minRatio) return result;
+      if (l <= 0 || l >= 1) break;
+    }
+    return result; // best effort even if the target ratio was never quite reached
+  }
+
   // If this person's data.json references a business ("brand": "acme-corp"),
   // fetch that business's small color file and override this page's colors.
   // Absolute path from site root (not relative to this person's folder) —
@@ -683,8 +743,9 @@
       if (!res.ok) return;
       const brand = await res.json();
       const root = document.documentElement.style;
-      if (brand.accent) root.setProperty('--copper', brand.accent);
-      if (brand.accentSoft) root.setProperty('--copper-soft', brand.accentSoft);
+      const effectiveBg = brand.background || '#14171c'; // the default --ink, if no custom background is set
+      if (brand.accent) root.setProperty('--copper', ensureContrast(brand.accent, effectiveBg));
+      if (brand.accentSoft) root.setProperty('--copper-soft', ensureContrast(brand.accentSoft, effectiveBg));
       if (brand.background) {
         const theme = computeThemeFromBackground(brand.background);
         root.setProperty('--ink', brand.background);
