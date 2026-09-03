@@ -377,7 +377,7 @@
     document.getElementById('fieldsEl').innerHTML = rows.map(r => `
       <a class="field" href="${r.href}" target="_blank" rel="noopener">
         <span class="icon">${ICONS[r.icon]}</span>
-        <span class="meta"><div class="label">${r.label}</div>${r.value ? `<div class="value">${r.value}</div>` : ''}</span>
+        <span class="meta"><div class="${r.value ? 'label' : 'value'}">${r.label}</div>${r.value ? `<div class="value">${r.value}</div>` : ''}</span>
       </a>
     `).join('');
   }
