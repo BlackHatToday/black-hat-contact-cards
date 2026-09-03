@@ -6,7 +6,7 @@
 <title>Brand Generator</title>
 <link rel="icon" type="image/png" href="/assets/favicon.png">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&family=Fraunces:wght@600&family=Source+Sans+3:wght@400&family=Playfair+Display:wght@700&family=Cormorant+Garamond:wght@500&family=Libre+Baskerville:wght@700&family=Lora:wght@600&family=Baloo+2:wght@700&family=Nunito:wght@500&display=swap');
 
   :root{
     --ink:#14171c; --surface:#1c2129; --surface-2:#242a34;
@@ -43,6 +43,14 @@
   input[type=text]:focus{ outline: none; border-color: var(--copper); }
 
   .color-row{ display:flex; align-items:center; gap: 12px; }
+
+  .font-choice-grid{ display:grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap:10px; }
+  .font-choice-btn{
+    padding: 16px 10px; background: var(--surface); border: 1px solid var(--line);
+    border-radius: 12px; color: var(--parchment); font-size: 16px; cursor: pointer;
+  }
+  .font-choice-btn:hover{ border-color: var(--copper-soft); }
+  .font-choice-btn.selected{ border-color: var(--copper); background: var(--surface-2); }
   input[type=color]{
     width: 52px; height: 42px; padding: 2px; background: var(--surface);
     border: 1px solid var(--line); border-radius: 8px; cursor: pointer;
@@ -96,10 +104,10 @@
     width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 14px;
     background: var(--surface-2); border: 2px solid var(--copper);
     display:flex; align-items:center; justify-content:center;
-    font-family:'Space Grotesk', sans-serif; font-weight: 600; font-size: 22px; color: var(--copper);
+    font-family:var(--font-display, 'Space Grotesk', sans-serif); font-weight: 600; font-size: 22px; color: var(--copper);
   }
-  .pv-name{ text-align:center; font-family:'Space Grotesk', sans-serif; font-weight: 700; font-size: 19px; color: var(--parchment); }
-  .pv-role{ text-align:center; font-size: 12.5px; color: var(--muted); margin-top: 4px; }
+  .pv-name{ text-align:center; font-family:var(--font-display, 'Space Grotesk', sans-serif); font-weight: 700; font-size: 19px; color: var(--parchment); }
+  .pv-role{ text-align:center; font-size: 12.5px; color: var(--muted); margin-top: 4px; font-family:var(--font-body, 'IBM Plex Sans', sans-serif); }
   .pv-section-label{
     display:flex; align-items:center; gap:8px; margin: 20px 0 10px;
     font-family:'IBM Plex Mono', monospace; font-size: 10px;
@@ -115,13 +123,13 @@
     display:flex; align-items:center; justify-content:center; gap:8px;
     width:100%; padding:13px; margin-bottom: 8px;
     background: var(--copper); color: var(--ink); border-radius: 12px;
-    font-family:'Space Grotesk', sans-serif; font-weight:600; font-size: 14px;
+    font-family:var(--font-display, 'Space Grotesk', sans-serif); font-weight:600; font-size: 14px;
   }
   .pv-outline-btn{
     display:flex; align-items:center; justify-content:center; gap:8px;
     width:100%; padding:12px;
     background: transparent; color: var(--copper-soft); border: 1px solid var(--copper);
-    border-radius: 12px; font-family:'Space Grotesk', sans-serif; font-weight:500; font-size: 13.5px;
+    border-radius: 12px; font-family:var(--font-display, 'Space Grotesk', sans-serif); font-weight:500; font-size: 13.5px;
   }
 </style>
 </head>
@@ -176,6 +184,18 @@
       <div class="hint" id="contrastNote" style="color:var(--copper-soft);"></div>
     </fieldset>
 
+    <fieldset>
+      <legend>Font Pairing (optional)</legend>
+      <div class="font-choice-grid" id="fontChoiceGrid">
+        <button type="button" class="font-choice-btn selected" data-font="" style="font-family:'Space Grotesk', sans-serif;">Default</button>
+        <button type="button" class="font-choice-btn" data-font="editorial" style="font-family:'Fraunces', serif;">Editorial</button>
+        <button type="button" class="font-choice-btn" data-font="luxury" style="font-family:'Playfair Display', serif;">Luxury</button>
+        <button type="button" class="font-choice-btn" data-font="traditional" style="font-family:'Libre Baskerville', serif;">Traditional</button>
+        <button type="button" class="font-choice-btn" data-font="playful" style="font-family:'Baloo 2', sans-serif;">Playful</button>
+      </div>
+      <div class="hint">A small, pre-matched set — not an open font picker. Each pairing was chosen and tested together, so there's no wrong combination to accidentally create.</div>
+    </fieldset>
+
   </form>
 
   <div class="preview-section">
@@ -223,10 +243,35 @@
     return '#' + (0x1000000 + r * 0x10000 + g * 0x100 + b).toString(16).slice(1);
   }
 
+  // Same pairing set as assets/app.js and assets/property.js — the CSS
+  // font-family values here are for the preview only; the actual saved
+  // value is just the short key (see collectData), matching how the live
+  // card looks it up.
+  const FONT_PAIRINGS = {
+    editorial:   { display: "'Fraunces', serif", body: "'Source Sans 3', sans-serif" },
+    luxury:      { display: "'Playfair Display', serif", body: "'Cormorant Garamond', serif" },
+    traditional: { display: "'Libre Baskerville', serif", body: "'Lora', serif" },
+    playful:     { display: "'Baloo 2', sans-serif", body: "'Nunito', sans-serif" },
+  };
+  let selectedFont = '';
+
+  document.querySelectorAll('.font-choice-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      selectedFont = btn.dataset.font;
+      document.querySelectorAll('.font-choice-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      updatePreview();
+    });
+  });
+
   function updatePreview() {
     const accent = document.getElementById('accentHex').value;
     const accentSoft = document.getElementById('accentSoftHex').value;
     const card = document.getElementById('previewCard');
+
+    const pairing = FONT_PAIRINGS[selectedFont];
+    card.style.setProperty('--font-display', pairing ? pairing.display : "'Space Grotesk', sans-serif");
+    card.style.setProperty('--font-body', pairing ? pairing.body : "'IBM Plex Sans', sans-serif");
 
     const bg = document.getElementById('backgroundHex').value;
     const effectiveBg = /^#[0-9a-fA-F]{6}$/.test(bg) ? bg : '#14171c';
@@ -393,6 +438,7 @@
     };
     const bg = document.getElementById('backgroundHex').value;
     if (/^#[0-9a-fA-F]{6}$/.test(bg)) d.background = bg;
+    if (selectedFont) d.font = selectedFont;
     return d;
   }
 
@@ -411,6 +457,8 @@
     setVal('backgroundPicker', d.background || '#14171c');
     setVal('backgroundHex', d.background || '');
     document.getElementById('pvOrgName').textContent = d.businessName || 'Acme Corp';
+    selectedFont = d.font || '';
+    document.querySelectorAll('.font-choice-btn').forEach(b => b.classList.toggle('selected', b.dataset.font === selectedFont));
     slugAutoFilled = false;
     accentSoftAutoFilled = false;
     updatePreview();
@@ -521,6 +569,8 @@
     setVal('backgroundHex', '');
     document.getElementById('pvOrgName').textContent = 'Acme Corp';
     document.getElementById('pvAvatar').textContent = 'AC';
+    selectedFont = '';
+    document.querySelectorAll('.font-choice-btn').forEach(b => b.classList.toggle('selected', b.dataset.font === ''));
     slugAutoFilled = true;
     accentSoftAutoFilled = true;
     updatePreview();

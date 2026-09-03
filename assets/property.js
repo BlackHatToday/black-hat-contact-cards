@@ -333,6 +333,25 @@
     return result;
   }
 
+  // Same font-pairing system as the person card — see the matching
+  // comment in assets/app.js.
+  const FONT_PAIRINGS = {
+    editorial:   { fontsUrl: 'https://fonts.googleapis.com/css2?family=Fraunces:wght@600&family=Source+Sans+3:wght@400&display=swap', display: "'Fraunces', serif", body: "'Source Sans 3', sans-serif" },
+    luxury:      { fontsUrl: 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Cormorant+Garamond:wght@500&display=swap', display: "'Playfair Display', serif", body: "'Cormorant Garamond', serif" },
+    traditional: { fontsUrl: 'https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@700&family=Lora:wght@600&display=swap', display: "'Libre Baskerville', serif", body: "'Lora', serif" },
+    playful:     { fontsUrl: 'https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Nunito:wght@500&display=swap', display: "'Baloo 2', sans-serif", body: "'Nunito', sans-serif" },
+  };
+  function applyFontPairing(key) {
+    const pairing = FONT_PAIRINGS[key];
+    if (!pairing) return;
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = pairing.fontsUrl;
+    document.head.appendChild(link);
+    document.documentElement.style.setProperty('--font-display', pairing.display);
+    document.documentElement.style.setProperty('--font-body', pairing.body);
+  }
+
   // Same brand-theming mechanism as the person card — see the matching
   // comment in assets/app.js. Background is optional — a brand with just
   // an accent color behaves exactly as before.
@@ -355,6 +374,7 @@
         root.setProperty('--surface-2', theme.surface2);
         root.setProperty('--line', theme.line);
       }
+      if (brand.font) applyFontPairing(brand.font);
     } catch (err) {
       console.error('Could not load brand theme:', err);
     }

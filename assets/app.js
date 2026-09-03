@@ -755,6 +755,29 @@
     return result; // best effort even if the target ratio was never quite reached
   }
 
+  // A small, deliberately limited set of pre-vetted font pairings — not
+  // an open "pick any Google Font" choice. Each pairing was chosen and
+  // tested as a matched pair (display + body), since a font that looks
+  // great in isolation can still read poorly next to the wrong partner.
+  // Google Fonts are loaded on demand, only when a non-default pairing
+  // is actually chosen — never preloaded for pairings nobody's using.
+  const FONT_PAIRINGS = {
+    editorial:   { fontsUrl: 'https://fonts.googleapis.com/css2?family=Fraunces:wght@600&family=Source+Sans+3:wght@400&display=swap', display: "'Fraunces', serif", body: "'Source Sans 3', sans-serif" },
+    luxury:      { fontsUrl: 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Cormorant+Garamond:wght@500&display=swap', display: "'Playfair Display', serif", body: "'Cormorant Garamond', serif" },
+    traditional: { fontsUrl: 'https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@700&family=Lora:wght@600&display=swap', display: "'Libre Baskerville', serif", body: "'Lora', serif" },
+    playful:     { fontsUrl: 'https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Nunito:wght@500&display=swap', display: "'Baloo 2', sans-serif", body: "'Nunito', sans-serif" },
+  };
+  function applyFontPairing(key) {
+    const pairing = FONT_PAIRINGS[key];
+    if (!pairing) return; // unknown/missing key (including "default") — leave the built-in fonts as-is
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = pairing.fontsUrl;
+    document.head.appendChild(link);
+    document.documentElement.style.setProperty('--font-display', pairing.display);
+    document.documentElement.style.setProperty('--font-body', pairing.body);
+  }
+
   // If this person's data.json references a business ("brand": "acme-corp"),
   // fetch that business's small color file and override this page's colors.
   // Absolute path from site root (not relative to this person's folder) —
@@ -781,6 +804,7 @@
         root.setProperty('--surface-2', theme.surface2);
         root.setProperty('--line', theme.line);
       }
+      if (brand.font) applyFontPairing(brand.font);
     } catch (err) {
       console.error('Could not load brand theme:', err);
     }
