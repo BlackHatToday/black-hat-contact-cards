@@ -1,7 +1,8 @@
 {
   "businessName": "",
   "brandSlug": "bkirk-royster",
-  "accent": "#5464a6",
+  "accent": "#040b25",
   "accentSoft": "#72b4ca",
-  "background": "#a7b1c3"
+  "background": "#a7b1c3",
+  "font": "luxury"
 }
