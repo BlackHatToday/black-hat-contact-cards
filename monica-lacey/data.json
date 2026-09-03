@@ -50,6 +50,10 @@
       "url": "https://blackhatcards.community/mo-tea-how-to-use.html"
     },
     {
+      "label": "What People Are Saying!",
+      "url": "https://blackhatcards.community/mo-tea-testimonials.html"
+    },
+    {
       "label": "Mo Tea",
       "url": "https://moteajar.com/"
     },
@@ -74,6 +78,18 @@
     {
       "photo": "photo3.jpg",
       "caption": "Come by!"
+    },
+    {
+      "photo": "photo4.jpg",
+      "caption": "Testimonials"
+    },
+    {
+      "photo": "photo5.jpg",
+      "caption": "How to use Mo Tea"
+    },
+    {
+      "photo": "photo6.jpg",
+      "caption": "Why Customers Love Mo Tea!"
     }
   ],
   "listings": [],
