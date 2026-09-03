@@ -222,13 +222,39 @@
   function renderListings(d) {
     const listings = (d.listings || []).filter(l => l.url).slice(0, 5); // hard cap at 5, even if more sneak into the data
     if (!listings.length) return;
-    document.getElementById('listingsEl').innerHTML = listings.map(l => `
-      <a class="field" href="${l.url}" target="_blank" rel="noopener">
-        <span class="icon">${ICONS.home}</span>
-        <span class="meta"><div class="label">${l.label || 'Listing'}</div><div class="value">View Listing</div></span>
+
+    // Render immediately with a generic icon in every card — the real
+    // photo (if any) swaps in per-card as its own fetch resolves below,
+    // so one slow or missing photo never blocks the others from showing.
+    document.getElementById('listingsEl').innerHTML = listings.map((l, i) => `
+      <a class="listing-card" href="${l.url}" target="_blank" rel="noopener">
+        <div class="listing-card-media" id="listingMedia${i}">
+          <span class="icon">${ICONS.home}</span>
+        </div>
+        <div class="listing-card-caption">${l.label || 'Listing'}</div>
       </a>
     `).join('');
     document.getElementById('listingsSection').style.display = 'block';
+
+    listings.forEach(async (l, i) => {
+      try {
+        const res = await fetch(`${l.url}data.json`, { cache: 'no-store' });
+        if (!res.ok) return;
+        const propertyData = await res.json();
+        if (!propertyData.heroPhoto) return;
+        const imgUrl = /^https?:\/\//i.test(propertyData.heroPhoto) ? propertyData.heroPhoto : `${l.url}${propertyData.heroPhoto}`;
+        const media = document.getElementById(`listingMedia${i}`);
+        if (!media) return; // page could have re-rendered by the time this resolves
+        const img = new Image();
+        img.onload = () => { media.innerHTML = `<img src="${imgUrl}" alt="${l.label || 'Listing'}">`; };
+        img.src = imgUrl; // only swap in once the image itself is confirmed loadable, not just the data.json fetch
+      } catch (err) {
+        // Missing/typo'd listing data, or the property card doesn't exist
+        // (yet) — leave the icon in place rather than showing a broken
+        // card. Not logged as an error since a not-yet-built listing is
+        // an expected, normal state, not a bug.
+      }
+    });
   }
 
   function openQrModal(url, label) {
