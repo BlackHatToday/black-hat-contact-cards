@@ -1,0 +1,74 @@
+{
+  "prefix": "",
+  "firstName": "Rasha",
+  "lastName": "Hughes",
+  "title": "",
+  "org": "Verdigris Restaurant",
+  "tagline": "",
+  "about": "",
+  "experience": [],
+  "skills": [],
+  "social": {
+    "instagram": "",
+    "tiktok": "",
+    "facebook": "",
+    "linkedin": "",
+    "twitter": "",
+    "youtube": ""
+  },
+  "payments": {
+    "cashapp": "",
+    "venmo": "",
+    "paypal": "",
+    "zelle": ""
+  },
+  "paymentSectionLabel": "Payment",
+  "notes": "",
+  "phones": [
+    {
+      "type": "Work",
+      "number": "(919) 679-1002"
+    }
+  ],
+  "emails": [],
+  "websites": [
+    {
+      "label": "Verdigris Restaurant",
+      "url": "https://www.instagram.com/verdigris_restaurant/"
+    },
+    {
+      "label": "Verdigris Restaurant",
+      "url": "https://verdigrisnc.com/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAcGRvZgJleHRuA2FlbQIxMQBzcnRjBmFwcF9pZA85MzY2MTk3NDMzOTI0NTkAAae7FTKsmEZ3FqCvDB6XYe5Dv49UNzk8lIuRpk13wjv9IKvst_l2PTLfmve1yA_aem_rdauYhADPflqg3HpTemgLw"
+    },
+    {
+      "label": "Oxford Oaks Distillery",
+      "url": "https://oxfordoaksdistillery.com/?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAcGRvZgJleHRuA2FlbQIxMQBzcnRjBmFwcF9pZA85MzY2MTk3NDMzOTI0NTkAAaduP-NVCxWWqsxP4xz-NsUioScPAJ5WHq8ODBdV1kxepIZ8cr1Pk-NBTBxObg_aem_EipmM4zbMMaWMB6UhawUbw"
+    },
+    {
+      "label": "Order Here",
+      "url": "https://verdigrisnc.com/menu?dialogState=orderDetails"
+    }
+  ],
+  "gallery": [
+    {
+      "photo": "photo1.jpg",
+      "caption": "Presentation"
+    },
+    {
+      "photo": "photo2.jpg",
+      "caption": "Delicious Steak"
+    },
+    {
+      "photo": "photo3.jpg",
+      "caption": "Bacon Burger"
+    }
+  ],
+  "listings": [],
+  "calendlyUrl": "",
+  "bookingLabel": "Book a Time",
+  "address": "127 College Street Oxford North Carolina 27565",
+  "photoFile": "photo.jpg",
+  "accessToken": "4rved7an",
+  "brand": "",
+  "showQR": true
+}
