@@ -369,8 +369,8 @@
   });
 
   // Set this to your own email address before sending this form out.
-  const RECIPIENT_EMAIL = "BlackHatToday+BHCC@Gmail.com";
-  const RECIPIENT_PHONE = "12524337173";
+  const RECIPIENT_EMAIL = "BlackHatToday@Gmail.com";
+  const RECIPIENT_PHONE = "19195947639";
 
   function formatAsText(d) {
     const lines = [];
@@ -405,7 +405,7 @@
     if (d.bookingUrl) lines.push(`\nBooking link: ${d.bookingUrl}`);
 
     lines.push('\n---\nRemember to attach the property photos (and your own photo, if you\'d like it on the card) to this email!');
-    lines.push('\nPayment Options:\nCash App: $BlackHatToday\nZelle: 252.433.7173');
+    if (tokenStatus === 'none') lines.push('\nPayment Options:\nCash App: $BlackHatToday\nZelle: 252.433.7173');
     return lines.join('\n');
   }
 
@@ -430,14 +430,22 @@
     showSendChoiceAgain();
   });
 
+  // Same subject-line logic as my-contact-info-form.html, adapted for a
+  // listing's address instead of a person's name — no tier/timing choices
+  // here, since those are specific to person-card pricing, not listings.
+  function buildSubjectLine(identifier) {
+    const kind = tokenStatus === 'none' ? 'New Listing Request' : 'Support / Update';
+    const verifiedTag = tokenStatus === 'verified' ? '[Verified] ' : tokenStatus === 'unverified' ? '[UNVERIFIED] ' : '';
+    return `${verifiedTag}${kind} — ${identifier} (BHCC)`;
+  }
+
   document.getElementById('emailBtn').addEventListener('click', () => {
     const data = collectData();
     if (!data.address) {
       document.getElementById('statusEl').textContent = 'Please enter at least the property address.';
       return;
     }
-    const subjectPrefix = tokenStatus === 'verified' ? '[Verified] ' : tokenStatus === 'unverified' ? '[UNVERIFIED] ' : '';
-    const subject = encodeURIComponent(`${subjectPrefix}Contact / Support — ${data.address}`);
+    const subject = encodeURIComponent(buildSubjectLine(data.address));
     const body = encodeURIComponent(formatAsText(data));
     window.location.href = `mailto:${RECIPIENT_EMAIL}?subject=${subject}&body=${body}`;
     showConfirmPanel();
@@ -449,8 +457,7 @@
       document.getElementById('statusEl').textContent = 'Please enter at least the property address.';
       return;
     }
-    const subjectPrefix = tokenStatus === 'verified' ? '[Verified] ' : tokenStatus === 'unverified' ? '[UNVERIFIED] ' : '';
-    const body = encodeURIComponent(`${subjectPrefix}Contact / Support — ${data.address}\n\n${formatAsText(data)}`);
+    const body = encodeURIComponent(`${buildSubjectLine(data.address)}\n\n${formatAsText(data)}`);
     const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
     const separator = isIOS ? '&' : '?';
     window.location.href = `sms:${RECIPIENT_PHONE}${separator}body=${body}`;

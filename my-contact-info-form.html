@@ -775,7 +775,7 @@
     if (d.notes) lines.push(`\nNotes:\n${d.notes}`);
 
     lines.push('\n---\nRemember to attach a photo to this email if you\'d like one on your card!');
-    lines.push('\nPayment Options:\nCash App: $BlackHatToday\nZelle: 252.433.7173');
+    if (tokenStatus === 'none') lines.push('\nPayment Options:\nCash App: $BlackHatToday\nZelle: 252.433.7173');
     return lines.join('\n');
   }
 
