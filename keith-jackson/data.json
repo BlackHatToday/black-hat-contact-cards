@@ -11,7 +11,7 @@
   "social": {
     "instagram": "",
     "tiktok": "",
-    "facebook": "",
+    "facebook": "mountzionuhc",
     "linkedin": "",
     "twitter": "",
     "youtube": ""
@@ -31,12 +31,44 @@
     }
   ],
   "emails": [],
-  "websites": [],
+  "websites": [
+    {
+      "label": "Mt Zion UHC",
+      "url": "https://www.mountzionuhc.com/"
+    },
+    {
+      "label": "Our YouTube",
+      "url": "https://www.youtube.com/c/MountZionUHCOxfordNC"
+    },
+    {
+      "label": "Mt Zion Podcasts",
+      "url": "https://www.mountzionuhc.com/podcasts"
+    },
+    {
+      "label": "Walking With The Wounded",
+      "url": "https://www.amazon.com/Walking-Wounded-Faithfully-Loving-Those-ebook/dp/B0HD677BF1/ref=tmm_kin_swatch_0"
+    }
+  ],
+  "gallery": [
+    {
+      "photo": "photo1.jpg",
+      "caption": "Mt Zion Books & Resources"
+    },
+    {
+      "photo": "photo2.jpg",
+      "caption": "Walking With The Wounded"
+    },
+    {
+      "photo": "photo3.jpg",
+      "caption": "First Lady Day"
+    }
+  ],
   "listings": [],
   "calendlyUrl": "",
   "bookingLabel": "Book a Time",
   "address": "209 Orange Street  Oxford  NC  27565",
   "photoFile": "photo.jpg",
   "accessToken": "6h8etycb",
+  "brand": "",
   "showQR": true
 }
