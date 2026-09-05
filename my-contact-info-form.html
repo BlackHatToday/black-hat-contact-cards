@@ -271,7 +271,7 @@
 
   <div id="formSection" style="display:none;">
   <h1>My Contact Info</h1>
-  <p class="sub">Fill in whatever applies to you (skip anything you don't want on your card), then choose Text or Email at the bottom to send it over.</p>
+  <p class="sub">Fill in whatever applies to you (skip anything you don't want on your card), then email it to me at the bottom.</p>
 
   <form id="cardForm">
 
@@ -295,7 +295,7 @@
       </div>
       <label>Tagline (optional — a short line under your name)</label>
       <input type="text" id="tagline" placeholder="Brand strategy · Storytelling · Growth">
-      <div class="hint-photo">📎 Want a profile photo, or a few gallery photos with captions? Choose <b>Email It</b> below (not Text It) and attach them after you hit send — mention any captions in the Message field above.</div>
+      <div class="hint-photo">📎 Want a profile photo, or a few gallery photos with captions? Attach them after you hit send below — mention any captions in the Message field above.</div>
     </fieldset>
 
     <fieldset>
@@ -417,19 +417,14 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 6 12 13 2 6"/><path d="M2 6h20v12H2z"/></svg>
       Email It
     </button>
-    <button type="button" class="btn-primary" id="textBtn">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      Text It
-    </button>
   </div>
   <p class="status" id="statusEl"></p>
 
   <div class="confirm-panel" id="confirmPanel">
     <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
     <h2>You're All Set!</h2>
-    <p>Your info is ready to send in the app that just opened — go ahead and hit send there if it hasn't already gone out.</p>
+    <p>Your info is ready to send in the email app that just opened — go ahead and hit send there if it hasn't already gone out.</p>
     <p>Once it comes through, I'll reply within a day or two with your mailing address request and next steps. Your card typically ships within 7-10 days after that.</p>
-    <p class="muted">Didn't see an app open? <a href="#" id="tryOtherWay" style="color:var(--copper-soft);">Try the other option</a> instead.</p>
   </div>
 
   </div>
@@ -701,7 +696,6 @@
 
   // Set this to your own email address before sending this form to friends.
   const RECIPIENT_EMAIL = "BlackHatToday@Gmail.com";
-  const RECIPIENT_PHONE = "19195947639";
 
   function formatAsText(d) {
     const lines = [];
@@ -898,18 +892,6 @@
     document.getElementById('confirmPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  function showSendChoiceAgain() {
-    document.getElementById('actionsArea').style.display = 'flex';
-    document.getElementById('sendChoice').style.display = 'flex';
-    document.getElementById('cardForm').style.display = 'block';
-    document.getElementById('confirmPanel').style.display = 'none';
-  }
-
-  document.getElementById('tryOtherWay').addEventListener('click', (e) => {
-    e.preventDefault();
-    showSendChoiceAgain();
-  });
-
   function updatePaymentReveal() {
     const reveal = document.getElementById('paymentReveal');
     const hint = document.getElementById('paymentRevealHint');
@@ -990,17 +972,6 @@
     const subject = encodeURIComponent(buildSubjectLine(name));
     const body = encodeURIComponent(formatAsText(data));
     window.location.href = `mailto:${RECIPIENT_EMAIL}?subject=${subject}&body=${body}`;
-    showConfirmPanel();
-  });
-
-  document.getElementById('textBtn').addEventListener('click', () => {
-    const data = collectData();
-    if (!validateBeforeSend(data)) return;
-    const name = `${data.firstName} ${data.lastName}`;
-    const body = encodeURIComponent(`${buildSubjectLine(name)}\n\n${formatAsText(data)}`);
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    const separator = isIOS ? '&' : '?';
-    window.location.href = `sms:${RECIPIENT_PHONE}${separator}body=${body}`;
     showConfirmPanel();
   });
 </script>

@@ -161,7 +161,7 @@
 
 <div class="wrap">
   <h1>Listing Info</h1>
-  <p class="sub">Fill in the details for this property, then choose Text or Email at the bottom to send it over.</p>
+  <p class="sub">Fill in the details for this property, then email it to me at the bottom.</p>
 
   <form id="listingForm">
 
@@ -217,10 +217,6 @@
     <button type="button" class="btn-secondary" id="previewBtn">Preview Card</button>
   </div>
   <div class="send-choice" id="sendChoice" style="margin-top:10px;">
-    <button type="button" class="btn-primary" id="textBtn">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      Text It
-    </button>
     <button type="button" class="btn-primary" id="emailBtn">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 6 12 13 2 6"/><path d="M2 6h20v12H2z"/></svg>
       Email It
@@ -231,9 +227,8 @@
   <div class="confirm-panel" id="confirmPanel">
     <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
     <h2>You're All Set!</h2>
-    <p>This listing's info is ready to send in the app that just opened — go ahead and hit send there if it hasn't already gone out.</p>
+    <p>This listing's info is ready to send in the email app that just opened — go ahead and hit send there if it hasn't already gone out.</p>
     <p>Once it comes through, I'll get the card built and reply with next steps.</p>
-    <p class="muted">Didn't see an app open? <a href="#" id="tryOtherWay" style="color:var(--copper-soft);">Try the other option</a> instead.</p>
   </div>
 
   <div class="brand-line">Adette &amp; Bo LLC</div>
@@ -370,7 +365,6 @@
 
   // Set this to your own email address before sending this form out.
   const RECIPIENT_EMAIL = "BlackHatToday@Gmail.com";
-  const RECIPIENT_PHONE = "19195947639";
 
   function formatAsText(d) {
     const lines = [];
@@ -418,18 +412,6 @@
     document.getElementById('confirmPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
-  function showSendChoiceAgain() {
-    document.getElementById('actionsArea').style.display = 'flex';
-    document.getElementById('sendChoice').style.display = 'flex';
-    document.getElementById('listingForm').style.display = 'block';
-    document.getElementById('confirmPanel').style.display = 'none';
-  }
-
-  document.getElementById('tryOtherWay').addEventListener('click', (e) => {
-    e.preventDefault();
-    showSendChoiceAgain();
-  });
-
   // Same subject-line logic as my-contact-info-form.html, adapted for a
   // listing's address instead of a person's name — no tier/timing choices
   // here, since those are specific to person-card pricing, not listings.
@@ -448,19 +430,6 @@
     const subject = encodeURIComponent(buildSubjectLine(data.address));
     const body = encodeURIComponent(formatAsText(data));
     window.location.href = `mailto:${RECIPIENT_EMAIL}?subject=${subject}&body=${body}`;
-    showConfirmPanel();
-  });
-
-  document.getElementById('textBtn').addEventListener('click', () => {
-    const data = collectData();
-    if (!data.address) {
-      document.getElementById('statusEl').textContent = 'Please enter at least the property address.';
-      return;
-    }
-    const body = encodeURIComponent(`${buildSubjectLine(data.address)}\n\n${formatAsText(data)}`);
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-    const separator = isIOS ? '&' : '?';
-    window.location.href = `sms:${RECIPIENT_PHONE}${separator}body=${body}`;
     showConfirmPanel();
   });
 </script>
