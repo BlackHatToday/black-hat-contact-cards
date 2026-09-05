@@ -276,6 +276,34 @@
     overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('open'); });
   }
 
+  // Mobile/Cell/Work phone rows are rendered with href="#" and a
+  // data-phone-choice attribute (see renderFields) rather than a direct
+  // tel: link — event delegation on the whole fields list catches clicks
+  // on them since they're rendered dynamically, after this function runs.
+  function wirePhoneChoiceModal() {
+    const overlay = document.getElementById('phoneChoiceModalOverlay');
+    const fieldsEl = document.getElementById('fieldsEl');
+    if (!overlay || !fieldsEl) return;
+    let activeNumber = '';
+    fieldsEl.addEventListener('click', (e) => {
+      const row = e.target.closest('[data-phone-choice]');
+      if (!row) return;
+      e.preventDefault();
+      activeNumber = row.dataset.phoneChoice;
+      overlay.classList.add('open');
+    });
+    document.getElementById('phoneChoiceCallBtn').addEventListener('click', () => {
+      window.location.href = `tel:${activeNumber}`;
+      overlay.classList.remove('open');
+    });
+    document.getElementById('phoneChoiceTextBtn').addEventListener('click', () => {
+      window.location.href = `sms:${activeNumber}`;
+      overlay.classList.remove('open');
+    });
+    document.getElementById('phoneChoiceModalClose').addEventListener('click', () => overlay.classList.remove('open'));
+    overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('open'); });
+  }
+
   function wireDownloadPdf() {
     const btn = document.getElementById('pdfSaveBtn');
     if (!btn) return;
@@ -369,13 +397,25 @@
 
   function renderFields(d) {
     const rows = [];
-    (d.phones || []).forEach(p => rows.push({ icon: 'phone', label: p.type || 'Phone', value: p.number, href: `tel:${String(p.number).replace(/[^+\d]/g, '')}` }));
+    // Mobile, Cell, and Work numbers open a Call-or-Text choice instead of
+    // dialing directly — for these specifically, either action is a
+    // reasonable default, so let the visitor pick in the moment rather
+    // than guessing. Other labels (Home, Other) still dial directly.
+    (d.phones || []).forEach(p => {
+      const cleanNumber = String(p.number).replace(/[^+\d]/g, '');
+      const showChoice = /^(mobile|cell|work)$/i.test((p.type || '').trim());
+      rows.push({
+        icon: 'phone', label: p.type || 'Phone', value: p.number,
+        href: showChoice ? '#' : `tel:${cleanNumber}`,
+        phoneChoice: showChoice ? cleanNumber : ''
+      });
+    });
     (d.emails || []).forEach(e => rows.push({ icon: 'email', label: e.type || 'Email', value: e.address, href: `mailto:${e.address}` }));
     if (d.address) rows.push({ icon: 'location', label: 'Address', value: d.address, href: `https://maps.google.com/?q=${encodeURIComponent(d.address)}` });
     if (d.website) rows.push({ icon: 'website', label: 'Website', value: 'View Site', href: d.website }); // legacy single-website support
     (d.websites || []).forEach(w => rows.push({ icon: 'website', label: w.label || 'Website', value: w.label ? '' : 'View Site', href: w.url }));
     document.getElementById('fieldsEl').innerHTML = rows.map(r => `
-      <a class="field" href="${r.href}" target="_blank" rel="noopener">
+      <a class="field" href="${r.href}" target="_blank" rel="noopener" ${r.phoneChoice ? `data-phone-choice="${r.phoneChoice}"` : ''}>
         <span class="icon">${ICONS[r.icon]}</span>
         <span class="meta"><div class="${r.value ? 'label' : 'value'}">${r.label}</div>${r.value ? `<div class="value">${r.value}</div>` : ''}</span>
       </a>
@@ -823,6 +863,7 @@
     }
 
     wireQrModal();
+    wirePhoneChoiceModal();
     wireGalleryLightbox();
     wireDownloadPdf();
     wirePrintQrOnly();
