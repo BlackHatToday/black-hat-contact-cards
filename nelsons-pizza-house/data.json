@@ -1,0 +1,85 @@
+{
+  "prefix": "",
+  "firstName": "Nelson's",
+  "lastName": "Pizza House",
+  "title": "",
+  "org": "",
+  "tagline": "Bringing Joy, One Slice At A Time!",
+  "about": "Nelson's Pizza House in Oxford is all about bringing joy, one slice at a time. Exceptional pizza, pasta, wings, and subs, crafted with passion and care, in a warm and inviting atmosphere for friends and family.",
+  "experience": [],
+  "skills": [
+    "Dine-In",
+    "Takeout",
+    "Delivery",
+    "Catering",
+    "Parties"
+  ],
+  "social": {
+    "instagram": "nelsons_pizzahouse",
+    "tiktok": "",
+    "facebook": "518688927996125",
+    "linkedin": "",
+    "twitter": "",
+    "youtube": ""
+  },
+  "payments": {
+    "cashapp": "",
+    "venmo": "",
+    "paypal": "",
+    "zelle": ""
+  },
+  "paymentSectionLabel": "Payment",
+  "notes": "Hours: Monday - Sunday, 11 AM - 9 PM.",
+  "phones": [
+    {
+      "type": "Work",
+      "number": "(919) 339-4366"
+    }
+  ],
+  "emails": [
+    {
+      "type": "Work",
+      "address": "joel@planettacogroup.com"
+    }
+  ],
+  "websites": [
+    {
+      "label": "Order Online",
+      "url": "https://www.toasttab.com/local/order/nelson-s-pizza-1011-lewis-street-ste-105/r-d8fbb497-dd52-4df0-881d-3bd6d80e4723?diningOption=takeout"
+    },
+    {
+      "label": "Website",
+      "url": "https://nelsonspizzahouse.com/"
+    }
+  ],
+  "gallery": [
+    {
+      "photo": "photo1.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo2.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo3.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo4.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo5.jpg",
+      "caption": ""
+    }
+  ],
+  "listings": [],
+  "calendlyUrl": "",
+  "bookingLabel": "Book a Time",
+  "address": "1011 Lewis Street Unit 105, Oxford, NC 27565",
+  "photoFile": "photo.jpg",
+  "accessToken": "ue9vv9ts",
+  "brand": "biz-nelsons-pizza-house",
+  "showQR": true
+}
