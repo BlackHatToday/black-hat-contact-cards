@@ -5,7 +5,7 @@
   "title": "",
   "org": "",
   "tagline": "Sunday Worship Service at 11:15 AM",
-  "about": "Wednesday Bible Study Conference Call @ 7 PM, Dial (520) 537-5038",
+  "about": "We believe that the Bible is the word of God, given by inspiration through holy men, and that it is the revelation of God's will to mankind, and that the scriptures are without error.",
   "experience": [],
   "skills": [],
   "social": {
@@ -23,7 +23,7 @@
     "zelle": ""
   },
   "paymentSectionLabel": "Payment",
-  "notes": "Join us for Worship   *   Sundays @ 11:15 AM\n\nWednesday Bible Study Conference Call @ 7 PM\nDial (520) 537-5038",
+  "notes": "Wednesday Bible Study Conference Call @ 7 PM, Dial (520) 537-5038",
   "phones": [
     {
       "type": "Work Landline",
@@ -37,12 +37,16 @@
   "emails": [],
   "websites": [
     {
-      "label": "Our Cyber Home",
-      "url": "https://www.mountzionuhc.com/"
+      "label": "Our Pastor",
+      "url": "https://www.mountzionuhc.com/our-pastor"
     },
     {
       "label": "What We Believe",
       "url": "https://www.mountzionuhc.com/what-we-believe"
+    },
+    {
+      "label": "Our Cyber Home",
+      "url": "https://www.mountzionuhc.com/"
     },
     {
       "label": "YouVersion Bible App",
