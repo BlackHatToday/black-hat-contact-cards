@@ -148,6 +148,14 @@
     <input type="file" id="loadFileInput" accept="application/json" style="display: none;">
   </div>
 
+  <div style="background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin-bottom: 18px; display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+    <div>
+      <div style="font-family:'Space Grotesk', sans-serif; font-weight: 600; font-size: 13.5px;">Starting a brand new business or person?</div>
+      <div class="hint" style="margin-top: 3px;">Clears every field below back to the defaults, so you're not editing leftover colors from whoever you built last.</div>
+    </div>
+    <button type="button" class="btn-secondary" id="newBrandBtn" style="white-space: nowrap;">New Brand</button>
+  </div>
+
   <form id="brandForm">
 
     <fieldset>
@@ -556,7 +564,7 @@
     }
   });
 
-  document.getElementById('resetBtn').addEventListener('click', () => {
+  function resetBrandForm() {
     currentFileHandle = null;
     document.getElementById('saveBtn').style.display = 'none';
     setVal('businessName', '');
@@ -575,7 +583,10 @@
     accentSoftAutoFilled = true;
     updatePreview();
     document.getElementById('statusEl').textContent = 'Reset to default colors — nothing saved yet.';
-  });
+  }
+
+  document.getElementById('resetBtn').addEventListener('click', resetBrandForm);
+  document.getElementById('newBrandBtn').addEventListener('click', resetBrandForm);
 
   updatePreview();
 </script>
