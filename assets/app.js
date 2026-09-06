@@ -131,11 +131,14 @@
     document.getElementById('skillsSection').style.display = 'block';
   }
 
+  let galleryItems = []; // shared with the lightbox below, so next/prev has something to navigate
+
   function renderGallery(d) {
     const items = (d.gallery || []).filter(g => g.photo).slice(0, 10); // hard cap at 10, even if more sneak into the data
     if (!items.length) return;
-    document.getElementById('galleryGrid').innerHTML = items.map(g => `
-      <a href="#" class="gallery-item" data-photo="${resolveAsset(g.photo)}" data-caption="${g.caption || ''}">
+    galleryItems = items;
+    document.getElementById('galleryGrid').innerHTML = items.map((g, i) => `
+      <a href="#" class="gallery-item" data-index="${i}">
         <img src="${resolveAsset(g.photo)}" alt="${g.caption || 'Photo'}" loading="lazy">
         ${g.caption ? `<div class="gallery-caption">${g.caption}</div>` : ''}
       </a>
@@ -145,20 +148,57 @@
 
   // Tapping a Gallery thumbnail opens it full-screen in an in-page
   // overlay rather than a new tab — see the matching CSS comment for why.
+  // Once open, swiping (touch) or the arrow buttons (any input) move
+  // between photos without closing back out to the grid each time.
   function wireGalleryLightbox() {
     const overlay = document.getElementById('galleryLightbox');
     const grid = document.getElementById('galleryGrid');
     if (!overlay || !grid) return;
+    let currentIndex = 0;
+
+    function showLightboxItem(index) {
+      // Wraps at both ends — past the last photo goes back to the first,
+      // and back past the first goes to the last, so there's no dead end
+      // in either swipe direction.
+      currentIndex = (index + galleryItems.length) % galleryItems.length;
+      const item = galleryItems[currentIndex];
+      document.getElementById('galleryLightboxImg').src = resolveAsset(item.photo);
+      document.getElementById('galleryLightboxCaption').textContent = item.caption || '';
+    }
+
     grid.addEventListener('click', (e) => {
       const item = e.target.closest('.gallery-item');
       if (!item) return;
       e.preventDefault();
-      document.getElementById('galleryLightboxImg').src = item.dataset.photo;
-      document.getElementById('galleryLightboxCaption').textContent = item.dataset.caption || '';
+      showLightboxItem(parseInt(item.dataset.index, 10));
       overlay.classList.add('open');
     });
     document.getElementById('galleryLightboxClose').addEventListener('click', () => overlay.classList.remove('open'));
     overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('open'); });
+
+    document.getElementById('galleryLightboxPrev').addEventListener('click', (e) => {
+      e.stopPropagation();
+      showLightboxItem(currentIndex - 1);
+    });
+    document.getElementById('galleryLightboxNext').addEventListener('click', (e) => {
+      e.stopPropagation();
+      showLightboxItem(currentIndex + 1);
+    });
+
+    // Swipe support — a left swipe advances (next), a right swipe goes
+    // back (prev), matching the direction you'd expect from flipping
+    // through photos. Small, accidental movements (under 40px) don't
+    // trigger navigation, so a light tap-and-drift doesn't skip a photo.
+    let touchStartX = null;
+    overlay.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].clientX; }, { passive: true });
+    overlay.addEventListener('touchend', (e) => {
+      if (touchStartX === null) return;
+      const deltaX = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(deltaX) > 40) {
+        showLightboxItem(deltaX < 0 ? currentIndex + 1 : currentIndex - 1);
+      }
+      touchStartX = null;
+    }, { passive: true });
   }
 
   function renderSocial(d) {

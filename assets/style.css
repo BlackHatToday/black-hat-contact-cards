@@ -155,6 +155,17 @@ section{ padding: 0 28px; margin-top: 8px; }
   display:flex; align-items:center; justify-content:center;
 }
 .lightbox-close:hover{ border-color:var(--copper); color:var(--copper); }
+
+.lightbox-arrow{
+  position:absolute; top:50%; transform:translateY(-50%);
+  background:var(--surface); border:1px solid var(--line);
+  color:var(--parchment); width:44px; height:44px; border-radius:50%; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+}
+.lightbox-arrow svg{ width:20px; height:20px; }
+.lightbox-arrow:hover{ border-color:var(--copper); color:var(--copper); }
+.lightbox-arrow-prev{ left:16px; }
+.lightbox-arrow-next{ right:16px; }
 .qr-modal{
   background:var(--surface); border:1px solid var(--line); border-radius:16px;
   padding:28px 24px; text-align:center; max-width:260px; width:100%;
