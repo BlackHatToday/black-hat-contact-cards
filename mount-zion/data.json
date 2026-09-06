@@ -1,0 +1,69 @@
+{
+  "prefix": "",
+  "firstName": "Mount",
+  "lastName": "Zion",
+  "title": "",
+  "org": "",
+  "tagline": "Sunday Worship Service at 11:15 AM",
+  "about": "",
+  "experience": [],
+  "skills": [],
+  "social": {
+    "instagram": "",
+    "tiktok": "",
+    "facebook": "mountzionuhc",
+    "linkedin": "",
+    "twitter": "",
+    "youtube": "MountZionUHCOxfordNC"
+  },
+  "payments": {
+    "cashapp": "$ZionOX",
+    "venmo": "",
+    "paypal": "",
+    "zelle": ""
+  },
+  "paymentSectionLabel": "Payment",
+  "notes": "Join us for Worship   *   Sundays @ 11:15 AM\nWednesday Bible Study Conference Call @ 7 PM\nDial (520) 537-5038",
+  "phones": [
+    {
+      "type": "Work Landline",
+      "number": "(919) 603-0355"
+    },
+    {
+      "type": "Other",
+      "number": "(520) 537-5038"
+    }
+  ],
+  "emails": [],
+  "websites": [
+    {
+      "label": "Our Cyber Home",
+      "url": "https://www.mountzionuhc.com/"
+    },
+    {
+      "label": "What We Believe",
+      "url": "https://www.mountzionuhc.com/what-we-believe"
+    },
+    {
+      "label": "YouVersion Bible App",
+      "url": "https://www.bible.com/organizations/0eb7a007-bc33-4da2-89a1-46d1ab25e51c"
+    },
+    {
+      "label": "Calendar",
+      "url": "https://www.mountzionuhc.com/calendar"
+    },
+    {
+      "label": "Prayer Requests",
+      "url": "https://www.mountzionuhc.com/content.cfm?id=268"
+    }
+  ],
+  "gallery": [],
+  "listings": [],
+  "calendlyUrl": "",
+  "bookingLabel": "Book a Time",
+  "address": "209 Orange Street, Oxford, NC 27565",
+  "photoFile": "photo.jpg",
+  "accessToken": "wi9fy9td",
+  "brand": "biz-mount-zion",
+  "showQR": true
+}
