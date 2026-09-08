@@ -1,0 +1,39 @@
+{
+  "prefix": "",
+  "firstName": "Daniel",
+  "lastName": "Badger",
+  "title": "Marketing Director",
+  "org": "DanBadg Growth Guide",
+  "tagline": "",
+  "about": "",
+  "experience": [],
+  "skills": [],
+  "social": {
+    "instagram": "",
+    "tiktok": "",
+    "facebook": "",
+    "linkedin": "",
+    "twitter": "",
+    "youtube": ""
+  },
+  "payments": {
+    "cashapp": "",
+    "venmo": "",
+    "paypal": "",
+    "zelle": ""
+  },
+  "paymentSectionLabel": "Payment",
+  "notes": "",
+  "phones": [],
+  "emails": [],
+  "websites": [],
+  "gallery": [],
+  "listings": [],
+  "calendlyUrl": "",
+  "bookingLabel": "Book a Time",
+  "address": "",
+  "photoFile": "photo.jpg",
+  "accessToken": "4psicjar",
+  "brand": "",
+  "showQR": true
+}
