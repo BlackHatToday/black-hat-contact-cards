@@ -3,5 +3,6 @@
   "brandSlug": "bkirk-royster",
   "accent": "#b8763f",
   "accentSoft": "#c98549",
-  "font": "luxury"
+  "background": "#000000",
+  "font": "editorial"
 }

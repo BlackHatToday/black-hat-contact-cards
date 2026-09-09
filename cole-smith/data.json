@@ -5,7 +5,7 @@
   "title": "Owner",
   "org": "Omega Appliance Repair",
   "tagline": "Veteran-Owned Appliance Repair",
-  "about": "Cole Smith, owner of Omega Appliance Repair \u2014 expert repair and installation for ovens, refrigerators, washers, and more, working with most major brands. Serving a wide area across north-central North Carolina and southern Virginia. Veteran-owned, with a 10% discount for Veterans and First Responders.",
+  "about": "Cole Smith, owner of Omega Appliance Repair — expert repair and installation for ovens, refrigerators, washers, and more, working with most major brands. Serving a wide area across north-central North Carolina and southern Virginia. Veteran-owned, with a 10% discount for Veterans and First Responders.",
   "experience": [],
   "skills": [
     "Kitchen Appliance Repair",
@@ -13,10 +13,21 @@
     "Specialized Appliance Repair",
     "Installations"
   ],
-  "social": {},
-  "payments": {},
+  "social": {
+    "instagram": "",
+    "tiktok": "",
+    "facebook": "",
+    "linkedin": "",
+    "twitter": "",
+    "youtube": ""
+  },
+  "payments": {
+    "cashapp": "",
+    "venmo": "",
+    "paypal": "",
+    "zelle": ""
+  },
   "paymentSectionLabel": "Payment",
-  "listings": [],
   "notes": "Hours: Mon-Sat 9:00am-5:00pm, closed Sunday. License #87909FFC919D7LLN1.",
   "phones": [
     {
@@ -44,6 +55,8 @@
       "url": "https://www.bbb.org/us/nc/henderson/profile/appliance-repair/omega-appliance-repair-and-home-services-llc-0593-90330359"
     }
   ],
+  "gallery": [],
+  "listings": [],
   "calendlyUrl": "",
   "bookingLabel": "Book a Time",
   "address": "",

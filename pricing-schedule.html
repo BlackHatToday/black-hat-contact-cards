@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pricing Schedule</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --navy:#16283f; --navy-2:#1e3a5a;
+    --blue-bright:#6db1ea; --blue-soft:#a9cdec;
+    --off-white:#f6f3ea; --muted:#8b93a1; --line:#2e3a4d;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  body{
+    background: radial-gradient(circle at 50% 0%, var(--navy-2) 0%, var(--navy) 60%);
+    color: var(--off-white); font-family:'IBM Plex Sans', sans-serif;
+    padding: 40px 28px;
+  }
+  .sheet{ max-width: 640px; margin: 0 auto; }
+
+  header{ text-align:center; margin-bottom: 30px; }
+  .kicker{
+    font-family:'IBM Plex Mono', monospace; font-size: 11.5px; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--blue-bright); margin-bottom: 10px;
+  }
+  h1{ font-family:'Space Grotesk', sans-serif; font-weight: 700; font-size: 27px; }
+  .sub{ color: var(--muted); font-size: 14px; margin-top: 8px; max-width: 480px; margin-left:auto; margin-right:auto; }
+
+  .section{
+    background: rgba(109,177,234,0.05); border: 1px solid var(--line); border-radius: 16px;
+    padding: 22px 24px; margin-bottom: 16px;
+  }
+  .section h2{ font-family:'Space Grotesk', sans-serif; font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+  .section .tagline{ color: var(--blue-soft); font-size: 12.5px; margin-bottom: 14px; }
+
+  .price-row{
+    display:flex; justify-content:space-between; align-items:baseline;
+    padding: 10px 0; border-bottom: 1px solid var(--line);
+  }
+  .price-row:last-child{ border-bottom:none; }
+  .price-row .label{ font-size: 13.5px; }
+  .price-row .price{ font-family:'Space Grotesk', sans-serif; font-weight: 700; font-size: 17px; color: var(--blue-bright); white-space:nowrap; }
+
+  .section ul{ list-style:none; margin-top: 10px; }
+  .section li{
+    font-size: 13px; line-height: 1.6; padding-left: 20px; position:relative; margin-bottom: 6px;
+  }
+  .section li::before{ content:'→'; position:absolute; left:0; color: var(--blue-bright); }
+
+  .why-box{
+    background: rgba(109,177,234,0.08); border-left: 3px solid var(--blue-bright);
+    border-radius: 8px; padding: 12px 14px; margin-top: 12px; font-size: 12.5px; line-height: 1.6; color: var(--off-white);
+  }
+  .why-box b{ color: var(--blue-soft); }
+
+  footer{
+    text-align:center; margin-top: 26px; padding-top: 20px; border-top: 1px solid var(--line);
+  }
+  .footer-note{ color: var(--muted); font-size: 12px; }
+
+  @media print{
+    body{
+      background: #f6f3ea; color: #2b2620; padding: 20px;
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+    .kicker{ color: #9c6535; }
+    .sub{ color: #6b6259; }
+    .section{ background: #fdfcf8; border-color: #ddd4c4; }
+    .section .tagline{ color: #9c6535; }
+    .price-row{ border-color: #ddd4c4; }
+    .price-row .price{ color: #9c6535; }
+    .section li::before{ color: #b8763f; }
+    .why-box{ background: rgba(184,118,63,0.08); border-color: #b8763f; color: #2b2620; }
+    .why-box b{ color: #9c6535; }
+    footer{ border-color: #ddd4c4; }
+    .footer-note{ color: #6b6259; }
+    @page{ size: letter; margin: 0.5in; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sheet">
+  <header>
+    <div class="kicker">Black Hat Community</div>
+    <h1>Pricing Schedule</h1>
+    <p class="sub">Straightforward pricing for the card itself, plus an optional path for anyone who knows they'll need frequent updates.</p>
+  </header>
+
+  <div class="section">
+    <h2>The Card</h2>
+    <div class="tagline">One-time purchase, yours to keep</div>
+    <div class="price-row"><span class="label">Personal Card</span><span class="price">$25</span></div>
+    <div class="price-row"><span class="label">Business Card</span><span class="price">$50</span></div>
+    <ul>
+      <li>Includes 2 free updates — plenty for the occasional new phone number or job title</li>
+      <li>No expiration, no recurring cost, works for as long as you want it to</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Ongoing Support (Optional)</h2>
+    <div class="tagline">For anyone who knows they'll be back often</div>
+    <div class="price-row"><span class="label">Personal — per year</span><span class="price">$15/yr</span></div>
+    <div class="price-row"><span class="label">Business — per year</span><span class="price">$30/yr</span></div>
+    <ul>
+      <li>Unlimited updates for the year — no counting, no per-change cost</li>
+      <li>Built with realtors in mind, whose listings genuinely change often — but open to anyone who'd rather not think about it</li>
+    </ul>
+    <div class="why-box"><b>Why this exists:</b> most personal and small-business cards barely change after setup. A few people — realtors especially — update constantly, and that's a genuinely different kind of relationship with the card. This tier exists for that difference, not to upsell everyone.</div>
+  </div>
+
+  <div class="section">
+    <h2>Pay-As-You-Go</h2>
+    <div class="tagline">For anyone past their 2 free updates, without a subscription</div>
+    <div class="price-row"><span class="label">Per update</span><span class="price">$5</span></div>
+    <ul>
+      <li>No commitment — pay only when you actually need a change</li>
+      <li>If you're updating more than 3 times a year, the annual subscription is the better deal</li>
+    </ul>
+  </div>
+
+  <footer>
+    <div class="footer-note">Questions about which option fits you? Just ask.</div>
+  </footer>
+</div>
+
+</body>
+</html>
