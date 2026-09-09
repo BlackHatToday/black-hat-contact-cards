@@ -2,16 +2,16 @@
   "prefix": "",
   "firstName": "Nancy",
   "lastName": "Manning",
-  "title": "",
-  "org": "",
-  "tagline": "",
+  "title": "Empowerment Speaker  *  Transformation Coach",
+  "org": "Elevate 360°",
+  "tagline": "Health,Mindset,Purpose,Legacy",
   "about": "",
   "experience": [],
   "skills": [],
   "social": {
-    "instagram": "",
+    "instagram": "nancy_empowers",
     "tiktok": "",
-    "facebook": "",
+    "facebook": "nancysempowers",
     "linkedin": "",
     "twitter": "",
     "youtube": ""
@@ -23,11 +23,58 @@
     "zelle": ""
   },
   "paymentSectionLabel": "Payment",
-  "notes": "",
-  "phones": [],
-  "emails": [],
+  "notes": "Co-Owner of Elevate360 Hybrid Personal Training Studio | Empowerment Speaker | Transformation Coach",
+  "phones": [
+    {
+      "type": "Work",
+      "number": "(864) 908-4526"
+    }
+  ],
+  "emails": [
+    {
+      "type": "Work",
+      "address": "nancy@elevate360now.com"
+    }
+  ],
   "websites": [],
-  "gallery": [],
+  "gallery": [
+    {
+      "photo": "photo1.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo2.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo3.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo4.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo5.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo6.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo7.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo8.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo9.jpg",
+      "caption": ""
+    }
+  ],
   "listings": [],
   "calendlyUrl": "",
   "bookingLabel": "Book a Time",
