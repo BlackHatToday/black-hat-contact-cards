@@ -2,5 +2,6 @@
   "businessName": "Nelson's Pizza House",
   "brandSlug": "biz-nelsons-pizza-house",
   "accent": "#c0392b",
-  "accentSoft": "#d35d4f"
+  "accentSoft": "#d35d4f",
+  "background": "#000000"
 }
