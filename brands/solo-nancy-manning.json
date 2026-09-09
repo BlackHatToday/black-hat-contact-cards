@@ -1,7 +1,8 @@
 {
-  "businessName": "nancy-manning",
+  "businessName": "Nancy Manning",
   "brandSlug": "solo-nancy-manning",
-  "accent": "#b286f3",
-  "accentSoft": "#f4d7f9",
+  "accent": "#ecc55b",
+  "accentSoft": "#c7b9d5",
+  "background": "#000000",
   "font": "editorial"
 }
