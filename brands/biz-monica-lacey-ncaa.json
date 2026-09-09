@@ -1,7 +1,8 @@
 {
   "businessName": "Monica Lacey NCAA",
   "brandSlug": "biz-monica-lacey-ncaa",
-  "accent": "#5c7bf5",
-  "accentSoft": "#000000",
-  "background": "#ffffff"
+  "accent": "#fb8423",
+  "accentSoft": "#050200",
+  "background": "#0077C9",
+  "font": "traditional"
 }
