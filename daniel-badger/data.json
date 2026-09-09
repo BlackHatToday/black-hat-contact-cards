@@ -24,14 +24,24 @@
   },
   "paymentSectionLabel": "Payment",
   "notes": "",
-  "phones": [],
-  "emails": [],
+  "phones": [
+    {
+      "type": "Mobile",
+      "number": "(302) 981-2148"
+    }
+  ],
+  "emails": [
+    {
+      "type": "Personal",
+      "address": "Badgerenator@gmail.com"
+    }
+  ],
   "websites": [],
   "gallery": [],
   "listings": [],
   "calendlyUrl": "",
   "bookingLabel": "Book a Time",
-  "address": "",
+  "address": "13 Saint Regis Drive, Newark DE, 19711",
   "photoFile": "photo.jpg",
   "accessToken": "4psicjar",
   "brand": "biz-daniel-badger",
