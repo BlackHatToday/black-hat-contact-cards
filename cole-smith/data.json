@@ -55,7 +55,12 @@
       "url": "https://www.bbb.org/us/nc/henderson/profile/appliance-repair/omega-appliance-repair-and-home-services-llc-0593-90330359"
     }
   ],
-  "gallery": [],
+  "gallery": [
+    {
+      "photo": "photo1.jpg",
+      "caption": ""
+    }
+  ],
   "listings": [],
   "calendlyUrl": "",
   "bookingLabel": "Book a Time",
