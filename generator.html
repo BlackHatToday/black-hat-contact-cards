@@ -333,6 +333,15 @@
     </fieldset>
 
     <fieldset>
+      <legend>Realtor Card</legend>
+      <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+        <input type="checkbox" id="isRealtor" style="width:auto;">
+        <span>This is a realtor's card</span>
+      </label>
+      <div class="hint">Changes what Refer a Friend sends — a realtor's card shares the realtor pricing schedule instead of the general intake form, since a referred realtor is usually in an information-gathering moment, not a ready-to-sign-up one.</div>
+    </fieldset>
+
+    <fieldset>
       <legend>Property Listings (optional — up to 5)</legend>
       <div id="listingsList"></div>
       <button type="button" class="add-btn" id="addListing">+ Add a listing</button>
@@ -786,6 +795,7 @@
       websites,
       gallery,
       listings,
+      isRealtor: document.getElementById('isRealtor').checked,
       calendlyUrl: document.getElementById('calendlyUrl').value,
       bookingLabel: document.getElementById('bookingLabel').value || 'Book a Time',
       address: document.getElementById('address').value,
@@ -988,6 +998,7 @@
     setVal('tagline', d.tagline);
     setVal('about', d.about);
     setVal('notes', d.notes);
+    document.getElementById('isRealtor').checked = !!d.isRealtor;
     setVal('calendlyUrl', d.calendlyUrl);
     setVal('bookingLabel', d.bookingLabel || 'Book a Time');
     setVal('address', d.address);
@@ -1103,6 +1114,7 @@
     ['instagram', 'tiktok', 'facebook', 'linkedin', 'twitter', 'youtube'].forEach(p => setVal(`social_${p}`, ''));
     ['cashapp', 'venmo', 'paypal', 'zelle'].forEach(p => setVal(`payment_${p}`, ''));
     document.getElementById('showQR').checked = true;
+    document.getElementById('isRealtor').checked = false;
 
     // Repeatable rows — clear and rebuild to the same starting state as a fresh page load
     document.getElementById('phoneList').innerHTML = '';
