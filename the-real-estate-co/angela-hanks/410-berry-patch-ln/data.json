@@ -1,19 +1,26 @@
 {
   "address": "410 Berry Patch LN, Pittsboro, NC 27312",
   "price": "$1,165,000",
-  "beds": 4,
-  "baths": 4.5,
-  "sqft": 4202,
+  "sqft": "4202",
+  "beds": "4",
+  "baths": "4.5",
   "description": "Privacy is the luxury you'll feel first at 410 Berry Patch Lane. Custom built in 2023 on 1.19 wooded acres in gated Chapel Ridge Estates, this home pairs the freshness of recent construction with the mature trees and settled character of an established neighborhood. Start the day on the screened porch, listening to birdsong and watching for deer in the yard. At sunset, unwind in the included saltwater hot tub as the clouds take on the evening's color. Inside, 11-foot main-floor ceilings and wood beams bring modern farmhouse character to the kitchen, living room, and primary suite. The 4,202-square-foot layout offers four bedrooms and 4.5 baths, including two main-floor suites, plus an oversized bonus room and a large home office upstairs. A three-car garage, whole-house generator, and backing near the fourth tee of Chapel Ridge's championship course round out the property.",
+  "heroPhoto": "hero.jpg",
+  "photos": [
+    "photo1.jpg",
+    "photo2.jpg",
+    "photo3.jpg"
+  ],
   "agentName": "Angela Hanks",
+  "agentPhotoFile": "agent.jpg",
   "agentPhone": "(252) 433-7769",
   "agentEmail": "ahanks@therealestate-co.com",
-  "brand": "biz-the-real-estate-co",
-  "bookingLabel": "Virtual Tour",
   "bookingUrl": "https://my.matterport.com/show/?m=myUqaeA3pKj",
-  "heroPhoto": "hero.jpg",
-  "photos": [],
-  "accessToken": "zmkycd83",
+  "bookingLabel": "Virtual Tour",
+  "listingUrl": "https://therealestate-co.com/listing-detail/1188877421/410-Berry-Patch-LN-Pittsboro-NC",
+  "otherPropertyUrl": "",
+  "otherPropertyLabel": "View Another Listing",
   "showQR": true,
-  "listingUrl": "https://therealestate-co.com/listing-detail/1188877421/410-Berry-Patch-LN-Pittsboro-NC"
+  "accessToken": "zmkycd83",
+  "brand": "biz-the-real-estate-co"
 }
