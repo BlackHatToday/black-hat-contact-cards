@@ -49,16 +49,16 @@
   }
   .section li::before{ content:'→'; position:absolute; left:0; color: var(--blue-bright); }
 
-  .why-box{
-    background: rgba(109,177,234,0.08); border-left: 3px solid var(--blue-bright);
-    border-radius: 8px; padding: 12px 14px; margin-top: 12px; font-size: 12.5px; line-height: 1.6; color: var(--off-white);
-  }
-  .why-box b{ color: var(--blue-soft); }
-
   footer{
     text-align:center; margin-top: 26px; padding-top: 20px; border-top: 1px solid var(--line);
   }
   .footer-note{ color: var(--muted); font-size: 12px; }
+  .cta-btn{
+    display:inline-block; text-decoration:none; margin-top:6px; margin-bottom:16px;
+    padding:14px 28px; background:var(--blue-bright); color:#0e1826;
+    border-radius:12px; font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:14.5px;
+  }
+  .cta-btn:hover{ background:var(--blue-soft); }
 
   @media print{
     body{
@@ -72,10 +72,9 @@
     .price-row{ border-color: #ddd4c4; }
     .price-row .price{ color: #9c6535; }
     .section li::before{ color: #b8763f; }
-    .why-box{ background: rgba(184,118,63,0.08); border-color: #b8763f; color: #2b2620; }
-    .why-box b{ color: #9c6535; }
     footer{ border-color: #ddd4c4; }
     .footer-note{ color: #6b6259; }
+    .cta-btn{ background: #b8763f; color: #f6f3ea; }
     @page{ size: letter; margin: 0.5in; }
   }
 </style>
@@ -86,31 +85,28 @@
   <header>
     <div class="kicker">Black Hat Community</div>
     <h1>Pricing Schedule</h1>
-    <p class="sub">Straightforward pricing for the card itself, plus an optional path for anyone who knows they'll need frequent updates.</p>
+    <p class="sub">Built around how realtors actually use their card — listings that turn over often, and updates that come with the territory.</p>
   </header>
 
   <div class="section">
     <h2>The Card</h2>
     <div class="tagline">One-time purchase, yours to keep</div>
-    <div class="price-row"><span class="label">Personal Card</span><span class="price">$25</span></div>
     <div class="price-row"><span class="label">Business Card</span><span class="price">$50</span></div>
     <ul>
-      <li>Includes 2 free updates — plenty for the occasional new phone number or job title</li>
-      <li>No expiration, no recurring cost, works for as long as you want it to</li>
+      <li>Includes 2 free updates and up to 5 linked listings out of the gate</li>
+      <li>No expiration, no recurring cost — the Realtor Support tier below is entirely optional</li>
     </ul>
   </div>
 
   <div class="section">
-    <h2>Ongoing Support (Optional)</h2>
-    <div class="tagline">For anyone who knows they'll be back often</div>
-    <div class="price-row"><span class="label">Personal — per year</span><span class="price">$15/yr</span></div>
-    <div class="price-row"><span class="label">Business — per year</span><span class="price">$30/yr</span></div>
+    <h2>Realtor Support (Optional)</h2>
+    <div class="tagline">For agents whose listings genuinely change often</div>
+    <div class="price-row"><span class="label">Per quarter</span><span class="price">$50/qtr</span></div>
     <ul>
-      <li>5 updates per quarter (20/year) — enough for regular use without needing to count</li>
+      <li>10 updates per quarter (40/year) — double the standard Business support tier</li>
+      <li>Up to 10 linked listings on your card at once — double the standard 5</li>
       <li>Need more in a given quarter? Extra updates are just $5 each, same as pay-as-you-go</li>
-      <li>Built with realtors in mind, whose listings genuinely change often — but open to anyone who'd rather not think about it</li>
     </ul>
-    <div class="why-box"><b>Why this exists:</b> most personal and small-business cards barely change after setup. A few people — realtors especially — update constantly, and that's a genuinely different kind of relationship with the card. This tier exists for that difference, not to upsell everyone.</div>
   </div>
 
   <div class="section">
@@ -119,11 +115,12 @@
     <div class="price-row"><span class="label">Per update</span><span class="price">$5</span></div>
     <ul>
       <li>No commitment — pay only when you actually need a change</li>
-      <li>If you're updating more than 3 times a year, the annual subscription is the better deal</li>
+      <li>Listings beyond your first 5 require the Realtor Support tier</li>
     </ul>
   </div>
 
   <footer>
+    <a href="/my-contact-info-form.html" class="cta-btn">Ready to get started? Request yours here</a>
     <div class="footer-note">Questions about which option fits you? Just ask.</div>
   </footer>
 </div>

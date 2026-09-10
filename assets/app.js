@@ -381,13 +381,24 @@
   // Share sheet — that sheet's available targets vary by device/browser
   // (desktop browsers often only offer Mail, no SMS capability at all),
   // so this guarantees all three options work everywhere, every time.
-  function wireReferButton() {
+  function wireReferButton(d) {
     const btn = document.getElementById('referBtn');
     const overlay = document.getElementById('referModalOverlay');
     if (!btn || !overlay) return;
 
-    const referUrl = `${PROJECT_BASE_URL}/my-contact-info-form.html`;
-    const message = 'I have a digital contact card that saves to your phone with a tap. Want your own? Request a Black Hat Card here:';
+    // Realtor cards send the realtor pricing schedule instead of the
+    // general intake form — someone hearing about this secondhand at a
+    // realtor gathering is in an information-gathering moment, not a
+    // ready-to-sign-up moment, and the general form has no way to show
+    // realtor-specific pricing anyway. The schedule itself links onward
+    // into the intake form for anyone ready to move forward.
+    const isRealtor = d && d.isRealtor === true;
+    const referUrl = isRealtor
+      ? `${PROJECT_BASE_URL}/pricing-schedule-realtors.html`
+      : `${PROJECT_BASE_URL}/my-contact-info-form.html`;
+    const message = isRealtor
+      ? 'I have a digital contact card that links my listings and saves to your phone with a tap. Built with realtors in mind — here\'s the pricing and how it works:'
+      : 'I have a digital contact card that saves to your phone with a tap. Want your own? Request a Black Hat Card here:';
 
     btn.addEventListener('click', () => overlay.classList.add('open'));
     document.getElementById('referModalClose').addEventListener('click', () => overlay.classList.remove('open'));
@@ -907,7 +918,7 @@
     wireGalleryLightbox();
     wireDownloadPdf();
     wirePrintQrOnly();
-    wireReferButton();
+    wireReferButton(data);
     renderPhoto(data);
     renderIdentity(data);
     renderAbout(data);
