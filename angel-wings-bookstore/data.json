@@ -1,0 +1,87 @@
+{
+  "prefix": "",
+  "firstName": "Angel Wings",
+  "lastName": "Bookstore",
+  "title": "",
+  "org": "",
+  "tagline": "Independently owned, in a house built in 1901",
+  "about": "The only independent bookstore in Granville County and several surrounding counties, owned and operated by a former teacher. We carry all genres, with a special focus on children's books and North Carolina authors, in a historic house in downtown Oxford.",
+  "experience": [],
+  "skills": [
+    "Books",
+    "Ebooks",
+    "Audiobooks",
+    "Children's Books",
+    "NC Authors",
+    "Book Club"
+  ],
+  "social": {
+    "instagram": "angelwingsbookstore",
+    "tiktok": "",
+    "facebook": "angelwingsbookstorenc",
+    "linkedin": "",
+    "twitter": "",
+    "youtube": ""
+  },
+  "payments": {
+    "cashapp": "",
+    "venmo": "",
+    "paypal": "",
+    "zelle": ""
+  },
+  "paymentSectionLabel": "Payment",
+  "notes": "Hours: Tuesday - Saturday, 8 AM - 8 PM. Closed Sunday & Monday.",
+  "phones": [
+    {
+      "type": "Work",
+      "number": "(919) 725-9056"
+    }
+  ],
+  "emails": [
+    {
+      "type": "Work",
+      "address": "MHarris@AngelWingsBookstore.com"
+    }
+  ],
+  "websites": [
+    {
+      "label": "Shop Online",
+      "url": "https://angelwingsbookstore.indielite.org/"
+    },
+    {
+      "label": "Staff Picks",
+      "url": "https://angelwingsbookstore.indielite.org/front-page-book-list-3"
+    },
+    {
+      "label": "Young Adult",
+      "url": "https://angelwingsbookstore.indielite.org/list/young-adult"
+    },
+    {
+      "label": "The Incredibly Human Henson Blayze",
+      "url": "https://angelwingsbookstore.indielite.org/book/9781984836779"
+    }
+  ],
+  "gallery": [
+    {
+      "photo": "photo1.jpg",
+      "caption": "Angel Wings"
+    },
+    {
+      "photo": "photo2.jpg",
+      "caption": "The Maid"
+    },
+    {
+      "photo": "photo3.jpg",
+      "caption": "The Midnight Library"
+    }
+  ],
+  "listings": [],
+  "isRealtor": false,
+  "calendlyUrl": "",
+  "bookingLabel": "Book a Time",
+  "address": "205 Williamsboro Street, Oxford, NC 27565",
+  "photoFile": "photo.jpg",
+  "accessToken": "cra7gbad",
+  "brand": "biz-angel-wings-bookstore",
+  "showQR": true
+}
