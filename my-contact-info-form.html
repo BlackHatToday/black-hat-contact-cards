@@ -123,7 +123,15 @@
     font-size: 26px; margin-bottom: 14px;
   }
   .landing p{
-    font-size: 14px; line-height: 1.65; color: var(--muted); max-width: 380px; margin: 0 auto 28px;
+    font-size: 14px; line-height: 1.65; color: var(--muted); max-width: 380px; margin: 0 auto 14px;
+  }
+  .landing-price-row{
+    display: flex; justify-content: center; gap: 10px; margin-bottom: 26px;
+  }
+  .landing-price-pill{
+    background: var(--surface); border: 1px solid var(--copper); color: var(--copper-soft);
+    font-family:'Space Grotesk', sans-serif; font-weight: 600; font-size: 12.5px;
+    padding: 6px 14px; border-radius: 20px;
   }
   .landing-btn-outline{
     width: 100%; padding: 15px; background: transparent; border: 1px solid var(--copper);
@@ -265,7 +273,12 @@
     <div class="landing-kicker">Black Hat Community</div>
     <h1>Get a Black Hat Card</h1>
     <p>A small card or bracelet with a chip inside. Hold it to the back of any smartphone, and your contact info appears instantly — no app required.</p>
+    <div class="landing-price-row">
+      <span class="landing-price-pill">$25 personal</span>
+      <span class="landing-price-pill">$50 business</span>
+    </div>
     <button type="button" class="landing-btn-outline" id="seeHowBtn">See how it works first</button>
+    <button type="button" class="landing-btn-outline" id="quickTextBtn">Have a question? Text us.</button>
     <button type="button" class="landing-btn-fill" id="imReadyBtn">I'm ready — let's get started</button>
   </div>
 
@@ -443,6 +456,12 @@
 <script>
   document.getElementById('seeHowBtn').addEventListener('click', () => {
     window.open('/animated-demo.html', '_blank');
+  });
+  document.getElementById('quickTextBtn').addEventListener('click', () => {
+    const body = encodeURIComponent("Hi! I have a quick question about the Black Hat Card: ");
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    const separator = isIOS ? '&' : '?';
+    window.location.href = `sms:${RECIPIENT_PHONE}${separator}body=${body}`;
   });
   document.getElementById('imReadyBtn').addEventListener('click', () => {
     document.getElementById('landingScreen').style.display = 'none';
@@ -697,6 +716,7 @@
 
   // Set this to your own email address before sending this form to friends.
   const RECIPIENT_EMAIL = "BlackHatToday@Gmail.com";
+  const RECIPIENT_PHONE = "19195947639";
 
   function formatAsText(d) {
     const lines = [];
