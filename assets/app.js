@@ -279,11 +279,17 @@
 
     listings.forEach(async (l, i) => {
       try {
-        const res = await fetch(`${l.url}data.json`, { cache: 'no-store' });
+        // Normalize to a trailing slash regardless of how the URL was
+        // entered — without this, a URL saved without one silently
+        // breaks this specific fetch (wrong path, 404) while the listing
+        // card's own link still works fine, since browsers handle a
+        // missing trailing slash on navigation but a raw fetch() won't.
+        const base = l.url.endsWith('/') ? l.url : `${l.url}/`;
+        const res = await fetch(`${base}data.json`, { cache: 'no-store' });
         if (!res.ok) return;
         const propertyData = await res.json();
         if (!propertyData.heroPhoto) return;
-        const imgUrl = /^https?:\/\//i.test(propertyData.heroPhoto) ? propertyData.heroPhoto : `${l.url}${propertyData.heroPhoto}`;
+        const imgUrl = /^https?:\/\//i.test(propertyData.heroPhoto) ? propertyData.heroPhoto : `${base}${propertyData.heroPhoto}`;
         const media = document.getElementById(`listingMedia${i}`);
         if (!media) return; // page could have re-rendered by the time this resolves
         const img = new Image();
