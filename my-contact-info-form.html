@@ -172,6 +172,8 @@
   .pay-row:last-child{ border-bottom:none; }
   .pay-label{ color: var(--muted); font-family:'IBM Plex Mono', monospace; font-size: 11px; text-transform: uppercase; }
   .pay-value{ font-family:'IBM Plex Mono', monospace; font-weight: 500; }
+  a.pay-value{ color: var(--copper-soft); text-decoration: none; }
+  a.pay-value:hover{ text-decoration: underline; }
 
   .confirm-panel{
     display: none; text-align: center; padding: 10px 4px 20px;
@@ -420,7 +422,7 @@
 
   <div class="payment-reveal" id="paymentReveal">
     <div class="hint" id="paymentRevealHint" style="margin-bottom:8px;">Pick a card type above to see the amount.</div>
-    <div class="pay-row"><span class="pay-label">Cash App</span><span class="pay-value">$BlackHatToday</span></div>
+    <div class="pay-row"><span class="pay-label">Cash App</span><a class="pay-value" href="https://cash.app/$BlackHatToday" target="_blank" rel="noopener">$BlackHatToday</a></div>
     <div class="pay-row"><span class="pay-label">Zelle</span><span class="pay-value">252.433.7173</span></div>
     <div class="hint" style="margin-top:8px;">Once you send it, mention that in your message below so I know it's already taken care of.</div>
   </div>
