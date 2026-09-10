@@ -117,6 +117,16 @@
     btn.style.display = 'flex';
   }
 
+  // Links back to wherever this listing actually lives (the agency site,
+  // an MLS page, etc.) — separate from bookingUrl, which is for scheduling
+  // a showing, not viewing the full original listing.
+  function renderOriginalListing(d) {
+    if (!d.listingUrl) return;
+    const btn = document.getElementById('viewListingBtn');
+    btn.href = d.listingUrl;
+    btn.style.display = 'flex';
+  }
+
   // Sends whoever's looking at this listing to property-intake-form.html
   // with its current info already filled in, via a URL parameter — so
   // it can be reviewed visually and edited before sending an update.
@@ -394,6 +404,7 @@
     renderAgent(data);
     renderOtherProperty(data);
     renderBooking(data);
+    renderOriginalListing(data);
     renderEditListingLink(data);
     renderQR(data);
   } catch (err) {

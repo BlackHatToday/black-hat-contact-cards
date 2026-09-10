@@ -287,6 +287,13 @@
     </fieldset>
 
     <fieldset>
+      <legend>Original Listing (optional)</legend>
+      <label>Link to the source listing (agency site, MLS, etc.)</label>
+      <input type="url" id="listingUrl" placeholder="https://therealestate-co.com/listing-detail/...">
+      <div class="hint">Shows a "View Full Listing" button linking back to wherever this property is actually listed. Leave blank to hide it.</div>
+    </fieldset>
+
+    <fieldset>
       <legend>Link to Another Listing (optional)</legend>
       <label>URL of the other listing's card</label>
       <input type="url" id="otherPropertyUrl" placeholder="https://blackhatcards.community/for-sale-456-oak-st/">
@@ -532,6 +539,7 @@
       agentEmail: document.getElementById('agentEmail').value,
       bookingUrl: document.getElementById('bookingUrl').value,
       bookingLabel: document.getElementById('bookingLabel').value || 'Schedule a Showing',
+      listingUrl: document.getElementById('listingUrl').value,
       otherPropertyUrl: document.getElementById('otherPropertyUrl').value,
       otherPropertyLabel: document.getElementById('otherPropertyLabel').value || 'View Another Listing',
       showQR: document.getElementById('showQR').checked,
@@ -581,6 +589,7 @@
       ` : ''}
 
       ${d.bookingUrl ? `<div class="mc-book">${d.bookingLabel || 'Schedule a Showing'}</div>` : ''}
+      ${d.listingUrl ? `<div class="mc-book" style="background:transparent; border:1px solid var(--copper); color:var(--copper-soft);">View Full Listing</div>` : ''}
       ${d.otherPropertyUrl ? `
         <div class="mc-section-label">Another Listing</div>
         <div class="mc-book" style="background:transparent; border:1px solid var(--copper); color:var(--copper-soft);">${d.otherPropertyLabel || 'View Another Listing'}</div>
@@ -680,6 +689,7 @@
     setVal('agentEmail', d.agentEmail);
     setVal('bookingUrl', d.bookingUrl);
     setVal('bookingLabel', d.bookingLabel || 'Schedule a Showing');
+    setVal('listingUrl', d.listingUrl);
     setVal('otherPropertyUrl', d.otherPropertyUrl);
     setVal('otherPropertyLabel', d.otherPropertyLabel || 'View Another Listing');
     setVal('brand', d.brand);
@@ -759,7 +769,7 @@
     document.getElementById('scanRawText').value = '';
     document.getElementById('scanStatus').textContent = '';
     ['address', 'price', 'sqft', 'beds', 'baths', 'description', 'agentName',
-     'agentPhone', 'agentEmail', 'bookingUrl', 'otherPropertyUrl',
+     'agentPhone', 'agentEmail', 'bookingUrl', 'listingUrl', 'otherPropertyUrl',
      'folderName', 'tagUrl', 'brand'].forEach(id => setVal(id, ''));
     setVal('heroPhoto', 'hero.jpg');
     setVal('agentPhotoFile', 'agent.jpg');
