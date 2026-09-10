@@ -1,0 +1,26 @@
+{
+  "address": "2312 Ballywater Lea WAY, Wake Forest, NC 27587",
+  "price": "$1,495,000",
+  "sqft": "4717",
+  "beds": "4",
+  "baths": "4.5",
+  "description": "Set on just over an acre of mature, tree-lined privacy in Waterstone Manors, this 2021-built home offers established landscaping and finished living space without the wait of new construction. A two-story foyer opens into a light-filled great room with soaring beamed ceilings and a gas fireplace, while the kitchen features an oversized quartz island, gas cooktop with pot filler, and an adjacent scullery to keep prep and small appliances out of sight. The main level holds two complete suites — a primary overlooking the backyard with a luxury bath and dream closet, plus a second suite ideal for guests. Upstairs offers a third suite, a fourth bedroom, a loft with built-in workspace, and a bonus room with two more flex spaces. Outside, a covered porch with its own gas fireplace and a patio with a built-in gas grill overlook a large, flat, beautifully maintained backyard. A fully encapsulated crawlspace, whole-house water purification, and radon mitigation round out this like-new home.",
+  "heroPhoto": "hero.jpg",
+  "photos": [
+    "photo1.jpg",
+    "photo2.jpg",
+    "photo3.jpg"
+  ],
+  "agentName": "Angela Hanks",
+  "agentPhotoFile": "agent.jpg",
+  "agentPhone": "(252) 433-7769",
+  "agentEmail": "ahanks@therealestate-co.com",
+  "bookingUrl": "",
+  "bookingLabel": "Schedule a Showing",
+  "listingUrl": "https://therealestate-co.com/listing-detail/1188693320/2312-Ballywater-Lea-WAY-Wake-Forest-NC",
+  "otherPropertyUrl": "",
+  "otherPropertyLabel": "View Another Listing",
+  "showQR": true,
+  "accessToken": "w9rkwh6g",
+  "brand": "biz-the-real-estate-co"
+}

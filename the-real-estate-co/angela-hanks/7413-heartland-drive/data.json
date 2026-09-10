@@ -1,0 +1,26 @@
+{
+  "address": "7413 Heartland DR, Wake Forest, NC 27587",
+  "price": "$759,500",
+  "sqft": "2855",
+  "beds": "4",
+  "baths": "3.5",
+  "description": "Space, serenity, and complete freedom with no city taxes on this expansive, tree-lined acre. Newly refinished hardwood floors and fresh neutral paint flow throughout the bright layout, anchored by a two-story family room. The chef's kitchen features new quartz countertops and newer stainless steel appliances, with a dining room and sunny breakfast area for casual or formal dining. The first-floor primary suite includes a generous walk-in closet and a fully renovated bath with a freestanding tub and dual vanities. Upstairs offers three spacious bedrooms plus a versatile flex room ideal for a home office, gym, or playroom, along with a private en-suite guest bedroom. Out back, relax on the large screened porch or deck under a pergola, surrounded by a sprawling, wooded acre lot. An epoxy-finished garage floor and walk-in storage round out this well-located home, convenient to Highway 540, Durham, Wake Forest, and Raleigh.",
+  "heroPhoto": "hero.jpg",
+  "photos": [
+    "photo1.jpg",
+    "photo2.jpg",
+    "photo3.jpg"
+  ],
+  "agentName": "Angela Hanks",
+  "agentPhotoFile": "agent.jpg",
+  "agentPhone": "(252) 433-7769",
+  "agentEmail": "ahanks@therealestate-co.com",
+  "bookingUrl": "https://www.zillow.com/view-imx/f13c2af6-5858-45b4-bfb3-f6c734c7f953?setAttribution=mls&wl=true&initialViewType=pano",
+  "bookingLabel": "Virtual Tour",
+  "listingUrl": "https://therealestate-co.com/listing-detail/1186902717/7413-Heartland-DR-Wake-Forest-NC",
+  "otherPropertyUrl": "",
+  "otherPropertyLabel": "View Another Listing",
+  "showQR": true,
+  "accessToken": "8v8kf6dt",
+  "brand": "biz-the-real-estate-co"
+}

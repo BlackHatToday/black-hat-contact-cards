@@ -1,0 +1,26 @@
+{
+  "address": "4217 Field Oak DR, Wake Forest, NC 27587",
+  "price": "$625,000",
+  "sqft": "2505",
+  "beds": "5",
+  "baths": "3.5",
+  "description": "This former Parade of Homes beauty won't last long, beautifully situated on a premium, private 0.43-acre corner lot in Wake Forest — rated the #1 most in-demand suburb in the US by MoveBuddha in early 2026. The upgraded kitchen features a brand-new dishwasher and gas stove, quartz countertops, and a barstool island, alongside newly refinished hardwoods throughout. A media/bonus room (with projector and screen included) can double as a 5th bedroom, and the huge fenced backyard includes a screened porch for outdoor entertaining. An unfinished, insulated third floor offers room to expand, and the side-entry garage includes a workshop with a sink. The neighborhood offers resident swim, golf, tennis, and fitness memberships, including two pools with a lazy river and water slide, plus an award-winning semi-private 18-hole golf course.",
+  "heroPhoto": "hero.jpg",
+  "photos": [
+    "photo1.jpg",
+    "photo2.jpg",
+    "photo3.jpg"
+  ],
+  "agentName": "Angela Hanks",
+  "agentPhotoFile": "agent.jpg",
+  "agentPhone": "(252) 433-7769",
+  "agentEmail": "ahanks@therealestate-co.com",
+  "bookingUrl": "",
+  "bookingLabel": "Schedule a Showing",
+  "listingUrl": "https://therealestate-co.com/listing-detail/1188871635/4217-Field-Oak-DR-Wake-Forest-NC",
+  "otherPropertyUrl": "",
+  "otherPropertyLabel": "View Another Listing",
+  "showQR": true,
+  "accessToken": "bjdpu3ke",
+  "brand": "biz-the-real-estate-co"
+}
