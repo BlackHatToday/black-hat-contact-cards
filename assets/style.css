@@ -445,11 +445,12 @@ footer{
 
 .book-showing-btn{
   display:flex; align-items:center; justify-content:center; gap:10px; width:100%;
-  padding:16px 20px; background:var(--copper); color:var(--ink);
+  margin-top:12px; padding:16px 20px; background:var(--copper); color:var(--ink);
   border:none; border-radius:14px; text-decoration:none;
   font-family:var(--font-display); font-weight:600; font-size:16px;
   cursor:pointer; transition:background .15s ease, transform .1s ease; text-transform:capitalize;
 }
+.book-showing-btn:first-child{ margin-top:0; }
 .book-showing-btn:hover{ background:#c98549; }
 .book-showing-btn:active{ transform:scale(0.98); }
 .book-showing-btn svg{ width:19px; height:19px; }
