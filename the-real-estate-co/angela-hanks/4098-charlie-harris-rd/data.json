@@ -1,9 +1,9 @@
 {
   "address": "4098 Charlie Harris RD, Oxford, NC 27565",
   "price": "$450,000",
-  "beds": 4,
-  "baths": 3,
   "sqft": "2,522",
+  "beds": "4",
+  "baths": "3",
   "description": "A 4-bedroom, 3-bath home in Oxford, NC, offering 2,522 square feet of living space.",
   "heroPhoto": "hero.jpg",
   "photos": [
@@ -16,9 +16,10 @@
   "agentEmail": "ahanks@therealestate-co.com",
   "bookingUrl": "",
   "bookingLabel": "Schedule a Showing",
+  "listingUrl": "",
   "otherPropertyUrl": "",
-  "otherPropertyLabel": "",
+  "otherPropertyLabel": "View Another Listing",
+  "showQR": true,
   "accessToken": "td6fg6sk",
-  "brand": "the-real-estate-co",
-  "showQR": true
+  "brand": "biz-the-real-estate-co"
 }
