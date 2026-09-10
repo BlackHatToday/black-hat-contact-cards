@@ -26,6 +26,7 @@ Task-first reference. If you need to know *how the system works and why*, see `P
 | Organize a realtor team's folders | §16 |
 | Change an existing card's color palette | §17 |
 | Handle a photo or gallery update request | §18 |
+| Set up a realtor's card (pricing tier and referral behavior) | §19 |
 
 ---
 
@@ -36,11 +37,12 @@ Task-first reference. If you need to know *how the system works and why*, see `P
 3. Fill in Identity — Prefix, First/Last Name, Title, Org, Tagline. Leave **Brand** blank unless this person belongs to a business you've already set up (§4).
 4. Fill in Phone and Email — at least one, so Share Your Info and Collect Info work.
 5. Click **Add more details** if you want About, Experience, Skills, Social, Payments, Address, Websites, or Calendly.
-6. Check the **Security Token** and **Folder Name** fields — Folder Name auto-fills from the person's name; edit it if you want something different.
-7. Click **Preview** to see the actual card before saving anything.
-8. Click **Copy** next to the **Tag URL** field — you'll need this in §7.
-9. Click **Save** (if you loaded an existing file) or **Download data.json**.
-10. Create a new folder at your project root named exactly like the Folder Name field. Copy `person-template/index.html` into it unedited, place the downloaded `data.json` inside, and add a photo named to match the `photoFile` field (default `photo.jpg`).
+6. If this person is a realtor, check **This is a realtor's card** — see §19 for what that actually changes.
+7. Check the **Security Token** and **Folder Name** fields — Folder Name auto-fills from the person's name; edit it if you want something different.
+8. Click **Preview** to see the actual card before saving anything.
+9. Click **Copy** next to the **Tag URL** field — you'll need this in §7.
+10. Click **Save** (if you loaded an existing file) or **Download data.json**.
+11. Create a new folder at your project root named exactly like the Folder Name field. Copy `person-template/index.html` into it unedited, place the downloaded `data.json` inside, and add a photo named to match the `photoFile` field (default `photo.jpg`).
 
 ---
 
@@ -290,7 +292,7 @@ Use this whenever someone asks to change their profile photo, or add/update Gall
 
 **How the request actually reaches you:**
 
-1. On `my-contact-info-form.html`, the photo hint specifically tells people to choose **Email It**, not **Text It** — only email supports attachments. If someone used Text and mentions a photo, you'll need to follow up and ask them to email it instead.
+1. `my-contact-info-form.html` only has an Email option now (Text It was removed) — so photo and Gallery attachments always come through as a normal email attachment.
 2. Any captions they want come through as plain text, either in the **Message** field or the body of their email — there's no dedicated captions field on the form itself, since the existing Message field already covers it without adding more fields to fill out.
 
 **Then, to actually apply it:**
@@ -301,3 +303,19 @@ Use this whenever someone asks to change their profile photo, or add/update Gall
 4. For Gallery photos: place the new image file(s) in their folder, then in the **Gallery** fieldset, add a row per photo (or edit an existing one) with the filename and whatever caption they described. **Save** or **Download** as usual.
 5. Push it live — `git add .`, `git commit -m "..."`, `git push`.
 6. Confirm by visiting their live card and checking the photo or gallery looks right.
+
+---
+
+## 19. Setting Up a Realtor's Card
+
+Realtors get a genuinely different pricing tier and referral behavior than everyone else — this section covers what's different and how to turn it on.
+
+**What's different:** a realtor's card links up to 10 listings (instead of the standard 5) and comes with its own support tier — $50/quarter for 10 updates, versus the standard $30/yr for 5 per quarter. It also changes what **Refer a Friend** actually sends: instead of the general intake form, it sends the realtor pricing schedule (`pricing-schedule-realtors.html`) with wording built around listings, not a generic "get your own card" pitch. See `pricing-schedule-realtors.html` and `realtor-card-letter.html` for the actual numbers and letter.
+
+**To turn this on for a person:**
+
+1. Open `generator.html`. Load the person's existing `data.json`, or fill them in fresh.
+2. Check **This is a realtor's card**, in its own fieldset just above Property Listings.
+3. Save or Download as usual.
+
+**One thing worth remembering — this doesn't apply itself.** Checking this box only takes effect once the file is actually saved and pushed live. If you're turning this on for someone who already has a card (Angela Hanks being the first case), you have to explicitly Load their file, check the box, and re-save — it doesn't happen automatically just because they agreed to the tier in conversation.

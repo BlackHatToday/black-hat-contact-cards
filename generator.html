@@ -670,16 +670,18 @@
   }
 
   function updateAddListingButtonState() {
+    const maxListings = document.getElementById('isRealtor').checked ? 10 : 5;
     const count = document.querySelectorAll('#listingsList .repeat-item').length;
     const btn = document.getElementById('addListing');
-    btn.disabled = count >= 5;
-    btn.textContent = count >= 5 ? 'Limit reached (5 listings max)' : '+ Add a listing';
-    btn.style.opacity = count >= 5 ? '0.5' : '1';
-    btn.style.cursor = count >= 5 ? 'default' : 'pointer';
+    btn.disabled = count >= maxListings;
+    btn.textContent = count >= maxListings ? `Limit reached (${maxListings} listings max)` : '+ Add a listing';
+    btn.style.opacity = count >= maxListings ? '0.5' : '1';
+    btn.style.cursor = count >= maxListings ? 'default' : 'pointer';
   }
 
   function addListingRow(prefill = {}) {
-    if (document.querySelectorAll('#listingsList .repeat-item').length >= 5) return null;
+    const maxListings = document.getElementById('isRealtor').checked ? 10 : 5;
+    if (document.querySelectorAll('#listingsList .repeat-item').length >= maxListings) return null;
     const row = repeatRow(document.getElementById('listingsList'), `
       <div><label>Label</label><input type="text" class="listing-label field-descriptor" placeholder="123 Main St"></div>
       <div><label>URL</label><input type="text" class="listing-url field-content" placeholder="https://blackhatcards.community/for-sale-123-main-st/"></div>
@@ -722,6 +724,7 @@
     addGalleryRow();
   });
   document.getElementById('addListing').addEventListener('click', () => addListingRow());
+  document.getElementById('isRealtor').addEventListener('change', () => updateAddListingButtonState());
   document.getElementById('addExperience').addEventListener('click', () => addExperienceRow());
   wireCardScan();
 
@@ -764,7 +767,7 @@
     const listings = [...document.querySelectorAll('#listingsList .repeat-item')].map(item => ({
       label: item.querySelector('.listing-label').value || 'Listing',
       url: item.querySelector('.listing-url').value
-    })).filter(l => l.url).slice(0, 5);
+    })).filter(l => l.url).slice(0, document.getElementById('isRealtor').checked ? 10 : 5);
 
     const social = {};
     ['instagram', 'tiktok', 'facebook', 'linkedin', 'twitter', 'youtube'].forEach(p => {

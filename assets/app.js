@@ -260,7 +260,8 @@
   }
 
   function renderListings(d) {
-    const listings = (d.listings || []).filter(l => l.url).slice(0, 5); // hard cap at 5, even if more sneak into the data
+    const maxListings = d.isRealtor ? 10 : 5; // realtor tier links up to 10, everyone else up to 5
+    const listings = (d.listings || []).filter(l => l.url).slice(0, maxListings); // hard cap, even if more sneak into the data
     if (!listings.length) return;
 
     // Render immediately with a generic icon in every card — the real
@@ -397,7 +398,7 @@
       ? `${PROJECT_BASE_URL}/pricing-schedule-realtors.html`
       : `${PROJECT_BASE_URL}/my-contact-info-form.html`;
     const message = isRealtor
-      ? 'I have a digital contact card that links my listings and saves to your phone with a tap. Built with realtors in mind — here\'s the pricing and how it works:'
+      ? 'My listings and contact info, shared with one tap — no app needed. Take a look:'
       : 'I have a digital contact card that saves to your phone with a tap. Want your own? Request a Black Hat Card here:';
 
     btn.addEventListener('click', () => overlay.classList.add('open'));
