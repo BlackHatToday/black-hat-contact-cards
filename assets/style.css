@@ -602,13 +602,20 @@ body.quick-share-mode #quickShareIntro{
      modules are baked into the image at generation time with their own
      internal contrast, completely independent of the page background
      around it, so this can't affect scannability. */
+  /* !important is required here, not just belt-and-suspenders — a person
+     with a custom brand background has that color set as an INLINE style
+     on <html> (via applyBrandTheme's setProperty call), and inline styles
+     always beat a plain class-based CSS rule regardless of specificity.
+     Confirmed by testing directly: without !important, a brand's custom
+     background color (e.g. blue) shows through in this print mode instead
+     of the intended white — not just the default dark theme. */
   html.print-qr-only,
   body.print-qr-only{
-    --ink: #ffffff;
-    --surface: #ffffff;
-    --surface-2: #ffffff;
-    --parchment: #14171c;
-    --line: #d1d5db;
+    --ink: #ffffff !important;
+    --surface: #ffffff !important;
+    --surface-2: #ffffff !important;
+    --parchment: #14171c !important;
+    --line: #d1d5db !important;
   }
 
   /* Property-only additions — the person-card rules above already cover
