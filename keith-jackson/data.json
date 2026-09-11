@@ -64,11 +64,12 @@
     }
   ],
   "listings": [],
+  "isRealtor": false,
   "calendlyUrl": "",
   "bookingLabel": "Book a Time",
   "address": "209 Orange Street  Oxford  NC  27565",
   "photoFile": "photo.jpg",
   "accessToken": "6h8etycb",
-  "brand": "",
+  "brand": "solo-keith-jackson",
   "showQR": true
 }
