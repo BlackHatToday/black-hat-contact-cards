@@ -595,6 +595,22 @@ body.quick-share-mode #quickShareIntro{
     display:none !important;
   }
 
+  /* This mode exists specifically for printing — a yard sign insert, a
+     flyer, a standalone QR slip — so the normal dark theme (built for
+     on-screen viewing) gets swapped for a plain white background here.
+     Safe to do without touching the QR code itself: its own dark/light
+     modules are baked into the image at generation time with their own
+     internal contrast, completely independent of the page background
+     around it, so this can't affect scannability. */
+  html.print-qr-only,
+  body.print-qr-only{
+    --ink: #ffffff;
+    --surface: #ffffff;
+    --surface-2: #ffffff;
+    --parchment: #14171c;
+    --line: #d1d5db;
+  }
+
   /* Property-only additions — the person-card rules above already cover
      everything shared. This makes the QR and address sit side by side
      (QR left, address right) with a dashed line between them, so a

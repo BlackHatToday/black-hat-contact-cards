@@ -366,10 +366,17 @@
     if (!link) return;
     link.addEventListener('click', (e) => {
       e.preventDefault();
+      // Added to <html> too, not just <body> — the CSS override for this
+      // mode's white print background lives on the <body> selector, and
+      // custom properties don't cascade upward to a parent element, so
+      // without this, <html>'s own background stays dark and shows
+      // through whenever the page content is shorter than the viewport.
+      document.documentElement.classList.add('print-qr-only');
       document.body.classList.add('print-qr-only');
       window.print();
     });
     window.addEventListener('afterprint', () => {
+      document.documentElement.classList.remove('print-qr-only');
       document.body.classList.remove('print-qr-only');
     });
   }
