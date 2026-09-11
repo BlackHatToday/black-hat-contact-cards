@@ -509,7 +509,7 @@
     });
   }
 
-  async function sendShareBackEmail(ownerEmail, ownerFirstName) {
+  async function sendShareBackEmail(ownerEmail, ownerFirstName, visitorInput = {}) {
     const timestamp = new Date().toLocaleString('en-US', { dateStyle: 'medium', timeStyle: 'short' });
     const locationLink = await getLocationLinkBestEffort();
 
@@ -517,24 +517,32 @@
     const bodyLines = [
       `Hi ${ownerFirstName},`, '',
       `Great meeting you! Here's my info:`, '',
-      'Name: ', 'Title: ', 'Company: ', 'Phone: ', 'Email: ', '',
-      '(fill in when you get a chance!)', '',
-      '---',
-      `Met: ${timestamp}`
+      `Name: ${visitorInput.name || ''}`,
+      'Title: ', 'Company: ',
+      `Phone: ${visitorInput.phone || ''}`,
+      `Email: ${visitorInput.email || ''}`,
+      `Where we met: ${visitorInput.whereMet || ''}`
     ];
+    if (visitorInput.visitorType) bodyLines.push(`I'm: ${visitorInput.visitorType}`);
+    bodyLines.push('', '---', `Met: ${timestamp}`);
     if (locationLink) bodyLines.push(`Location: ${locationLink}`);
     const body = encodeURIComponent(bodyLines.join('\n'));
 
     window.location.href = `mailto:${ownerEmail}?subject=${subject}&body=${body}`;
   }
 
-  async function sendShareBackText(ownerPhone, ownerFirstName) {
+  async function sendShareBackText(ownerPhone, ownerFirstName, visitorInput = {}) {
     const locationLink = await getLocationLinkBestEffort();
 
     const bodyLines = [
       `Hi ${ownerFirstName}! Great meeting you — here's my info:`, '',
-      'Name: ', 'Title: ', 'Company: ', 'Phone: ', 'Email: '
+      `Name: ${visitorInput.name || ''}`,
+      'Title: ', 'Company: ',
+      `Phone: ${visitorInput.phone || ''}`,
+      `Email: ${visitorInput.email || ''}`,
+      `Where we met: ${visitorInput.whereMet || ''}`
     ];
+    if (visitorInput.visitorType) bodyLines.push(`I'm: ${visitorInput.visitorType}`);
     if (locationLink) { bodyLines.push(''); bodyLines.push(`Location: ${locationLink}`); }
     const body = bodyLines.join('\n');
 
@@ -560,16 +568,41 @@
     if (ownerPhone) textBtn.style.display = 'flex';
     if (ownerEmail) emailBtn.style.display = 'flex';
 
+    // The buyer/neighbor/curious pills only make sense in a real estate
+    // context — everyone else just gets Name/Phone/Email/Where We Met.
+    const pillsContainer = document.getElementById('shareBackPills');
+    let selectedVisitorType = '';
+    if (d.isRealtor) {
+      pillsContainer.style.display = 'flex';
+      pillsContainer.querySelectorAll('.share-back-pill').forEach(pill => {
+        pill.addEventListener('click', () => {
+          pillsContainer.querySelectorAll('.share-back-pill').forEach(p => p.classList.remove('selected'));
+          pill.classList.add('selected');
+          selectedVisitorType = pill.dataset.value;
+        });
+      });
+    }
+
     btn.addEventListener('click', () => overlay.classList.add('open'));
     document.getElementById('shareBackModalClose').addEventListener('click', () => overlay.classList.remove('open'));
     overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('open'); });
 
+    function collectVisitorInput() {
+      return {
+        name: document.getElementById('shareBackName').value.trim(),
+        phone: document.getElementById('shareBackPhone').value.trim(),
+        email: document.getElementById('shareBackEmail').value.trim(),
+        whereMet: document.getElementById('shareBackWhereMet').value.trim(),
+        visitorType: selectedVisitorType
+      };
+    }
+
     textBtn.addEventListener('click', () => {
-      sendShareBackText(ownerPhone, ownerFirstName);
+      sendShareBackText(ownerPhone, ownerFirstName, collectVisitorInput());
       overlay.classList.remove('open');
     });
     emailBtn.addEventListener('click', () => {
-      sendShareBackEmail(ownerEmail, ownerFirstName);
+      sendShareBackEmail(ownerEmail, ownerFirstName, collectVisitorInput());
       overlay.classList.remove('open');
     });
 
