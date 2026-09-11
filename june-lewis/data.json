@@ -33,15 +33,55 @@
   "emails": [],
   "websites": [
     {
-      "label": "Website",
+      "label": "Facebook",
       "url": "https://www.facebook.com/profile.php?id=61589063694745"
+    },
+    {
+      "label": "June Lewis, III for County Commissioner District 4",
+      "url": "https://www.facebook.com/profile.php?id=61589063694745"
+    },
+    {
+      "label": "A Stronger Tomorrow Begins Today!",
+      "url": "https://www.facebook.com/reel/4485048741772817"
+    }
+  ],
+  "gallery": [
+    {
+      "photo": "photo1.jpg",
+      "caption": "Vote!"
+    },
+    {
+      "photo": "photo2.jpg",
+      "caption": "9.11.2001"
+    },
+    {
+      "photo": "photo3.jpg",
+      "caption": "Meet The Candidate!"
+    },
+    {
+      "photo": "photo4.jpg",
+      "caption": "Cast YOUR Vote!"
+    },
+    {
+      "photo": "photo5.jpg",
+      "caption": "A Stronger Tomorrow Begins Today"
+    },
+    {
+      "photo": "photo6.jpg",
+      "caption": "Character & Faith  ***  Vision & Action"
+    },
+    {
+      "photo": "photo7.jpg",
+      "caption": "Bill Journey"
     }
   ],
   "listings": [],
+  "isRealtor": false,
   "calendlyUrl": "",
   "bookingLabel": "Book a Time",
   "address": "",
   "photoFile": "photo.jpg",
   "accessToken": "55wdvhia",
+  "brand": "solo-june-lewis",
   "showQR": true
 }
