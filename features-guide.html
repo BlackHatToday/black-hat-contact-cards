@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>What Your Black Hat Card Can Do</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<title>Everything Your Card Can Do</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
@@ -54,11 +53,6 @@
   .pricing{ font-family:'Space Grotesk', sans-serif; font-weight: 700; font-size: 15px; margin-bottom: 4px; }
   .footer-note{ color: var(--muted); font-size: 12px; }
 
-  .footer-qr{
-    width: 84px; height: 84px; background: #fff; border-radius: 8px;
-    padding: 6px; margin: 14px auto 10px;
-  }
-  .footer-qr canvas, .footer-qr img{ width:100% !important; height:100% !important; display:block; }
   .footer-contact{
     font-family:'IBM Plex Mono', monospace; font-size: 12px; color: var(--blue-soft);
     margin-top: 6px;
@@ -88,8 +82,8 @@
 <div class="sheet">
   <header>
     <div class="kicker">Black Hat Community</div>
-    <h1>One Card. However You Use It.</h1>
-    <p class="sub">A Black Hat Card works differently depending on what you actually need it for — here's what it does for you.</p>
+    <h1>Get More From Your Card</h1>
+    <p class="sub">You already have one — here's everything it can actually do, in case you haven't found it all yet.</p>
   </header>
 
   <div class="segment">
@@ -150,22 +144,11 @@
   </div>
 
   <footer>
-    <div class="pricing">Cards or Bracelets $25 Personal / $50 Business</div>
-    <div class="footer-note" style="margin-bottom:8px;">Ongoing support plans available for frequent updates</div>
-    <div class="footer-note">Scan to request yours, or reach out</div>
-    <div class="footer-qr" id="footerQr"></div>
+    <div class="pricing">Questions about any of this?</div>
+    <div class="footer-note">Tap Contact / Support / Updates at the bottom of your own card, or reach out directly</div>
     <div class="footer-contact">(919) 594-7639 &middot; BlackHatToday@Gmail.com</div>
   </footer>
 </div>
-
-<script>
-  new QRCode(document.getElementById("footerQr"), {
-    text: "https://blackhatcards.community/my-contact-info-form.html",
-    width: 140, height: 140,
-    colorDark: "#16283f", colorLight: "#ffffff",
-    correctLevel: QRCode.CorrectLevel.M
-  });
-</script>
 
 </body>
 </html>
