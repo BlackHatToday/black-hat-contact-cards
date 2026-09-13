@@ -75,11 +75,12 @@
     }
   ],
   "listings": [],
+  "isRealtor": false,
   "calendlyUrl": "",
   "bookingLabel": "Book a Time",
   "address": "",
   "photoFile": "photo.jpg",
   "accessToken": "pwimeut5",
-  "brand": "",
+  "brand": "biz-josefina-sanchez",
   "showQR": true
 }
