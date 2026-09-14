@@ -383,6 +383,17 @@ footer{
 }
 .update-request-link:hover{ color: var(--copper); }
 
+/* Contact/Support/Updates specifically (not Print QR Code Only, which
+   shares the base .update-request-link style above) gets a border to
+   read more clearly as clickable, since it's the one people most often
+   need to actually find and use. */
+#editMyInfoLink{
+  display:table; margin-left:auto; margin-right:auto;
+  padding:9px 18px; border:1px solid var(--line); border-radius:20px;
+  margin-top:20px;
+}
+#editMyInfoLink:hover{ border-color: var(--copper); }
+
 .load-error{
   text-align:center; padding: 60px 28px; color: var(--muted);
   font-family:'IBM Plex Mono', monospace; font-size: 13px; line-height:1.6;
