@@ -1,0 +1,99 @@
+{
+  "prefix": "",
+  "firstName": "Sergio",
+  "lastName": "Vazquez",
+  "title": "Owner",
+  "org": "MVS Painting",
+  "tagline": "Exterior & Interior Painting",
+  "about": "",
+  "experience": [],
+  "skills": [
+    "Power Washing",
+    "Deck Stain",
+    "Change Color",
+    "Repaint",
+    "New Construction",
+    "Free Estimates",
+    "Fully Insured"
+  ],
+  "social": {
+    "instagram": "",
+    "tiktok": "",
+    "facebook": "",
+    "linkedin": "",
+    "twitter": "",
+    "youtube": ""
+  },
+  "payments": {
+    "cashapp": "",
+    "venmo": "",
+    "paypal": "",
+    "zelle": ""
+  },
+  "paymentSectionLabel": "Payment",
+  "notes": "",
+  "phones": [
+    {
+      "type": "Mobile",
+      "number": "(919) 524-3302"
+    }
+  ],
+  "emails": [
+    {
+      "type": "Work",
+      "address": "MVSPainting85@gmail.com"
+    }
+  ],
+  "websites": [],
+  "gallery": [
+    {
+      "photo": "photo1.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo2.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo3.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo4.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo5.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo6.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo7.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo8.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo9.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo10.jpg",
+      "caption": ""
+    }
+  ],
+  "listings": [],
+  "isRealtor": false,
+  "calendlyUrl": "",
+  "bookingLabel": "Book a Time",
+  "address": "",
+  "photoFile": "photo.jpg",
+  "accessToken": "vd87nhip",
+  "brand": "biz-sergio-vazquez",
+  "showQR": true
+}
