@@ -1,5 +1,5 @@
 {
-  "address": "Church Road, Clarksville, VA 2392",
+  "address": "Church Road, Clarksville, VA 23927",
   "price": "$100,000",
   "sqft": "",
   "beds": "",
@@ -16,7 +16,7 @@
   "agentEmail": "ahanks@therealestate-co.com",
   "bookingUrl": "",
   "bookingLabel": "Schedule a Showing",
-  "listingUrl": "",
+  "listingUrl": "https://therealestate-co.com/listing-detail/1187269989/Church-Road-Clarksville-VA",
   "otherPropertyUrl": "",
   "otherPropertyLabel": "View Another Listing",
   "showQR": true,
