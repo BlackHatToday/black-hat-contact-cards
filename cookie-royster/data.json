@@ -1,0 +1,45 @@
+{
+  "prefix": "",
+  "firstName": "Cookie",
+  "lastName": "Royster",
+  "title": "",
+  "org": "",
+  "tagline": "",
+  "about": "I'm lost!  Please call my Mom!",
+  "experience": [],
+  "skills": [],
+  "social": {
+    "instagram": "",
+    "tiktok": "",
+    "facebook": "",
+    "linkedin": "",
+    "twitter": "",
+    "youtube": ""
+  },
+  "payments": {
+    "cashapp": "",
+    "venmo": "",
+    "paypal": "",
+    "zelle": ""
+  },
+  "paymentSectionLabel": "Payment",
+  "notes": "",
+  "phones": [
+    {
+      "type": "Mobile",
+      "number": "(434) 265-4509"
+    }
+  ],
+  "emails": [],
+  "websites": [],
+  "gallery": [],
+  "listings": [],
+  "isRealtor": false,
+  "calendlyUrl": "",
+  "bookingLabel": "Book a Time",
+  "address": "",
+  "photoFile": "photo.jpg",
+  "accessToken": "j2p7xwtf",
+  "brand": "",
+  "showQR": true
+}
