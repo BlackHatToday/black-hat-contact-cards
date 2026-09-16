@@ -950,6 +950,28 @@
 
   try {
     const data = await loadData();
+
+    // Trial cards carry a trialExpires date (YYYY-MM-DD). Checked first,
+    // before any rendering — comparing today's date against it, done
+    // entirely in the visitor's own browser. If it's passed, the page
+    // shows this instead of the card and stops there; nothing below this
+    // block ever runs. Compares by date only (not time), so the trial
+    // stays valid through the entire final day rather than cutting off
+    // at some arbitrary hour.
+    if (data.trialExpires) {
+      const today = new Date().toISOString().slice(0, 10);
+      if (today > data.trialExpires) {
+        document.querySelector('.page').innerHTML = `
+          <div class="load-error">
+            <div class="trial-ended-heading">Your Trial Has Ended</div>
+            This 7-day trial of ${data.firstName || 'this'}'s Black Hat Card has ended.<br>
+            Want your own?
+            <a href="${PROJECT_BASE_URL}/my-contact-info-form.html" class="trial-ended-btn">Get Your Own Card</a>
+          </div>`;
+        return;
+      }
+    }
+
     await applyBrandTheme(data); // before any rendering, to avoid a flash of the default color
 
     // "Collect Contact Info" QR jumps here with ?action=share — strips

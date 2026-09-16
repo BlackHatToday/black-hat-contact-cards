@@ -277,6 +277,17 @@
     </fieldset>
 
     <fieldset>
+      <legend>Trial Card</legend>
+      <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+        <input type="checkbox" id="isTrial" style="width:auto;">
+        <span>This is a 7-day trial card</span>
+      </label>
+      <label style="margin-top:12px;">Expires on</label>
+      <input type="date" id="trialExpires">
+      <div class="hint">Checking the box auto-fills 7 days from today — adjust if you want a different window. Once this date passes, the card automatically stops showing its normal content and instead shows a "Your Trial Has Ended" screen with a link to get a real card. Leave the box unchecked for a normal, non-expiring card.</div>
+    </fieldset>
+
+    <fieldset>
       <legend>About</legend>
       <label>Narrative / bio (leave blank to hide this section)</label>
       <textarea id="about" placeholder="A few sentences about who you are and what you do."></textarea>
@@ -725,6 +736,13 @@
   });
   document.getElementById('addListing').addEventListener('click', () => addListingRow());
   document.getElementById('isRealtor').addEventListener('change', () => updateAddListingButtonState());
+  document.getElementById('isTrial').addEventListener('change', (e) => {
+    if (e.target.checked && !document.getElementById('trialExpires').value) {
+      const d = new Date();
+      d.setDate(d.getDate() + 7);
+      document.getElementById('trialExpires').value = d.toISOString().slice(0, 10);
+    }
+  });
   document.getElementById('addExperience').addEventListener('click', () => addExperienceRow());
   wireCardScan();
 
@@ -799,6 +817,7 @@
       gallery,
       listings,
       isRealtor: document.getElementById('isRealtor').checked,
+      trialExpires: document.getElementById('isTrial').checked ? document.getElementById('trialExpires').value : '',
       calendlyUrl: document.getElementById('calendlyUrl').value,
       bookingLabel: document.getElementById('bookingLabel').value || 'Book a Time',
       address: document.getElementById('address').value,
@@ -1002,6 +1021,8 @@
     setVal('about', d.about);
     setVal('notes', d.notes);
     document.getElementById('isRealtor').checked = !!d.isRealtor;
+    document.getElementById('isTrial').checked = !!d.trialExpires;
+    document.getElementById('trialExpires').value = d.trialExpires || '';
     setVal('calendlyUrl', d.calendlyUrl);
     setVal('bookingLabel', d.bookingLabel || 'Book a Time');
     setVal('address', d.address);
@@ -1118,6 +1139,8 @@
     ['cashapp', 'venmo', 'paypal', 'zelle'].forEach(p => setVal(`payment_${p}`, ''));
     document.getElementById('showQR').checked = true;
     document.getElementById('isRealtor').checked = false;
+    document.getElementById('isTrial').checked = false;
+    document.getElementById('trialExpires').value = '';
 
     // Repeatable rows — clear and rebuild to the same starting state as a fresh page load
     document.getElementById('phoneList').innerHTML = '';

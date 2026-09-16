@@ -188,12 +188,22 @@
   .confirm-panel .muted{ color: var(--muted); font-size: 12.5px; }
 
   .hint{ font-size: 11.5px; color: var(--muted); margin-top: 6px; line-height:1.5; }
+  .terms-agree{
+    display:flex; align-items:flex-start; gap:8px; margin-top:16px; cursor:pointer;
+    font-size:12.5px; color:var(--muted); line-height:1.5;
+  }
+  .terms-agree input{ margin-top:2px; width:auto; flex-shrink:0; }
+  .terms-agree a{ color: var(--copper-soft); }
   .hint-photo{
     font-size: 12px; color: var(--copper); margin-top: 8px; line-height:1.5;
     font-weight: 500;
   }
   .status{ text-align:center; font-family:'IBM Plex Mono', monospace; font-size: 12.5px; color: var(--copper-soft); margin-top: 10px; min-height: 18px; }
   .brand-line{ text-align:center; margin-top: 24px; font-family:'IBM Plex Mono', monospace; font-size: 9px; letter-spacing:0.04em; color: #3a3f4a; }
+  .legal-links{ text-align:center; margin-top: 20px; font-size: 11.5px; }
+  .legal-links a{ color: var(--muted); text-decoration: none; }
+  .legal-links a:hover{ color: var(--copper-soft); }
+  .legal-links span{ color: var(--line); margin: 0 8px; }
 
   /* ---- preview overlay ---- */
   .overlay{
@@ -427,6 +437,11 @@
     <div class="hint" style="margin-top:8px;">Once you send it, mention that in your message below so I know it's already taken care of.</div>
   </div>
 
+  <label class="terms-agree" id="termsAgreeRow">
+    <input type="checkbox" id="agreeToTerms">
+    <span>I agree to the <a href="/terms.html" target="_blank" rel="noopener">Terms &amp; Conditions</a> and <a href="/privacy-policy.html" target="_blank" rel="noopener">Privacy Policy</a></span>
+  </label>
+
   <div class="send-choice" id="sendChoice" style="margin-top:14px;">
     <button type="button" class="btn-primary" id="emailBtn">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 6 12 13 2 6"/><path d="M2 6h20v12H2z"/></svg>
@@ -444,6 +459,7 @@
 
   </div>
 
+  <div class="legal-links"><a href="/terms.html" target="_blank" rel="noopener">Terms</a><span>&middot;</span><a href="/privacy-policy.html" target="_blank" rel="noopener">Privacy</a></div>
   <div class="brand-line">Adette &amp; Bo LLC</div>
 </div>
 
@@ -614,6 +630,7 @@
     document.getElementById('tierChoice').style.display = 'none';
     document.getElementById('timingChoice').style.display = 'none';
     document.getElementById('paymentReveal').style.display = 'none';
+    document.getElementById('termsAgreeRow').style.display = 'none';
     document.querySelectorAll('.choice-label').forEach(el => el.style.display = 'none');
   }
 
@@ -733,9 +750,9 @@
     if (selectedTier || selectedTiming) lines.push('');
 
     if (tokenStatus === 'verified') {
-      lines.push('✓ VERIFIED — sent via the actual card link, token matches what\'s on file.');
+      lines.push('✓ Card link matches — also worth confirming the sender\'s email/phone matches what\'s on file before making sensitive changes.');
     } else if (tokenStatus === 'unverified') {
-      lines.push('⚠ NOT VERIFIED — token missing or doesn\'t match what\'s on file. Confirm this is really them before making changes.');
+      lines.push('⚠ Card link doesn\'t match — cross-check the sender\'s email/phone against what\'s on file before making any changes.');
     }
     if (tokenStatus !== 'none') lines.push('');
 
@@ -961,7 +978,7 @@
   // body, since SMS has no subject field) — keeps both channels consistent.
   function buildSubjectLine(name) {
     const kind = tokenStatus === 'none' ? 'New Card Request' : 'Support / Update';
-    const verifiedTag = tokenStatus === 'verified' ? '[Verified] ' : tokenStatus === 'unverified' ? '[UNVERIFIED] ' : '';
+    const verifiedTag = tokenStatus === 'verified' ? '[Card Link Match] ' : tokenStatus === 'unverified' ? '[No Card Link Match] ' : '';
     return `${verifiedTag}${kind} — ${name} (BHCC)`;
   }
 
@@ -982,6 +999,11 @@
       if (!selectedTiming) {
         document.getElementById('statusEl').textContent = 'Please choose when you\'d like to pay above.';
         document.getElementById('timingChoice').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return false;
+      }
+      if (!document.getElementById('agreeToTerms').checked) {
+        document.getElementById('statusEl').textContent = 'Please agree to the Terms & Conditions and Privacy Policy above.';
+        document.getElementById('termsAgreeRow').scrollIntoView({ behavior: 'smooth', block: 'center' });
         return false;
       }
     }

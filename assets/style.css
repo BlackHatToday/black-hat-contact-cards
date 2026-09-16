@@ -398,6 +398,16 @@ footer{
   text-align:center; padding: 60px 28px; color: var(--muted);
   font-family:'IBM Plex Mono', monospace; font-size: 13px; line-height:1.6;
 }
+.trial-ended-heading{
+  font-family:'Space Grotesk', sans-serif; font-size: 20px; font-weight: 600;
+  color: var(--parchment); margin-bottom: 14px;
+}
+.trial-ended-btn{
+  display:block; margin:20px auto 0; max-width:220px; padding:13px 26px;
+  background:var(--copper); color:var(--ink); border-radius:12px;
+  text-decoration:none; font-family:'Space Grotesk', sans-serif; font-weight:600; font-size:14px;
+}
+.trial-ended-btn:hover{ background:var(--copper-soft); }
 
 /* ============================================================
    PROPERTY LISTING CARD — used by property-template, not the

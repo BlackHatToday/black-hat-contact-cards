@@ -370,9 +370,9 @@
     const lines = [];
 
     if (tokenStatus === 'verified') {
-      lines.push('✓ VERIFIED — sent via the actual listing card link, token matches what\'s on file.');
+      lines.push('✓ Card link matches — also worth confirming the sender\'s email/phone matches what\'s on file before making sensitive changes.');
     } else if (tokenStatus === 'unverified') {
-      lines.push('⚠ NOT VERIFIED — token missing or doesn\'t match what\'s on file. Confirm this is really the listing agent before making changes.');
+      lines.push('⚠ Card link doesn\'t match — cross-check the sender\'s email/phone against what\'s on file before making any changes.');
     }
     if (tokenStatus !== 'none') lines.push('');
 
@@ -417,7 +417,7 @@
   // here, since those are specific to person-card pricing, not listings.
   function buildSubjectLine(identifier) {
     const kind = tokenStatus === 'none' ? 'New Listing Request' : 'Support / Update';
-    const verifiedTag = tokenStatus === 'verified' ? '[Verified] ' : tokenStatus === 'unverified' ? '[UNVERIFIED] ' : '';
+    const verifiedTag = tokenStatus === 'verified' ? '[Card Link Match] ' : tokenStatus === 'unverified' ? '[No Card Link Match] ' : '';
     return `${verifiedTag}${kind} — ${identifier} (BHCC)`;
   }
 
