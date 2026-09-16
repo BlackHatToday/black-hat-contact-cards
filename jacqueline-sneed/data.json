@@ -1,0 +1,80 @@
+{
+  "prefix": "",
+  "firstName": "Jacqueline",
+  "lastName": "Sneed",
+  "title": "Media Coordinator",
+  "org": "West Oxford Elementary School",
+  "tagline": "Every Child Is Known,Learning With Purpose,Leadership Starts Here,Empowered To Make A Difference",
+  "about": "We’re raising world changers. One child at a time.",
+  "experience": [],
+  "skills": [],
+  "social": {
+    "instagram": "woxworldchangers",
+    "tiktok": "",
+    "facebook": "",
+    "linkedin": "",
+    "twitter": "",
+    "youtube": ""
+  },
+  "payments": {
+    "cashapp": "",
+    "venmo": "",
+    "paypal": "",
+    "zelle": ""
+  },
+  "paymentSectionLabel": "Payment",
+  "notes": "",
+  "phones": [
+    {
+      "type": "Mobile",
+      "number": "(919) 693-9161"
+    }
+  ],
+  "emails": [
+    {
+      "type": "Work",
+      "address": "gcpsCommunications@gcs.k12.nc.us"
+    }
+  ],
+  "websites": [
+    {
+      "label": "West Oxford Elementary School",
+      "url": "https://woes.gcs.k12.nc.us/"
+    },
+    {
+      "label": "Parent Square",
+      "url": "https://www.parentsquare.com/"
+    },
+    {
+      "label": "School Calendar",
+      "url": "https://woes.gcs.k12.nc.us/page/page_calendar?calID=138828"
+    }
+  ],
+  "gallery": [
+    {
+      "photo": "photo1.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo2.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo3.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo4.jpg",
+      "caption": ""
+    }
+  ],
+  "listings": [],
+  "isRealtor": false,
+  "calendlyUrl": "",
+  "bookingLabel": "Book a Time",
+  "address": "412 Ivey Day Road  Oxford  NC  27565",
+  "photoFile": "photo.jpg",
+  "accessToken": "p7erp85w",
+  "brand": "biz-jacqueline-sneed",
+  "showQR": true
+}
