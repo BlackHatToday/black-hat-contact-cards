@@ -1,0 +1,56 @@
+{
+  "prefix": "",
+  "firstName": "Debra",
+  "lastName": "Bullock",
+  "title": "Librarian",
+  "org": "Stovall Branch Library",
+  "tagline": "",
+  "about": "",
+  "experience": [],
+  "skills": [],
+  "social": {
+    "instagram": "",
+    "tiktok": "",
+    "facebook": "",
+    "linkedin": "",
+    "twitter": "",
+    "youtube": ""
+  },
+  "payments": {
+    "cashapp": "",
+    "venmo": "",
+    "paypal": "",
+    "zelle": ""
+  },
+  "paymentSectionLabel": "Payment",
+  "notes": "",
+  "phones": [
+    {
+      "type": "Mobile",
+      "number": "(919) 693-5722"
+    }
+  ],
+  "emails": [],
+  "websites": [
+    {
+      "label": "Our Digital Home",
+      "url": "https://www.granvillecounty.org/421/Stovall-Branch-Library"
+    }
+  ],
+  "gallery": [
+    {
+      "photo": "photo1.jpg",
+      "caption": ""
+    }
+  ],
+  "listings": [],
+  "isRealtor": false,
+  "trialExpires": "",
+  "calendlyUrl": "",
+  "bookingLabel": "Book a Time",
+  "address": "300 Main Street  Stovall, NC 27582",
+  "photoFile": "photo.jpg",
+  "accessToken": "5viahvg5",
+  "brand": "solo-debra-bullock",
+  "showQR": true
+}
