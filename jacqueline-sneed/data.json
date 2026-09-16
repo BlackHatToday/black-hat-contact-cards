@@ -4,7 +4,7 @@
   "lastName": "Sneed",
   "title": "Media Coordinator",
   "org": "West Oxford Elementary School",
-  "tagline": "Every Child Is Known,Learning With Purpose,Leadership Starts Here,Empowered To Make A Difference",
+  "tagline": "Every Child Is Known,Learning With Purpose",
   "about": "We’re raising world changers. One child at a time.",
   "experience": [],
   "skills": [],
@@ -38,16 +38,16 @@
   ],
   "websites": [
     {
-      "label": "West Oxford Elementary School",
+      "label": "Our Digital Home",
       "url": "https://woes.gcs.k12.nc.us/"
-    },
-    {
-      "label": "Parent Square",
-      "url": "https://www.parentsquare.com/"
     },
     {
       "label": "School Calendar",
       "url": "https://woes.gcs.k12.nc.us/page/page_calendar?calID=138828"
+    },
+    {
+      "label": "Parent Square",
+      "url": "https://www.parentsquare.com/"
     }
   ],
   "gallery": [
