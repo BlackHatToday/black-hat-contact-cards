@@ -38,7 +38,7 @@
   "emails": [
     {
       "type": "Work",
-      "address": "service@omegaappliancerepairnc.com"
+      "address": "Service@OmegaApplianceRepairNC.com"
     }
   ],
   "websites": [
@@ -53,10 +53,15 @@
     {
       "label": "BBB Profile",
       "url": "https://www.bbb.org/us/nc/henderson/profile/appliance-repair/omega-appliance-repair-and-home-services-llc-0593-90330359"
+    },
+    {
+      "label": "Thanks for trusting Omega Appliance Repair and Home Services LLC. We'd love your feedback here: ",
+      "url": "https://pro.housecallpro.com/review/llxcfjzbf2"
     }
   ],
   "gallery": [],
   "listings": [],
+  "isRealtor": false,
   "calendlyUrl": "",
   "bookingLabel": "Book a Time",
   "address": "",
