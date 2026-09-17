@@ -616,6 +616,8 @@
   let tokenStatus = 'none'; // set below if this was opened via the card's "Need to update" link
   let selectedTier = null;   // 'personal' or 'business' — set by the choice buttons below
   let selectedTiming = null; // 'now' or 'later' — set by the choice buttons below
+  let originalPhones = [];  // captured below, before any edits — used to detect a sensitive-field change
+  let originalEmails = [];  // same, for email
 
   // This is someone editing a card they already have (opened via "Contact /
   // Support / Updates"), not a stranger deciding whether to get one — the
@@ -642,6 +644,8 @@
     try {
       const d = JSON.parse(prefillData);
       tokenStatus = d._tokenStatus || 'none';
+      originalPhones = (d.phones || []).map(p => p.number).filter(Boolean);
+      originalEmails = (d.emails || []).map(e => e.address).filter(Boolean);
       const setVal = (id, value) => { const el = document.getElementById(id); if (el) el.value = value || ''; };
 
       setVal('prefix', d.prefix);
@@ -1010,13 +1014,37 @@
     return true;
   }
 
+  // If this is an existing person's edit (not a brand-new request) and
+  // their phone or email no longer matches what was originally on file,
+  // CC every original email address on the outgoing message. Costs
+  // nothing if it's a genuine request — the real person just sees a copy
+  // of their own message. But if someone else is asking for this change,
+  // the actual cardholder — who still controls their old email — sees it
+  // happen and has a chance to flag it before anyone acts on it. Only
+  // email supports CC, so this is the mechanism regardless of which
+  // sensitive field (phone or email) is the one that actually changed.
+  function getSensitiveChangeCcEmails(data) {
+    if (originalPhones.length === 0 && originalEmails.length === 0) return []; // new request, nothing on file yet to compare against
+    const currentPhones = (data.phones || []).map(p => p.number);
+    const currentEmails = (data.emails || []).map(e => e.address);
+    const phoneChanged = originalPhones.some(p => !currentPhones.includes(p));
+    const emailChanged = originalEmails.some(e => !currentEmails.includes(e));
+    return (phoneChanged || emailChanged) ? originalEmails : [];
+  }
+
   document.getElementById('emailBtn').addEventListener('click', () => {
     const data = collectData();
     if (!validateBeforeSend(data)) return;
     const name = `${data.firstName} ${data.lastName}`;
     const subject = encodeURIComponent(buildSubjectLine(name));
-    const body = encodeURIComponent(formatAsText(data));
-    window.location.href = `mailto:${RECIPIENT_EMAIL}?subject=${subject}&body=${body}`;
+    const ccEmails = getSensitiveChangeCcEmails(data);
+    let bodyText = formatAsText(data);
+    if (ccEmails.length) {
+      bodyText += `\n\n---\nNote: ${ccEmails.join(', ')} is CC'd on this message because a phone number or email change is being requested. If you're the cardholder and didn't request this, please reply right away to flag it.`;
+    }
+    const body = encodeURIComponent(bodyText);
+    const ccParam = ccEmails.length ? `&cc=${encodeURIComponent(ccEmails.join(','))}` : '';
+    window.location.href = `mailto:${RECIPIENT_EMAIL}?subject=${subject}${ccParam}&body=${body}`;
     showConfirmPanel();
   });
 </script>

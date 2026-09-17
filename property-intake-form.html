@@ -282,6 +282,8 @@
   // listing card, its current info arrives as a URL parameter — fill in
   // every field from it so the agent sees everything before editing.
   let tokenStatus = 'none'; // set below if this was opened via the card's "Need to update" link
+  let originalAgentPhone = ''; // captured below, before any edits — used to detect a sensitive-field change
+  let originalAgentEmail = '';
   (function prefillFromUrl() {
     const params = new URLSearchParams(window.location.search);
     const prefillData = params.get('data');
@@ -289,6 +291,8 @@
     try {
       const d = JSON.parse(prefillData);
       tokenStatus = d._tokenStatus || 'none';
+      originalAgentPhone = d.agentPhone || '';
+      originalAgentEmail = d.agentEmail || '';
       const setVal = (id, value) => { const el = document.getElementById(id); if (el) el.value = value || ''; };
       setVal('address', d.address);
       setVal('price', d.price);
@@ -421,6 +425,18 @@
     return `${verifiedTag}${kind} — ${identifier} (BHCC)`;
   }
 
+  // Same reasoning as the person-card intake form: if this is an existing
+  // listing's edit and the agent's phone or email no longer matches what
+  // was originally on file, CC the original agent email — costs nothing
+  // if it's genuine, but gives the real agent a chance to notice and flag
+  // it if someone else is the one asking for the change.
+  function getSensitiveChangeCcEmail(data) {
+    if (!originalAgentPhone && !originalAgentEmail) return ''; // new listing, nothing on file yet to compare against
+    const changed = (originalAgentPhone && data.agentPhone !== originalAgentPhone) ||
+                    (originalAgentEmail && data.agentEmail !== originalAgentEmail);
+    return changed ? originalAgentEmail : '';
+  }
+
   document.getElementById('emailBtn').addEventListener('click', () => {
     const data = collectData();
     if (!data.address) {
@@ -428,8 +444,14 @@
       return;
     }
     const subject = encodeURIComponent(buildSubjectLine(data.address));
-    const body = encodeURIComponent(formatAsText(data));
-    window.location.href = `mailto:${RECIPIENT_EMAIL}?subject=${subject}&body=${body}`;
+    const ccEmail = getSensitiveChangeCcEmail(data);
+    let bodyText = formatAsText(data);
+    if (ccEmail) {
+      bodyText += `\n\n---\nNote: ${ccEmail} is CC'd on this message because the listing agent's phone number or email is being changed. If you're the actual agent and didn't request this, please reply right away to flag it.`;
+    }
+    const body = encodeURIComponent(bodyText);
+    const ccParam = ccEmail ? `&cc=${encodeURIComponent(ccEmail)}` : '';
+    window.location.href = `mailto:${RECIPIENT_EMAIL}?subject=${subject}${ccParam}&body=${body}`;
     showConfirmPanel();
   });
 </script>

@@ -27,6 +27,7 @@ Task-first reference. If you need to know *how the system works and why*, see `P
 | Change an existing card's color palette | §17 |
 | Handle a photo or gallery update request | §18 |
 | Set up a realtor's card (pricing tier and referral behavior) | §19 |
+| Verify a change request before acting on it | §20 |
 
 ---
 
@@ -319,3 +320,28 @@ Realtors get a genuinely different pricing tier and referral behavior than every
 3. Save or Download as usual.
 
 **One thing worth remembering — this doesn't apply itself.** Checking this box only takes effect once the file is actually saved and pushed live. If you're turning this on for someone who already has a card (Angela Hanks being the first case), you have to explicitly Load their file, check the box, and re-save — it doesn't happen automatically just because they agreed to the tier in conversation.
+
+---
+
+## 20. Verifying a Change Request Before Acting On It
+
+As long as you personally recognize most people asking for a change, this mostly takes care of itself. It stops taking care of itself once cards go out to people you don't know personally — a request can look completely reasonable and still not actually be from the cardholder. This section exists for that point, so the rule already lives here rather than needing to be worked out in the moment.
+
+**The actual risk isn't a break-in — it's someone convincingly asking you to change the wrong thing.** Someone emails or texts claiming to be a cardholder and asks you to update their phone number or email to something new. If they're not actually that person, you've just handed their card to a stranger, in good faith, because the request looked normal.
+
+**Not every field carries the same risk.** A wrong gallery photo or an odd bio update is low-stakes even if you got the requester wrong. The phone number and email are different — they're what everything else on the card routes through, so getting either one wrong is effectively handing over the whole card. Treat these two fields differently from everything else:
+
+**The rule for phone number or email changes specifically:** before making the change, confirm it against the contact info *already on file* for that person — not whatever the new message provides. In practice:
+- Reply to the *existing* email already listed on their card, not the one in the incoming request, and wait for a reply there before proceeding.
+- For a phone number change specifically, a quick call to the *old* number is the stronger version of the same check — a real-time conversation is much harder to fake than a text.
+
+This works because someone who doesn't already control the real person's existing email or phone can't intercept a message sent there — which is exactly the case a false request usually is.
+
+**This part is now automatic, not just a habit to remember.** Both `my-contact-info-form.html` and `property-intake-form.html` compare the phone and email being submitted against what was originally on file for that person or listing. If either one changed, the outgoing message automatically CCs the *original* email address — no action needed on your end for this to happen. The message itself also gets a short note explaining why that address is CC'd, so it doesn't just look like confusing noise to whoever's reading it — both to a genuine sender wondering why their old email showed up, and to the CC'd party, who needs to actually understand they should speak up if this wasn't them. If it's a genuine request, the real person just sees a copy of their own message with a plain explanation. If it isn't, the actual cardholder — who still controls their old email — sees the change happen, understands why they're seeing it, and has a chance to flag it before you act on it. This doesn't replace the manual check above; it's a second, silent layer underneath it. It also does nothing for a brand-new request, since there's nothing on file yet to compare against — the manual check above is still what applies there.
+
+**Everything else** — photos, bio, socials, address, listings — can be taken at face value the way it always has been, especially once the ✓/⚠ card-link line in the message and the `[Card Link Match]` / `[No Card Link Match]` subject tag already give you a first, quick read on whether the request came through the card's own link at all (see `PROJECT-NOTES.md` §6, Security & Trust Model, for exactly what that tag does and doesn't prove).
+
+**A private verification phrase is worth setting up per person, if this ever becomes a recurring concern.** At signup, ask the person for a simple word or phrase only they'd know, and keep it somewhere private — not in the public repo, alongside the token/folder log already planned for. Ask for it before acting on a phone or email change if anything about the request feels off. This is a manual habit, not a technical feature — nothing to build, just a note to keep.
+
+**A full backend-based verification system was also considered and deliberately set aside for now** — real logins, server-side identity checks, that category of thing. See `FUTURE-CONSIDERATIONS.md` for what that would actually involve and why it's a bigger step than anything else in this section.
+
