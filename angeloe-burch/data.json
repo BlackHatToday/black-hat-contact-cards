@@ -11,7 +11,7 @@
   "social": {
     "instagram": "",
     "tiktok": "",
-    "facebook": "",
+    "facebook": "https://www.facebook.com/profile.php?id=61594058501416&rdid=zIpAHDMHcqiWKHoj&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F19qEZD2LFJ%2F#",
     "linkedin": "",
     "twitter": "",
     "youtube": ""
@@ -26,12 +26,21 @@
   "notes": "",
   "phones": [],
   "emails": [],
-  "websites": [],
+  "websites": [
+    {
+      "label": "CG#2 Facebook",
+      "url": "https://www.facebook.com/profile.php?id=61594058501416&rdid=zIpAHDMHcqiWKHoj&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F19qEZD2LFJ%2F#"
+    }
+  ],
+  "gallery": [],
   "listings": [],
+  "isRealtor": false,
+  "trialExpires": "",
   "calendlyUrl": "",
   "bookingLabel": "Book a Time",
   "address": "",
   "photoFile": "photo.jpg",
   "accessToken": "2j98ajfm",
+  "brand": "",
   "showQR": true
 }
