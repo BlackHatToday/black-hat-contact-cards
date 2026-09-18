@@ -64,6 +64,10 @@
       "url": "https://blackhatcards.community/capabilities.html"
     },
     {
+      "label": "Cedar Grove #2",
+      "url": "https://cedargrovebaptistchurch2.org/"
+    },
+    {
       "label": "Angela Hanks",
       "url": "https://blackhatcards.community/the-real-estate-co/angela-hanks/"
     },
@@ -91,6 +95,7 @@
   "gallery": [],
   "listings": [],
   "isRealtor": false,
+  "trialExpires": "",
   "calendlyUrl": "",
   "bookingLabel": "Book a Time",
   "address": "P.O. Box 913 Oxford NC 27565",
