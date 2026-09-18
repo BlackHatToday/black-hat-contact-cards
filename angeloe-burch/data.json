@@ -24,7 +24,12 @@
   },
   "paymentSectionLabel": "Payment",
   "notes": "",
-  "phones": [],
+  "phones": [
+    {
+      "type": "Mobile",
+      "number": "(434) 374-9357"
+    }
+  ],
   "emails": [],
   "websites": [
     {
@@ -32,13 +37,18 @@
       "url": "https://www.facebook.com/profile.php?id=61594058501416&rdid=zIpAHDMHcqiWKHoj&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F19qEZD2LFJ%2F#"
     }
   ],
-  "gallery": [],
+  "gallery": [
+    {
+      "photo": "photo1.jpg",
+      "caption": ""
+    }
+  ],
   "listings": [],
   "isRealtor": false,
   "trialExpires": "",
   "calendlyUrl": "",
   "bookingLabel": "Book a Time",
-  "address": "",
+  "address": "212 Church Road Clarksville VA 23927",
   "photoFile": "photo.jpg",
   "accessToken": "2j98ajfm",
   "brand": "",
