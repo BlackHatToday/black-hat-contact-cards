@@ -33,7 +33,7 @@
   "emails": [],
   "websites": [
     {
-      "label": "CG#2 Facebook",
+      "label": "CG2 Facebook",
       "url": "https://www.facebook.com/profile.php?id=61594058501416&rdid=zIpAHDMHcqiWKHoj&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F19qEZD2LFJ%2F#"
     }
   ],
@@ -49,7 +49,7 @@
   "calendlyUrl": "",
   "bookingLabel": "Book a Time",
   "address": "212 Church Road Clarksville VA 23927",
-  "photoFile": "photo.jpg",
+  "photoFile": "photo1.jpg",
   "accessToken": "2j98ajfm",
   "brand": "",
   "showQR": true
