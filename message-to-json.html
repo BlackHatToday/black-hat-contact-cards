@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Message to data.json</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap');
+  :root{
+    --ink:#000000; --surface:#1c2129; --surface-2:#242a34;
+    --copper:#b8763f; --copper-soft:#c98549; --parchment:#ede6d6;
+    --muted:#8b93a1; --line:#2e3542; --good:#5fb88a;
+  }
+  *{ box-sizing:border-box; }
+  body{ background:var(--ink); color:var(--parchment); font-family:'IBM Plex Sans', sans-serif; margin:0; padding:32px 20px 60px; }
+  .wrap{ max-width:640px; margin:0 auto; }
+  h1{ font-family:'Space Grotesk', sans-serif; font-size:24px; margin-bottom:8px; }
+  .sub{ color:var(--muted); font-size:13.5px; line-height:1.6; margin-bottom:22px; }
+  textarea{
+    width:100%; min-height:220px; padding:14px; background:var(--surface); border:1px solid var(--line);
+    border-radius:12px; color:var(--parchment); font-family:'IBM Plex Mono', monospace; font-size:12.5px;
+    resize:vertical; line-height:1.5;
+  }
+  .btn-primary{
+    width:100%; margin-top:12px; padding:15px; background:var(--copper); color:var(--ink); border:none;
+    border-radius:12px; font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:15px; cursor:pointer;
+  }
+  .btn-primary:hover{ background:var(--copper-soft); }
+  .btn-secondary{
+    width:100%; margin-top:10px; padding:13px; background:transparent; color:var(--muted); border:1px solid var(--line);
+    border-radius:12px; font-family:'IBM Plex Mono', monospace; font-size:13px; cursor:pointer;
+  }
+  .btn-secondary:hover{ border-color:var(--copper); color:var(--copper-soft); }
+  .meta-note{
+    display:none; margin-top:16px; background:rgba(184,118,63,0.1); border:1px solid var(--copper);
+    border-radius:10px; padding:12px 14px; font-size:12.5px; line-height:1.6;
+  }
+  .meta-note.show{ display:block; }
+  .meta-note b{ color:var(--copper-soft); }
+  .result{ display:none; margin-top:20px; }
+  .result.show{ display:block; }
+  .preview-box{
+    background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:16px 18px;
+    font-family:'IBM Plex Mono', monospace; font-size:12px; line-height:1.7; max-height:340px; overflow-y:auto;
+    white-space:pre-wrap;
+  }
+  .preview-box .field-name{ color:var(--copper-soft); }
+  .warn{
+    display:none; margin-top:14px; background:rgba(212,162,74,0.1); border:1px solid #d4a24a;
+    border-radius:10px; padding:12px 14px; font-size:12.5px; color:#d4a24a; line-height:1.6;
+  }
+  .warn.show{ display:block; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <h1>Message to data.json</h1>
+  <p class="sub">Paste the exact text you received from a Text It / Email It submission — read it first, same as always, and only convert it once you've confirmed it's legitimate. This doesn't replace that review step, it just replaces the retyping afterward.</p>
+
+  <textarea id="inputText" placeholder="Paste the full message here, including Name:, Phone numbers:, etc."></textarea>
+  <button type="button" class="btn-primary" id="convertBtn">Convert to data.json</button>
+
+  <div class="meta-note" id="metaNote"></div>
+  <div class="warn" id="warnBox"></div>
+
+  <div class="result" id="result">
+    <div class="preview-box" id="previewBox"></div>
+    <button type="button" class="btn-primary" id="downloadBtn" style="margin-top:14px;">Download data.json</button>
+    <button type="button" class="btn-secondary" id="copyBtn">Copy JSON</button>
+  </div>
+</div>
+
+<script>
+  const KNOWN_HEADERS = ['Name:', 'Title:', 'Organization:', 'Tagline:', 'About:', 'Experience:', 'Skills:',
+    'Phone numbers:', 'Emails:', 'Address:', 'Websites:', 'Social media:', 'Payments:', 'Calendly link:', 'Notes:'];
+  const isKnownHeader = (line) => KNOWN_HEADERS.some(h => line === h || line.startsWith(h + ' '));
+
+  const PREFIXES = ['Dr.', 'Dr', 'Mr.', 'Mr', 'Mrs.', 'Mrs', 'Ms.', 'Ms', 'Miss', 'Prof.', 'Prof'];
+
+  function splitLabelValue(line) {
+    const idx = line.indexOf(': ');
+    if (idx === -1) return [line.trim(), ''];
+    return [line.slice(0, idx).trim(), line.slice(idx + 2).trim()];
+  }
+
+  function parseSubmission(text) {
+    const lines = text.replace(/\r\n/g, '\n').split('\n');
+    const data = {
+      prefix: '', firstName: '', lastName: '', title: '', org: '', tagline: '',
+      about: '', experience: [], skills: [], social: {}, payments: {},
+      paymentSectionLabel: 'Payment', listings: [], notes: '', phones: [], emails: [],
+      websites: [], calendlyUrl: '', bookingLabel: 'Book a Time', address: '',
+      photoFile: 'photo.jpg', accessToken: '', brand: '', showQR: true
+    };
+    const meta = { cardType: '', paymentTiming: '', verified: '', supportMessage: '' };
+    let i = 0;
+
+    // Leading meta lines — Card type, Payment timing, verification status,
+    // and the free-text support message — none of these are card fields,
+    // just information for you to read before the actual data starts.
+    while (i < lines.length) {
+      const line = lines[i];
+      if (line.startsWith('Card type: ')) { meta.cardType = line.slice('Card type: '.length); i++; continue; }
+      if (line.startsWith('Payment: ')) { meta.paymentTiming = line.slice('Payment: '.length); i++; continue; }
+      if (line.startsWith('✓ VERIFIED') || line.startsWith('⚠ NOT VERIFIED')) { meta.verified = line; i++; continue; }
+      if (line === 'Message:') {
+        i++;
+        const msgLines = [];
+        while (i < lines.length && lines[i] !== '---') { msgLines.push(lines[i]); i++; }
+        meta.supportMessage = msgLines.join('\n').trim();
+        i++;
+        continue;
+      }
+      if (line.trim() === '') { i++; continue; }
+      break; // reached the first real data line
+    }
+
+    while (i < lines.length) {
+      const line = lines[i];
+      if (line.startsWith('Name: ')) {
+        const full = line.slice('Name: '.length).trim();
+        const parts = full.split(/\s+/).filter(Boolean);
+        if (parts.length > 1 && PREFIXES.includes(parts[0])) { data.prefix = parts.shift(); }
+        data.firstName = parts[0] || '';
+        data.lastName = parts.slice(1).join(' ');
+        i++;
+      } else if (line.startsWith('Title: ')) {
+        data.title = line.slice('Title: '.length); i++;
+      } else if (line.startsWith('Organization: ')) {
+        data.org = line.slice('Organization: '.length); i++;
+      } else if (line.startsWith('Tagline: ')) {
+        data.tagline = line.slice('Tagline: '.length); i++;
+      } else if (line === 'About:') {
+        i++;
+        const buf = [];
+        while (i < lines.length && lines[i].trim() !== '' && !isKnownHeader(lines[i])) { buf.push(lines[i]); i++; }
+        data.about = buf.join('\n').trim();
+      } else if (line === 'Experience:') {
+        i++;
+        while (i < lines.length && lines[i].startsWith('  ') && !lines[i].startsWith('    ')) {
+          const raw = lines[i].trim();
+          let role = raw, company = '', period = '';
+          const periodMatch = raw.match(/^(.*)\s\(([^()]*)\)$/);
+          let withoutPeriod = raw;
+          if (periodMatch) { withoutPeriod = periodMatch[1]; period = periodMatch[2]; }
+          const atMatch = withoutPeriod.match(/^(.*)\sat\s(.*)$/);
+          if (atMatch) { role = atMatch[1]; company = atMatch[2]; } else { role = withoutPeriod; }
+          i++;
+          let description = '';
+          if (i < lines.length && lines[i].startsWith('    ')) { description = lines[i].trim(); i++; }
+          data.experience.push({ role, company, period, description });
+        }
+      } else if (line.startsWith('Skills: ')) {
+        data.skills = line.slice('Skills: '.length).split(',').map(s => s.trim()).filter(Boolean);
+        i++;
+      } else if (line === 'Phone numbers:') {
+        i++;
+        while (i < lines.length && lines[i].startsWith('  ')) {
+          const [type, number] = splitLabelValue(lines[i].trim());
+          data.phones.push({ type, number });
+          i++;
+        }
+      } else if (line === 'Emails:') {
+        i++;
+        while (i < lines.length && lines[i].startsWith('  ')) {
+          const [type, address] = splitLabelValue(lines[i].trim());
+          data.emails.push({ type, address });
+          i++;
+        }
+      } else if (line.startsWith('Address: ')) {
+        data.address = line.slice('Address: '.length); i++;
+      } else if (line === 'Websites:') {
+        i++;
+        while (i < lines.length && lines[i].startsWith('  ')) {
+          const [label, url] = splitLabelValue(lines[i].trim());
+          data.websites.push({ label, url });
+          i++;
+        }
+      } else if (line === 'Social media:') {
+        i++;
+        while (i < lines.length && lines[i].startsWith('  ')) {
+          const [platform, handle] = splitLabelValue(lines[i].trim());
+          data.social[platform.toLowerCase()] = handle;
+          i++;
+        }
+      } else if (line === 'Payments:') {
+        i++;
+        while (i < lines.length && lines[i].startsWith('  ')) {
+          const [platform, handle] = splitLabelValue(lines[i].trim());
+          data.payments[platform.toLowerCase()] = handle;
+          i++;
+        }
+      } else if (line.startsWith('Calendly link: ')) {
+        data.calendlyUrl = line.slice('Calendly link: '.length); i++;
+      } else if (line === 'Notes:') {
+        i++;
+        const buf = [];
+        while (i < lines.length && lines[i].trim() !== '' && !isKnownHeader(lines[i]) && lines[i] !== '---') { buf.push(lines[i]); i++; }
+        data.notes = buf.join('\n').trim();
+      } else if (line === '---' || line.startsWith('Remember to attach') || line === 'Payment Options:' || line.startsWith('Cash App:') || line.startsWith('Zelle:')) {
+        break; // boilerplate footer — nothing past here is card data
+      } else {
+        i++; // blank line or something unrecognized — skip and keep going
+      }
+    }
+
+    return { data, meta };
+  }
+
+  document.getElementById('convertBtn').addEventListener('click', () => {
+    const text = document.getElementById('inputText').value;
+    if (!text.trim()) return;
+    const { data, meta } = parseSubmission(text);
+
+    const metaNote = document.getElementById('metaNote');
+    const metaParts = [];
+    if (meta.cardType) metaParts.push(`<b>Card type:</b> ${meta.cardType}`);
+    if (meta.paymentTiming) metaParts.push(`<b>Payment:</b> ${meta.paymentTiming}`);
+    if (meta.verified) metaParts.push(meta.verified);
+    if (meta.supportMessage) metaParts.push(`<b>Message included:</b> "${meta.supportMessage}"`);
+    if (metaParts.length) {
+      metaNote.innerHTML = metaParts.join('<br>') + '<br><br>None of this is written into the data.json below — it\'s shown here so you don\'t lose it once you move on from this message.';
+      metaNote.classList.add('show');
+    } else {
+      metaNote.classList.remove('show');
+    }
+
+    const warnBox = document.getElementById('warnBox');
+    if (!data.firstName) {
+      warnBox.textContent = 'Couldn\'t find a "Name:" line — check that you pasted the complete message.';
+      warnBox.classList.add('show');
+    } else {
+      warnBox.classList.remove('show');
+    }
+
+    const json = JSON.stringify(data, null, 2);
+    document.getElementById('previewBox').textContent = json;
+    document.getElementById('result').classList.add('show');
+    window._convertedJson = json;
+    window._convertedName = [data.firstName, data.lastName].filter(Boolean).join('-').toLowerCase().replace(/[^a-z0-9-]/g, '') || 'data';
+  });
+
+  document.getElementById('downloadBtn').addEventListener('click', () => {
+    if (!window._convertedJson) return;
+    const blob = new Blob([window._convertedJson], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `${window._convertedName}-data.json`;
+    a.click();
+  });
+
+  document.getElementById('copyBtn').addEventListener('click', () => {
+    if (!window._convertedJson) return;
+    navigator.clipboard.writeText(window._convertedJson).then(() => {
+      const btn = document.getElementById('copyBtn');
+      const original = btn.textContent;
+      btn.textContent = 'Copied!';
+      setTimeout(() => { btn.textContent = original; }, 1500);
+    });
+  });
+</script>
+
+</body>
+</html>
