@@ -1,0 +1,96 @@
+{
+  "prefix": "",
+  "firstName": "Destinne",
+  "lastName": "Parker-Stewart",
+  "title": "Therapist, LCSW",
+  "org": "",
+  "tagline": "",
+  "about": "I offer therapy in-person or online via video. I'm available late afternoon and evenings.  I specialize in Anxiety, Relationship Issues and Family Conflict.",
+  "experience": [],
+  "skills": [],
+  "social": {
+    "instagram": "ms.parker_stewart",
+    "tiktok": "",
+    "facebook": "",
+    "linkedin": "destinne",
+    "twitter": "",
+    "youtube": ""
+  },
+  "payments": {
+    "cashapp": "$DestinnePS",
+    "venmo": "",
+    "paypal": "",
+    "zelle": ""
+  },
+  "paymentSectionLabel": "Payment",
+  "notes": "",
+  "phones": [
+    {
+      "type": "Work",
+      "number": "(484) 749-0424"
+    }
+  ],
+  "emails": [],
+  "websites": [
+    {
+      "label": "Link Tree",
+      "url": "https://linktr.ee/childfamilymentalwellness"
+    },
+    {
+      "label": "Psychology Today",
+      "url": "https://www.psychologytoday.com/us/therapists/destinne-parker-stewart-reading-pa/962073"
+    },
+    {
+      "label": "Linked In",
+      "url": "https://www.linkedin.com/in/destinne/"
+    },
+    {
+      "label": "Child & Family Mental Wellness",
+      "url": "https://childandfamilymentalwellness.com/"
+    }
+  ],
+  "gallery": [
+    {
+      "photo": "photo1.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo2.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo3.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo4.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo5.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo6.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo7.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo8.jpg",
+      "caption": ""
+    }
+  ],
+  "listings": [],
+  "isRealtor": false,
+  "trialExpires": "",
+  "calendlyUrl": "",
+  "bookingLabel": "Book a Time",
+  "address": "",
+  "photoFile": "photo.jpg",
+  "accessToken": "arqgz77z",
+  "brand": "solo-destinne-parker-stewart",
+  "showQR": true
+}

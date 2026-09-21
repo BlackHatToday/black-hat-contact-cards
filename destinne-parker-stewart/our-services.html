@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Child & Family Mental Wellness Services</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: #eef3f5;
+            color: #2b3a42;
+        }
+
+        /* Colors recreated from source images */
+        .bg-brand-teal {
+            background-color: #0b7878;
+        }
+        .text-brand-header {
+            color: #0070bb;
+        }
+        .text-brand-teal-light {
+            color: #f7eed3;
+        }
+
+        /* Slide Transition Animations */
+        .slide-card {
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+            opacity: 0;
+            transform: scale(0.98);
+            pointer-events: none;
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide-card.active {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4 sm:p-6 md:p-8 select-none">
+
+    <div class="w-full max-w-3xl flex flex-col items-center">
+        
+        <!-- Header Badge -->
+        <div class="mb-6 text-center">
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-teal-100 text-teal-800 tracking-wide uppercase">
+                Child & Family Mental Wellness
+            </span>
+        </div>
+
+        <!-- Main Card Deck Window -->
+        <div class="w-full bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden relative flex flex-col min-h-[380px] sm:min-h-[340px]">
+
+            <!-- Slide Canvas Viewport -->
+            <div class="relative flex-1 p-6 sm:p-10 flex items-center justify-center">
+
+                <!-- Slide 1: Main Title Card (Teal & Cream) -->
+                <div class="slide-card active" data-index="0">
+                    <div class="w-full h-full bg-brand-teal text-white p-8 sm:p-10 rounded-xl shadow-inner flex flex-col justify-center">
+                        <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-6 text-brand-teal-light tracking-tight">
+                            Our Services
+                        </h1>
+                        <p class="text-base sm:text-lg md:text-xl leading-relaxed text-brand-teal-light font-normal opacity-95">
+                            At Child & Family Mental Wellness, we believe in the power of therapy to transform lives. Our therapeutic services are designed to provide a safe and supportive environment. Where individuals and families can explore their feelings, beliefs, address challenges, and achieve personal goals.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Slide 2: Individual Therapy -->
+                <div class="slide-card" data-index="1">
+                    <div class="w-full h-full bg-white p-6 sm:p-10 rounded-xl flex flex-col justify-center">
+                        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-brand-header mb-6 tracking-tight">
+                            Individual Therapy
+                        </h2>
+                        <p class="text-base sm:text-lg md:text-xl leading-relaxed text-gray-800 font-normal">
+                            This service provides a focus on breaking unhealthy generational cycles/patterns, showing up emotionally regulated in relationships, and building support systems.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Slide 3: Adolescent -->
+                <div class="slide-card" data-index="2">
+                    <div class="w-full h-full bg-white p-6 sm:p-10 rounded-xl flex flex-col justify-center">
+                        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-brand-header mb-6 tracking-tight">
+                            Adolescent (12-19)
+                        </h2>
+                        <p class="text-base sm:text-lg md:text-xl leading-relaxed text-gray-800 font-normal">
+                            This service provides individual therapy with a focus on increasing self awareness, communication, emotional intelligence & regulation, while developing healthy coping skills.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Slide 4: Family Therapy -->
+                <div class="slide-card" data-index="3">
+                    <div class="w-full h-full bg-white p-6 sm:p-10 rounded-xl flex flex-col justify-center">
+                        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-brand-header mb-6 tracking-tight">
+                            Family Therapy
+                        </h2>
+                        <p class="text-base sm:text-lg md:text-xl leading-relaxed text-gray-800 font-normal">
+                            This service supports family members improving communication while navigating relational stress caused by mental health, blending families, parenting challenges, role confusion, conflict or transitions.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Slide 5: Training/Workshops -->
+                <div class="slide-card" data-index="4">
+                    <div class="w-full h-full bg-white p-6 sm:p-10 rounded-xl flex flex-col justify-center">
+                        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-brand-header mb-6 tracking-tight">
+                            Training/Workshops
+                        </h2>
+                        <p class="text-base sm:text-lg md:text-xl leading-relaxed text-gray-800 font-normal">
+                            I provide workshops and trainings for schools, community organizations, and professionals focused on supporting children, strengthening family relationships.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Bottom Control Navigation Bar -->
+            <div class="bg-gray-50 border-t border-gray-200 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+                
+                <!-- Slide Counter -->
+                <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider min-w-[80px]">
+                    Slide <span id="currentSlideNum" class="text-gray-900 font-bold text-sm">1</span> / <span id="totalSlidesNum">5</span>
+                </div>
+
+                <!-- Indicator Dots -->
+                <div class="flex items-center space-x-2" id="dotsContainer">
+                    <!-- Dots will be generated dynamically -->
+                </div>
+
+                <!-- Action Controls -->
+                <div class="flex items-center space-x-2">
+                    <button id="prevBtn" aria-label="Previous Slide" class="p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-200 active:scale-95 transition">
+                        <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                    </button>
+
+                    <button id="playPauseBtn" aria-label="Pause Slideshow" class="p-2 rounded-lg bg-teal-700 text-white hover:bg-teal-800 active:scale-95 transition shadow-sm">
+                        <i id="playPauseIcon" data-lucide="pause" class="w-5 h-5"></i>
+                    </button>
+
+                    <button id="nextBtn" aria-label="Next Slide" class="p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-200 active:scale-95 transition">
+                        <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer Note -->
+        <p class="text-xs text-gray-500 mt-4 text-center">Auto-advancing every 4 seconds. Use arrow keys or buttons to control.</p>
+    </div>
+
+    <script>
+        // Setup Constants and State
+        const SLIDE_INTERVAL = 4000; // 4 Seconds
+        let currentIndex = 0;
+        let isPlaying = true;
+        let slideTimer = null;
+
+        // DOM Element Cache
+        const slides = document.querySelectorAll('.slide-card');
+        const totalSlides = slides.length;
+        const currentSlideNum = document.getElementById('currentSlideNum');
+        const totalSlidesNum = document.getElementById('totalSlidesNum');
+        const dotsContainer = document.getElementById('dotsContainer');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+
+        // Initialize Lucide SVG Icons
+        lucide.createIcons();
+
+        // Update Total Slide Display
+        totalSlidesNum.textContent = totalSlides;
+
+        // Create Navigation Dots dynamically
+        function createDots() {
+            dotsContainer.innerHTML = '';
+            slides.forEach((_, idx) => {
+                const dot = document.createElement('button');
+                dot.ariaLabel = `Go to slide ${idx + 1}`;
+                dot.className = `w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                    idx === 0 ? 'bg-teal-700 w-6' : 'bg-gray-300 hover:bg-gray-400'
+                }`;
+                dot.addEventListener('click', () => goToSlide(idx));
+                dotsContainer.appendChild(dot);
+            });
+        }
+
+        // Render current active slide
+        function updateSlideDisplay() {
+            slides.forEach((slide, idx) => {
+                if (idx === currentIndex) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+
+            // Update Numerical Counter
+            currentSlideNum.textContent = currentIndex + 1;
+
+            // Update Dot Indicator Styles
+            Array.from(dotsContainer.children).forEach((dot, idx) => {
+                if (idx === currentIndex) {
+                    dot.className = 'w-6 h-2.5 rounded-full bg-teal-700 transition-all duration-300';
+                } else {
+                    dot.className = 'w-2.5 h-2.5 rounded-full bg-gray-300 hover:bg-gray-400 transition-all duration-300';
+                }
+            });
+
+            // Reset 4-Second Auto-Timer
+            restartTimer();
+        }
+
+        // Timer Control
+        function restartTimer() {
+            clearTimeout(slideTimer);
+            if (isPlaying) {
+                slideTimer = setTimeout(() => {
+                    nextSlide();
+                }, SLIDE_INTERVAL);
+            }
+        }
+
+        function goToSlide(index) {
+            currentIndex = (index + totalSlides) % totalSlides;
+            updateSlideDisplay();
+        }
+
+        function nextSlide() {
+            goToSlide(currentIndex + 1);
+        }
+
+        function prevSlide() {
+            goToSlide(currentIndex - 1);
+        }
+
+        function togglePlayPause() {
+            isPlaying = !isPlaying;
+            const icon = document.getElementById('playPauseIcon');
+
+            if (isPlaying) {
+                playPauseBtn.setAttribute('aria-label', 'Pause Slideshow');
+                icon.setAttribute('data-lucide', 'pause');
+                nextSlide();
+            } else {
+                playPauseBtn.setAttribute('aria-label', 'Play Slideshow');
+                icon.setAttribute('data-lucide', 'play');
+                clearTimeout(slideTimer);
+            }
+            lucide.createIcons();
+        }
+
+        // Attach Event Handlers
+        prevBtn.addEventListener('click', prevSlide);
+        nextBtn.addEventListener('click', nextSlide);
+        playPauseBtn.addEventListener('click', togglePlayPause);
+
+        // Keyboard Navigation Support
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') prevSlide();
+            if (e.key === ' ') {
+                e.preventDefault();
+                togglePlayPause();
+            }
+        });
+
+        // Initialize Presentation
+        createDots();
+        updateSlideDisplay();
+    </script>
+</body>
+</html>
