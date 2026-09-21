@@ -51,6 +51,22 @@
   ],
   "gallery": [
     {
+      "photo": "photo7.jpg",
+      "caption": "Back To School"
+    },
+    {
+      "photo": "photo6.jpg",
+      "caption": "Supporting Families"
+    },
+    {
+      "photo": "photo5.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo8.jpg",
+      "caption": "I'm Excited To Announce!"
+    },
+    {
       "photo": "photo1.jpg",
       "caption": ""
     },
@@ -65,22 +81,6 @@
     {
       "photo": "photo4.jpg",
       "caption": ""
-    },
-    {
-      "photo": "photo5.jpg",
-      "caption": ""
-    },
-    {
-      "photo": "photo6.jpg",
-      "caption": ""
-    },
-    {
-      "photo": "photo7.jpg",
-      "caption": "Back To School"
-    },
-    {
-      "photo": "photo8.jpg",
-      "caption": "I'm Excited To Announce!"
     }
   ],
   "listings": [],
