@@ -33,6 +33,10 @@
   "emails": [],
   "websites": [
     {
+      "label": "Our Services",
+      "url": "https://blackhatcards.community/dps-our-services.html"
+    },
+    {
       "label": "Link Tree",
       "url": "https://linktr.ee/childfamilymentalwellness"
     },
@@ -41,16 +45,8 @@
       "url": "https://www.psychologytoday.com/us/therapists/destinne-parker-stewart-reading-pa/962073"
     },
     {
-      "label": "Linked In",
-      "url": "https://www.linkedin.com/in/destinne/"
-    },
-    {
       "label": "Child & Family Mental Wellness",
       "url": "https://childandfamilymentalwellness.com/"
-    },
-    {
-      "label": "Our Services",
-      "url": "https://blackhatcards.community/dps-our-services.html"
     }
   ],
   "gallery": [
@@ -80,11 +76,11 @@
     },
     {
       "photo": "photo7.jpg",
-      "caption": ""
+      "caption": "Back To School"
     },
     {
       "photo": "photo8.jpg",
-      "caption": ""
+      "caption": "I'm Excited To Announce!"
     }
   ],
   "listings": [],
