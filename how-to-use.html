@@ -8,21 +8,21 @@
   @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap');
 
   :root{
-    --navy:#16283f; --navy-2:#1e3a5a;
-    --blue-bright:#6db1ea; --blue-soft:#a9cdec;
-    --off-white:#f6f3ea; --muted:#8b93a1; --line:#2e3a4d;
+    --ink:#000000; --surface:#1c2129;
+    --copper:#b8763f; --copper-soft:#c98549;
+    --parchment:#ede6d6; --muted:#8b93a1; --line:#2e3542;
   }
   *{ box-sizing:border-box; margin:0; padding:0; }
   body{
-    background: radial-gradient(circle at 50% 0%, var(--navy-2) 0%, var(--navy) 60%);
-    color: var(--off-white); font-family:'IBM Plex Sans', sans-serif;
+    background: var(--ink);
+    color: var(--parchment); font-family:'IBM Plex Sans', sans-serif;
     padding: 40px 32px;
   }
   .sheet{ max-width: 900px; margin: 0 auto; }
   header{ text-align:center; margin-bottom: 34px; }
   .kicker{
     font-family:'IBM Plex Mono', monospace; font-size: 12px; letter-spacing: 0.16em;
-    text-transform: uppercase; color: var(--blue-bright); margin-bottom: 10px;
+    text-transform: uppercase; color: var(--copper); margin-bottom: 10px;
   }
   h1{ font-family:'Space Grotesk', sans-serif; font-weight: 700; font-size: 30px; letter-spacing: -0.01em; }
   .sub{ color: var(--muted); font-size: 14.5px; margin-top: 8px; }
@@ -32,11 +32,11 @@
     margin: 30px 0 8px; flex-wrap: wrap;
   }
   .pipe-node{
-    font-family:'IBM Plex Mono', monospace; font-size: 11.5px; color: var(--off-white);
+    font-family:'IBM Plex Mono', monospace; font-size: 11.5px; color: var(--parchment);
     background: rgba(109,177,234,0.08); border: 1px solid var(--line);
     padding: 8px 14px; border-radius: 999px;
   }
-  .pipe-arrow{ color: var(--blue-bright); font-size: 14px; }
+  .pipe-arrow{ color: var(--copper); font-size: 14px; }
 
   .steps{
     display: grid; grid-template-columns: 1fr 1fr 1fr auto 1fr 1fr; gap: 10px; margin-top: 30px; align-items: stretch;
@@ -51,11 +51,11 @@
     border-radius: 14px; padding: 20px 18px; text-align:center;
   }
   .step-icon{
-    width: 52px; height: 52px; margin: 0 auto 14px; color: var(--blue-bright);
+    width: 52px; height: 52px; margin: 0 auto 14px; color: var(--copper);
   }
   .step .num{
-    font-family:'Space Grotesk', sans-serif; font-weight: 700; font-size: 12px; color: var(--navy);
-    background: var(--blue-bright); width: 22px; height: 22px; border-radius: 50%;
+    font-family:'Space Grotesk', sans-serif; font-weight: 700; font-size: 12px; color: var(--ink);
+    background: var(--copper); width: 22px; height: 22px; border-radius: 50%;
     display:flex; align-items:center; justify-content:center; margin: 0 auto 10px;
   }
   .step h3{
@@ -67,8 +67,8 @@
     text-align:center; margin-top: 34px; padding: 20px; background: rgba(109,177,234,0.06);
     border: 1px solid var(--line); border-radius: 14px;
   }
-  .footer-note p{ font-size: 13px; color: var(--off-white); line-height: 1.6; }
-  .footer-note b{ color: var(--blue-bright); }
+  .footer-note p{ font-size: 13px; color: var(--parchment); line-height: 1.6; }
+  .footer-note b{ color: var(--copper); }
 
   footer{
     text-align:center; margin-top: 30px; font-family:'IBM Plex Mono', monospace;
@@ -76,7 +76,7 @@
   }
 
   @media (max-width: 720px){ .steps{ grid-template-columns: 1fr 1fr; } .or-divider{ grid-column: span 2; padding: 4px 0; } .pipeline{ flex-direction: column; } .pipe-arrow{ transform: rotate(90deg); } }
-  @media print{ body{ background: var(--navy); padding: 20px; -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+  @media print{ body{ background: var(--ink); padding: 20px; -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
 </style>
 </head>
 <body>
@@ -108,7 +108,7 @@
         <path d="M2 26 A 22 22 0 0 1 2 48" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" opacity="0.3"/>
       </svg>
       <h3>Tap the Card</h3>
-      <p>Hold your Black Hat Card to the back of their phone — just like tapping to pay.</p>
+      <p>Hold your Black Hat Card to the back of their phone, wherever they'd tap to pay.</p>
     </div>
     <div class="step">
       <div class="num">2</div>
@@ -121,7 +121,7 @@
         <rect x="38" y="36" width="8" height="2.5" rx="1.25" fill="currentColor" opacity="0.6"/>
       </svg>
       <h3>Your Card Opens</h3>
-      <p>Your photo, name, and contact info load instantly — right in their browser, no app needed.</p>
+      <p>Your photo, name, and contact info load instantly — right in the browser on their phone, no app needed.</p>
     </div>
     <div class="step">
       <div class="num">3</div>
