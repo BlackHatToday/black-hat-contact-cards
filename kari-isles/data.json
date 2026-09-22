@@ -1,0 +1,51 @@
+{
+  "prefix": "",
+  "firstName": "Kari",
+  "lastName": "Isles",
+  "title": "Phlebotomists",
+  "org": "Duke Primary Care Oxford",
+  "tagline": "",
+  "about": "",
+  "experience": [],
+  "skills": [],
+  "social": {
+    "instagram": "",
+    "tiktok": "",
+    "facebook": "",
+    "linkedin": "",
+    "twitter": "",
+    "youtube": ""
+  },
+  "payments": {
+    "cashapp": "",
+    "venmo": "",
+    "paypal": "",
+    "zelle": ""
+  },
+  "paymentSectionLabel": "Payment",
+  "notes": "",
+  "phones": [
+    {
+      "type": "Work",
+      "number": "(919) 693-3972"
+    }
+  ],
+  "emails": [],
+  "websites": [
+    {
+      "label": "Duke Primary Care",
+      "url": "https://www.dukehealth.org/locations/duke-primary-care-oxford?utm_source=google&utm_medium=local&utm_campaign=evergreen"
+    }
+  ],
+  "gallery": [],
+  "listings": [],
+  "isRealtor": false,
+  "trialExpires": "",
+  "calendlyUrl": "",
+  "bookingLabel": "Book a Time",
+  "address": "1490 Williamsboro St Oxford, NC 27565",
+  "photoFile": "photo.jpg",
+  "accessToken": "2py4qih6",
+  "brand": "",
+  "showQR": true
+}
