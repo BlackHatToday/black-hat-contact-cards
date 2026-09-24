@@ -1,7 +1,7 @@
 {
   "prefix": "",
   "firstName": "Jeneil",
-  "lastName": "Robinson-Davis",
+  "lastName": "Davis",
   "title": "",
   "org": "",
   "tagline": "",
@@ -11,7 +11,7 @@
   "social": {
     "instagram": "",
     "tiktok": "",
-    "facebook": "",
+    "facebook": "dtscsolutions",
     "linkedin": "",
     "twitter": "",
     "youtube": ""
@@ -22,12 +22,25 @@
     "paypal": "",
     "zelle": ""
   },
+  "paymentSectionLabel": "Payment",
   "notes": "",
   "phones": [],
   "emails": [],
-  "websites": [],
+  "websites": [
+    {
+      "label": "Right Build International",
+      "url": "https://www.rightbuildint.com/"
+    }
+  ],
+  "gallery": [],
+  "listings": [],
+  "isRealtor": false,
+  "trialExpires": "",
   "calendlyUrl": "",
+  "bookingLabel": "Book a Time",
   "address": "",
   "photoFile": "photo.jpg",
+  "accessToken": "qwdbyis4",
+  "brand": "solo-jeneil-davis",
   "showQR": true
 }
