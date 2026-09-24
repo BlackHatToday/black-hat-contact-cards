@@ -13,10 +13,21 @@
     "Program Management",
     "Construction Consulting"
   ],
-  "social": {},
-  "payments": {},
+  "social": {
+    "instagram": "",
+    "tiktok": "",
+    "facebook": "",
+    "linkedin": "",
+    "twitter": "",
+    "youtube": ""
+  },
+  "payments": {
+    "cashapp": "",
+    "venmo": "",
+    "paypal": "",
+    "zelle": ""
+  },
   "paymentSectionLabel": "Payment",
-  "listings": [],
   "notes": "Office Hours: Mon-Thurs 8 AM - 5 PM, Fri 8 AM - 3:30 PM.",
   "phones": [
     {
@@ -29,8 +40,33 @@
     {
       "label": "Visit Our Site",
       "url": "https://www.rightbuildint.com/"
+    },
+    {
+      "label": "Construction Portfololio",
+      "url": "https://www.rightbuildint.com/construction-projects/"
+    },
+    {
+      "label": "Consulting Portfolio",
+      "url": "https://www.rightbuildint.com/consulting-projects/"
     }
   ],
+  "gallery": [
+    {
+      "photo": "photo1.jpg",
+      "caption": "Founded in 2007"
+    },
+    {
+      "photo": "photo2.jpg",
+      "caption": "Our Goal"
+    },
+    {
+      "photo": "photo3.jpg",
+      "caption": "Our Mission"
+    }
+  ],
+  "listings": [],
+  "isRealtor": false,
+  "trialExpires": "",
   "calendlyUrl": "",
   "bookingLabel": "Book a Time",
   "address": "2232 Page Rd. Ste 102, Durham, NC 27703",
