@@ -1,7 +1,8 @@
 {
-  "businessName": "solo-bernadette-royster",
-  "brandSlug": "solo-bernadette-royster",
-  "accent": "#192E25",
-  "accentSoft": "#857120",
-  "background": "#E1EBE5"
+  "businessName": "Bernard Royster",
+  "brandSlug": "bernard-royster",
+  "accent": "#ecc55b",
+  "accentSoft": "#c7b9d5",
+  "background": "#000000",
+  "font": "luxury"
 }
