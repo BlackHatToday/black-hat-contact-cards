@@ -1,0 +1,68 @@
+{
+  "prefix": "",
+  "firstName": "Kasey",
+  "lastName": "Shearin",
+  "title": "Owner",
+  "org": "Shearin Auto & Diesel, LLC",
+  "tagline": "",
+  "about": "",
+  "experience": [],
+  "skills": [],
+  "social": {
+    "instagram": "",
+    "tiktok": "",
+    "facebook": "Shearinautoanddiesel",
+    "linkedin": "",
+    "twitter": "",
+    "youtube": ""
+  },
+  "payments": {
+    "cashapp": "",
+    "venmo": "",
+    "paypal": "",
+    "zelle": ""
+  },
+  "paymentSectionLabel": "Payment",
+  "notes": "",
+  "phones": [
+    {
+      "type": "Work",
+      "number": "919-339-4874"
+    }
+  ],
+  "emails": [
+    {
+      "type": "Work",
+      "address": "ShearinAuto@GMail.com"
+    }
+  ],
+  "websites": [],
+  "gallery": [
+    {
+      "photo": "photo1.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo2.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo3.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo4.jpg",
+      "caption": ""
+    }
+  ],
+  "listings": [],
+  "isRealtor": false,
+  "trialExpires": "",
+  "calendlyUrl": "",
+  "bookingLabel": "Book a Time",
+  "address": "7709 US Highway 15, Oxford, NC 27565",
+  "photoFile": "photo.jpg",
+  "accessToken": "637c69sq",
+  "brand": "biz-shearin-auto-diesel",
+  "showQR": true
+}
