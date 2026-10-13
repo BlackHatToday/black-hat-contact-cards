@@ -32,11 +32,15 @@
   ],
   "emails": [],
   "websites": [],
+  "gallery": [],
   "listings": [],
+  "isRealtor": false,
+  "trialExpires": "",
   "calendlyUrl": "",
   "bookingLabel": "Book a Time",
   "address": "",
   "photoFile": "photo.jpg",
   "accessToken": "y48b7pag",
+  "brand": "solo-bernard-royster",
   "showQR": true
 }
