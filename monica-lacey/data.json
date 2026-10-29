@@ -72,7 +72,8 @@
     {
       "label": "Reading Internships",
       "url": "https://www.readingsd.org/o/rhs-college-and-career-center/page/internshipswork-study",
-      "qr": true
+      "qr": true,
+      "qrCaption": "Scan or tap!"
     }
   ],
   "gallery": [
