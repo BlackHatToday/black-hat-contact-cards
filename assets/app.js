@@ -479,7 +479,7 @@
     if (d.address) rows.push({ icon: 'location', label: 'Address', value: d.address, href: `https://maps.google.com/?q=${encodeURIComponent(d.address)}` });
     if (d.website) rows.push({ icon: 'website', label: 'Website', value: 'View Site', href: d.website }); // legacy single-website support
     // siteIndex marks which row came from which "websites" entry, so a link
-    // shown as a QR code with "qrOnly": true can have its plain row removed
+    // (kept for tagging rows; the Contact-box row is never removed)
     // (see renderLinkQrs) — only after its code has actually been drawn.
     (d.websites || []).forEach((w, i) => rows.push({ icon: 'website', label: w.label || 'Website', value: w.label ? '' : 'View Site', href: w.url, siteIndex: i }));
     document.getElementById('fieldsEl').innerHTML = rows.map(r => `
@@ -560,9 +560,10 @@
         printLink.textContent = 'Print this QR code';
         printLink.addEventListener('click', (e) => {
           e.preventDefault();
-          printLinkQr(url, d.org || [d.prefix, d.firstName, d.lastName].filter(Boolean).join(' '), label, caption);
+          printLinkQr(url, d.org || [d.prefix, d.firstName, d.lastName].filter(Boolean).join(' '), label, caption, w.qrShowUrl !== true);
         });
-        text.append(capEl, urlEl, printLink);
+        // The web address text under the code is hidden unless "qrShowUrl": true.
+        if (w.qrShowUrl === true) text.append(capEl, urlEl, printLink); else text.append(capEl, printLink);
 
         // Draw the code BEFORE putting the block on the page: if drawing fails,
         // nothing is added, so there is never an empty block with no code in it.
@@ -575,21 +576,6 @@
         block.append(codeLink, text);
         section.append(heading, block);
         parent.insertBefore(section, scanSection || null);
-
-        // "qrOnly": true — show just the code, not the plain link row as well.
-        // Done only now, after the code is on the page, so a link can never
-        // disappear without its code appearing.
-        if (w.qrOnly === true) {
-          const row = document.querySelector(`#fieldsEl [data-site-index="${index}"]`);
-          if (row) row.remove();
-          // A Contact box left completely empty would show as a hollow outline.
-          const fieldsEl = document.getElementById('fieldsEl');
-          const bookBtn = document.getElementById('bookBtn');
-          if (fieldsEl && !fieldsEl.children.length && (!bookBtn || bookBtn.style.display === 'none')) {
-            const contactSection = fieldsEl.closest('section');
-            if (contactSection) contactSection.style.display = 'none';
-          }
-        }
        } catch (err) {
         console.error('Could not draw a website QR code:', err);
        }
@@ -611,7 +597,7 @@
     if (old) old.remove();
   }
 
-  function printLinkQr(url, title, linkLabel, caption) {
+  function printLinkQr(url, title, linkLabel, caption, hideUrl) {
     cleanupLinkPrint(); // clear anything left over from an earlier print that never reported finishing
     const sheet = document.createElement('div');
     sheet.id = 'qrPrintSheet';
@@ -633,7 +619,7 @@
       correctLevel: QRCode.CorrectLevel.M
     });
     add('qr-print-hint', caption || "Scan with your phone's camera");
-    add('qr-print-url', url.replace(/^https?:\/\//i, '').replace(/\/$/, ''));
+    if (!hideUrl) add('qr-print-url', url.replace(/^https?:\/\//i, '').replace(/\/$/, ''));
 
     document.body.appendChild(sheet);
     document.documentElement.classList.add('print-link-qr');
