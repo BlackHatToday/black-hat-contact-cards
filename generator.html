@@ -664,9 +664,24 @@
     const row = repeatRow(document.getElementById('websiteList'), `
       <div><label>Label</label><input type="text" class="website-label field-descriptor" placeholder="Website"></div>
       <div><label>URL</label><input type="text" class="website-url field-content" placeholder="https://acme.com"></div>
+      <div class="checkbox-row" style="grid-column:1 / -1; margin-top:0;">
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer; text-transform:none; letter-spacing:normal;">
+          <input type="checkbox" class="website-qr" style="width:auto;">
+          <span>Show this link as a QR code on the page (tap to open, printable)</span>
+        </label>
+      </div>
+      <div class="website-qr-caption-wrap" style="grid-column:1 / -1; display:none;">
+        <label>QR caption (optional)</label>
+        <input type="text" class="website-qr-caption" maxlength="160" placeholder="Scan the QR code or tap it to register!">
+      </div>
     `);
+    const qrBox = row.querySelector('.website-qr');
+    const capWrap = row.querySelector('.website-qr-caption-wrap');
+    qrBox.addEventListener('change', () => { capWrap.style.display = qrBox.checked ? 'block' : 'none'; });
     if (prefill.label) row.querySelector('.website-label').value = prefill.label;
     if (prefill.url) row.querySelector('.website-url').value = prefill.url;
+    if (prefill.qr) { qrBox.checked = true; capWrap.style.display = 'block'; }
+    if (prefill.qrCaption) row.querySelector('.website-qr-caption').value = prefill.qrCaption;
     return row;
   }
 
@@ -774,7 +789,12 @@
 
     const websites = [...document.querySelectorAll('#websiteList .repeat-item')].map(item => ({
       label: item.querySelector('.website-label').value || 'Website',
-      url: item.querySelector('.website-url').value
+      url: item.querySelector('.website-url').value,
+      // Only written when ticked (and a caption only when typed), so
+      // data.json stays clean for everyone who doesn't use this
+      ...(item.querySelector('.website-qr').checked ? { qr: true } : {}),
+      ...(item.querySelector('.website-qr').checked && item.querySelector('.website-qr-caption').value.trim()
+        ? { qrCaption: item.querySelector('.website-qr-caption').value.trim() } : {})
     })).filter(w => w.url);
 
     const gallery = [...document.querySelectorAll('#galleryList .repeat-item')].map(item => ({

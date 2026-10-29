@@ -278,6 +278,29 @@ section{ padding: 0 28px; margin-top: 8px; }
 }
 .qr-block .caption{ font-size:12.5px; color:var(--parchment); line-height:1.5; }
 
+/* ---- website-link QR blocks (built by JavaScript from "qr": true links;
+   they reuse the .qr-block box above, with a larger, tappable code) ---- */
+.link-qr-code{
+  flex-shrink:0; width: clamp(108px, 32vw, 136px); height: clamp(108px, 32vw, 136px);
+  background:var(--parchment); border-radius:8px; padding:8px; text-decoration:none;
+  display:flex; align-items:center; justify-content:center; cursor:pointer;
+  transition: box-shadow .15s ease;
+}
+.link-qr-code:hover{ box-shadow:0 0 0 2px var(--copper); }
+.link-qr-code canvas, .link-qr-code img{ display:block; width:100% !important; height:100% !important; max-width:100%; }
+.link-qr-section .text{ flex:1; min-width:140px; }
+.link-qr-url{
+  font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--muted);
+  margin-top:8px; word-break:break-all;
+}
+/* Scoped under .link-qr-section so it outranks the shared .update-request-link
+   style (centered, block), which is declared later in this file. */
+.link-qr-section .link-qr-print{ display:inline-block; text-align:left; margin-top:10px; }
+
+/* One-page printout for a website QR — never visible on screen; the print
+   rules below reveal it only while a "Print this QR code" is in progress. */
+#qrPrintSheet{ display:none; }
+
 /* ---- contact fields ---- */
 .fields{ background:var(--surface); border:1px solid var(--line); border-radius:14px; overflow:hidden; }
 .field{
@@ -596,8 +619,46 @@ body.quick-share-mode #quickShareIntro{
   #editMyInfoLink,
   #pdfSaveBtn,
   .qr-modal-overlay,
-  .refer-modal-overlay{
+  .refer-modal-overlay,
+  .link-qr-print{
     display:none !important;
+  }
+
+  /* "Print this QR code" for a website link — body.print-link-qr is set
+     right before window.print() and removed after. Hides the whole card and
+     shows only #qrPrintSheet on plain white, in fixed dark ink (not the
+     theme variables, which a brand's custom colors can override). */
+  html.print-link-qr,
+  body.print-link-qr{
+    background:#ffffff !important;
+  }
+  body.print-link-qr > *:not(#qrPrintSheet){
+    display:none !important;
+  }
+  body.print-link-qr #qrPrintSheet{
+    display:flex !important; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center; min-height:9in; padding:0.4in; color:#14171c; background:#ffffff;
+  }
+  #qrPrintSheet .qr-print-title{
+    font-family:var(--font-display); font-weight:700; font-size:30px; line-height:1.2; margin-bottom:6px;
+  }
+  #qrPrintSheet .qr-print-label{
+    font-family:'IBM Plex Mono', monospace; font-size:14px; letter-spacing:0.14em;
+    text-transform:uppercase; color:#555b66; margin-bottom:26px;
+  }
+  #qrPrintSheet .qr-print-code{
+    width:3.4in; height:3.4in; padding:0.25in; background:#ffffff; box-sizing:content-box;
+  }
+  #qrPrintSheet .qr-print-code canvas,
+  #qrPrintSheet .qr-print-code img{
+    display:block; width:100% !important; height:100% !important;
+  }
+  #qrPrintSheet .qr-print-hint{
+    font-family:var(--font-display); font-size:18px; margin-top:22px; max-width:5.5in;
+  }
+  #qrPrintSheet .qr-print-url{
+    font-family:'IBM Plex Mono', monospace; font-size:14px; color:#555b66;
+    margin-top:8px; max-width:5.5in; word-break:break-all;
   }
 
   /* "Print QR Code Only" mode — set via body.print-qr-only right before
@@ -637,6 +698,15 @@ body.quick-share-mode #quickShareIntro{
     --surface-2: #ffffff !important;
     --parchment: #14171c !important;
     --line: #d1d5db !important;
+  }
+
+  /* The QR code's own backing box is painted with var(--parchment), which
+     the override above turns dark in this mode — leaving the code ringed by
+     a DARK border instead of a light one. A QR code needs a light margin
+     around it to scan reliably (a test decoder could not read it; with a
+     white backing it read correctly). Force the backing to white here. */
+  body.print-qr-only #qrcode{
+    background:#ffffff !important;
   }
 
   /* Property-only additions — the person-card rules above already cover

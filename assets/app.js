@@ -487,6 +487,140 @@
     `).join('');
   }
 
+  // ---- QR codes for website links, shown right on the page ----
+  //
+  // A website entry with "qr": true in data.json gets its own block, styled
+  // like the "Scan" section: the code itself (tap it to open the link — also
+  // clickable in a saved PDF), a short caption, the address, and a Print
+  // link. "qrCaption" (optional) replaces the default caption, e.g.
+  // "Scan the QR code or tap it to register!".
+  //
+  // The blocks are built here in JavaScript and placed just before the Scan
+  // section, rather than being added to each card's index.html, because a
+  // change to index.html never reaches cards that already exist — a change
+  // to this shared file does.
+  const MAX_LINK_QRS = 3; // keeps one card from turning into a wall of codes
+  const DEFAULT_QR_CAPTION = "Scan with your phone's camera, or tap the code to open the link.";
+
+  function renderLinkQrs(d) {
+    // Guarded on its own: a problem drawing these codes (for example the QR
+    // library failing to load) must never stop the rest of the card from showing.
+    try {
+      const links = (d.websites || [])
+        .filter(w => w && w.qr === true && String(w.url || '').trim())
+        .slice(0, MAX_LINK_QRS);
+      if (!links.length) return;
+
+      const scanSection = document.getElementById('qrSection');
+      const parent = scanSection ? scanSection.parentNode : document.querySelector('.page');
+
+      links.forEach(w => {
+        const raw = String(w.url).trim();
+        // "acme.com" typed without https:// would be unscannable (a phone reads
+        // it as plain text, not a link) and would break the tap link, so add it.
+        const url = /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
+        const label = w.label || 'Website';
+        const caption = String(w.qrCaption || '').trim() || DEFAULT_QR_CAPTION;
+
+        const section = document.createElement('section');
+        section.className = 'link-qr-section';
+
+        const heading = document.createElement('div');
+        heading.className = 'section-label';
+        const headingText = document.createElement('span');
+        headingText.textContent = label;
+        heading.appendChild(headingText);
+
+        const block = document.createElement('div');
+        block.className = 'qr-block';
+
+        const codeLink = document.createElement('a');
+        codeLink.className = 'link-qr-code';
+        codeLink.href = url;
+        codeLink.target = '_blank';
+        codeLink.rel = 'noopener';
+        codeLink.setAttribute('aria-label', `Open ${label}`);
+
+        const text = document.createElement('div');
+        text.className = 'text';
+        const capEl = document.createElement('div');
+        capEl.className = 'caption';
+        capEl.textContent = caption;
+        const urlEl = document.createElement('div');
+        urlEl.className = 'link-qr-url';
+        urlEl.textContent = url.replace(/^https?:\/\//i, '').replace(/\/$/, '');
+        const printLink = document.createElement('a');
+        printLink.href = '#';
+        printLink.className = 'update-request-link link-qr-print';
+        printLink.textContent = 'Print this QR code';
+        printLink.addEventListener('click', (e) => {
+          e.preventDefault();
+          printLinkQr(url, d.org || [d.prefix, d.firstName, d.lastName].filter(Boolean).join(' '), label, caption);
+        });
+        text.append(capEl, urlEl, printLink);
+
+        block.append(codeLink, text);
+        section.append(heading, block);
+        parent.insertBefore(section, scanSection || null);
+
+        new QRCode(codeLink, {
+          text: url, width: 220, height: 220,
+          colorDark: '#14171c', colorLight: '#ede6d6',
+          correctLevel: QRCode.CorrectLevel.M
+        });
+      });
+    } catch (err) {
+      console.error('Could not draw website QR codes:', err);
+    }
+  }
+
+  // Prints one clean white page: who it's from, which link, a large QR code
+  // (pure black on white, the most reliably scannable on paper), the caption,
+  // and the web address in text. Works by adding a body class that the print
+  // stylesheet uses to hide everything except #qrPrintSheet — the same
+  // approach as "Print QR Code Only" for the card's own QR.
+  function cleanupLinkPrint() {
+    document.documentElement.classList.remove('print-link-qr');
+    document.body.classList.remove('print-link-qr');
+    const old = document.getElementById('qrPrintSheet');
+    if (old) old.remove();
+  }
+
+  function printLinkQr(url, title, linkLabel, caption) {
+    cleanupLinkPrint(); // clear anything left over from an earlier print that never reported finishing
+    const sheet = document.createElement('div');
+    sheet.id = 'qrPrintSheet';
+    const add = (cls, text) => {
+      const el = document.createElement('div');
+      el.className = cls;
+      el.textContent = text;
+      sheet.appendChild(el);
+      return el;
+    };
+    if (title) add('qr-print-title', title);
+    if (linkLabel) add('qr-print-label', linkLabel);
+    const codeBox = document.createElement('div');
+    codeBox.className = 'qr-print-code';
+    sheet.appendChild(codeBox);
+    new QRCode(codeBox, {
+      text: url, width: 400, height: 400,
+      colorDark: '#000000', colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.M
+    });
+    add('qr-print-hint', caption || "Scan with your phone's camera");
+    add('qr-print-url', url.replace(/^https?:\/\//i, '').replace(/\/$/, ''));
+
+    document.body.appendChild(sheet);
+    document.documentElement.classList.add('print-link-qr');
+    document.body.classList.add('print-link-qr');
+    // afterprint cleans up on desktop browsers; a phone browser that never
+    // fires it is covered by the clean-up at the top of this function and
+    // by the page-level 'pageshow' listener below.
+    window.addEventListener('afterprint', cleanupLinkPrint, { once: true });
+    setTimeout(() => window.print(), 150); // a beat for the code image to finish drawing
+  }
+  window.addEventListener('pageshow', cleanupLinkPrint);
+
   function renderCalendly(d) {
     if (!d.calendlyUrl) return;
     const btn = document.getElementById('bookBtn');
@@ -948,6 +1082,32 @@
     }
   }
 
+  // Anonymous open counter. Sends the card's folder name and whether it was
+  // opened via the physical tag (?t= token present) or a plain link/QR to
+  // /api/tap, which adds 1 to a daily total. Nothing about the visitor is
+  // sent or stored. Wrapped in its own try/catch and deferred, so a counter
+  // problem can never affect how the card itself loads or renders.
+  function trackOpen() {
+    try {
+      const host = window.location.hostname;
+      if (!host || host === 'localhost' || host === '127.0.0.1') return; // testing
+      if (localStorage.getItem('bh_owner') === '1') return;             // Boris opted this browser out (stats.html)
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('action')) return;                                  // Collect-Info / share variants aren't card opens
+      const card = basePath().replace(/^\/+|\/+$/g, '').toLowerCase();
+      if (!card) return;
+      const sessionKey = 'bh_tap_' + card;                               // once per browser session, so reloads don't inflate it
+      if (sessionStorage.getItem(sessionKey)) return;
+      sessionStorage.setItem(sessionKey, '1');
+      const body = JSON.stringify({ card, src: params.has('t') ? 'tag' : 'link' });
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon('/api/tap', new Blob([body], { type: 'text/plain' }));
+      } else {
+        fetch('/api/tap', { method: 'POST', body, keepalive: true, headers: { 'Content-Type': 'text/plain' } }).catch(() => {});
+      }
+    } catch (e) { /* counting is best-effort; never surface an error */ }
+  }
+
   try {
     const data = await loadData();
 
@@ -1001,10 +1161,12 @@
     renderFields(data);
     renderCalendly(data);
     renderQR(data);
+    renderLinkQrs(data);
     wireSaveButton(data);
     renderShareBack(data);
     wireScanVisitorCard(data);
     renderEditMyInfoLink(data);
+    setTimeout(trackOpen, 0); // last, and deferred — only counts cards that actually rendered
   } catch (err) {
     document.querySelector('.page').innerHTML = `
       <div class="load-error">
