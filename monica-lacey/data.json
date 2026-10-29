@@ -73,8 +73,7 @@
       "label": "Get Some Mo Tea!",
       "url": "https://moteajar.com/",
       "qr": true,
-      "qrCaption": "Scan or tap!",
-      "qrOnly": true
+      "qrCaption": "Scan or tap!"
     }
   ],
   "gallery": [

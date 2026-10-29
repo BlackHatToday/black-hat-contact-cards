@@ -28,6 +28,7 @@ Task-first reference. If you need to know *how the system works and why*, see `P
 | Handle a photo or gallery update request | §18 |
 | Set up a realtor's card (pricing tier and referral behavior) | §19 |
 | Verify a change request before acting on it | §20 |
+| Show a website link as a QR code on a card | §21 |
 
 ---
 
@@ -344,4 +345,28 @@ This works because someone who doesn't already control the real person's existin
 **A private verification phrase is worth setting up per person, if this ever becomes a recurring concern.** At signup, ask the person for a simple word or phrase only they'd know, and keep it somewhere private — not in the public repo, alongside the token/folder log already planned for. Ask for it before acting on a phone or email change if anything about the request feels off. This is a manual habit, not a technical feature — nothing to build, just a note to keep.
 
 **A full backend-based verification system was also considered and deliberately set aside for now** — real logins, server-side identity checks, that category of thing. See `FUTURE-CONSIDERATIONS.md` for what that would actually involve and why it's a bigger step than anything else in this section.
+
+---
+
+## 21. Showing a Website Link as a QR Code on a Card
+
+Use this when a client wants a link (a registration form, a shop, a menu) to appear on their card as a scannable, tappable, printable QR code, sitting on the page like the "Scan" section. Person cards only; property cards don't have it yet.
+
+**To turn it on for one link:**
+1. Open `generator.html`, **Load data.json** for that person, and find the link under Websites.
+2. Tick **"Show this link as a QR code on the page (tap to open, printable)."**
+3. Optional: type a **QR caption** (e.g. "Scan or tap!"). If left blank, the card shows "Scan with your phone's camera, or tap the code to open the link."
+4. Optional: tick **"Also show the web address under the code."** By default the address text (e.g. moteajar.com) is hidden.
+5. Save, then push (§9). Or edit `data.json` directly: add `"qr": true`, and optionally `"qrCaption": "..."` and `"qrShowUrl": true` to that website entry.
+
+**What the visitor sees:** the link's own label stays in the Contact box as always, and also heads a QR block above the Scan section. Tapping the code opens the link; "Print this QR code" prints a one-page sheet with the code, the label and the caption.
+
+**Limits and habits:**
+- Maximum 3 QR blocks per card.
+- Use a short link where possible (e.g. `forms.gle/...`). Very long links produce a denser code that's harder to scan.
+- Only `generator.html` or hand-editing `data.json` can turn this on. The intake form and message-to-json do not offer it.
+- It needs the current `assets/app.js` and `assets/style.css` pushed; no template change is needed.
+- An old `"qrOnly": true` in a `data.json` (an earlier option, since removed) is ignored and can be deleted.
+- The tap counter (when set up) does not count taps on these codes.
+- Printouts have been checked with a decoder only; scan a real one with a phone before promising it to a client.
 

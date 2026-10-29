@@ -267,8 +267,8 @@ section{ padding: 0 28px; margin-top: 8px; }
   background:var(--surface); border:1px solid var(--line); border-radius:14px; flex-wrap:wrap;
 }
 #qrcode{
-  flex-shrink:0; width: clamp(72px, 22vw, 92px); height: clamp(72px, 22vw, 92px);
-  background:var(--parchment); border-radius:8px; padding:7px;
+  flex-shrink:0; width: clamp(108px, 32vw, 136px); height: clamp(108px, 32vw, 136px);
+  background:var(--parchment); border-radius:8px; padding:8px;
   display:flex; align-items:center; justify-content:center;
 }
 #qrcode canvas, #qrcode img{ display:block; width:100% !important; height:100% !important; max-width:100%; }
