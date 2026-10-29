@@ -478,9 +478,12 @@
     (d.emails || []).forEach(e => rows.push({ icon: 'email', label: e.type || 'Email', value: e.address, href: `mailto:${e.address}` }));
     if (d.address) rows.push({ icon: 'location', label: 'Address', value: d.address, href: `https://maps.google.com/?q=${encodeURIComponent(d.address)}` });
     if (d.website) rows.push({ icon: 'website', label: 'Website', value: 'View Site', href: d.website }); // legacy single-website support
-    (d.websites || []).forEach(w => rows.push({ icon: 'website', label: w.label || 'Website', value: w.label ? '' : 'View Site', href: w.url }));
+    // siteIndex marks which row came from which "websites" entry, so a link
+    // shown as a QR code with "qrOnly": true can have its plain row removed
+    // (see renderLinkQrs) — only after its code has actually been drawn.
+    (d.websites || []).forEach((w, i) => rows.push({ icon: 'website', label: w.label || 'Website', value: w.label ? '' : 'View Site', href: w.url, siteIndex: i }));
     document.getElementById('fieldsEl').innerHTML = rows.map(r => `
-      <a class="field" href="${r.href}" target="_blank" rel="noopener" ${r.phoneChoice ? `data-phone-choice="${r.phoneChoice}"` : ''}>
+      <a class="field" href="${r.href}" target="_blank" rel="noopener" ${r.phoneChoice ? `data-phone-choice="${r.phoneChoice}"` : ''} ${r.siteIndex !== undefined ? `data-site-index="${r.siteIndex}"` : ''}>
         <span class="icon">${ICONS[r.icon]}</span>
         <span class="meta"><div class="${r.value ? 'label' : 'value'}">${r.label}</div>${r.value ? `<div class="value">${r.value}</div>` : ''}</span>
       </a>
@@ -507,14 +510,16 @@
     // library failing to load) must never stop the rest of the card from showing.
     try {
       const links = (d.websites || [])
-        .filter(w => w && w.qr === true && String(w.url || '').trim())
+        .map((w, index) => ({ w, index }))
+        .filter(({ w }) => w && w.qr === true && String(w.url || '').trim())
         .slice(0, MAX_LINK_QRS);
       if (!links.length) return;
 
       const scanSection = document.getElementById('qrSection');
       const parent = scanSection ? scanSection.parentNode : document.querySelector('.page');
 
-      links.forEach(w => {
+      links.forEach(({ w, index }) => {
+       try { // one link failing must not stop the next one from drawing
         const raw = String(w.url).trim();
         // "acme.com" typed without https:// would be unscannable (a phone reads
         // it as plain text, not a link) and would break the tap link, so add it.
@@ -559,15 +564,35 @@
         });
         text.append(capEl, urlEl, printLink);
 
-        block.append(codeLink, text);
-        section.append(heading, block);
-        parent.insertBefore(section, scanSection || null);
-
+        // Draw the code BEFORE putting the block on the page: if drawing fails,
+        // nothing is added, so there is never an empty block with no code in it.
         new QRCode(codeLink, {
           text: url, width: 220, height: 220,
           colorDark: '#14171c', colorLight: '#ede6d6',
           correctLevel: QRCode.CorrectLevel.M
         });
+
+        block.append(codeLink, text);
+        section.append(heading, block);
+        parent.insertBefore(section, scanSection || null);
+
+        // "qrOnly": true — show just the code, not the plain link row as well.
+        // Done only now, after the code is on the page, so a link can never
+        // disappear without its code appearing.
+        if (w.qrOnly === true) {
+          const row = document.querySelector(`#fieldsEl [data-site-index="${index}"]`);
+          if (row) row.remove();
+          // A Contact box left completely empty would show as a hollow outline.
+          const fieldsEl = document.getElementById('fieldsEl');
+          const bookBtn = document.getElementById('bookBtn');
+          if (fieldsEl && !fieldsEl.children.length && (!bookBtn || bookBtn.style.display === 'none')) {
+            const contactSection = fieldsEl.closest('section');
+            if (contactSection) contactSection.style.display = 'none';
+          }
+        }
+       } catch (err) {
+        console.error('Could not draw a website QR code:', err);
+       }
       });
     } catch (err) {
       console.error('Could not draw website QR codes:', err);

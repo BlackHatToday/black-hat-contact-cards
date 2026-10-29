@@ -673,6 +673,12 @@
       <div class="website-qr-caption-wrap" style="grid-column:1 / -1; display:none;">
         <label>QR caption (optional)</label>
         <input type="text" class="website-qr-caption" maxlength="160" placeholder="Scan the QR code or tap it to register!">
+        <div class="checkbox-row" style="margin-top:10px;">
+          <label style="display:flex; align-items:center; gap:8px; cursor:pointer; text-transform:none; letter-spacing:normal;">
+            <input type="checkbox" class="website-qr-only" style="width:auto;">
+            <span>Show only the QR code — hide this link's plain row in the Contact box</span>
+          </label>
+        </div>
       </div>
     `);
     const qrBox = row.querySelector('.website-qr');
@@ -682,6 +688,7 @@
     if (prefill.url) row.querySelector('.website-url').value = prefill.url;
     if (prefill.qr) { qrBox.checked = true; capWrap.style.display = 'block'; }
     if (prefill.qrCaption) row.querySelector('.website-qr-caption').value = prefill.qrCaption;
+    if (prefill.qrOnly) row.querySelector('.website-qr-only').checked = true;
     return row;
   }
 
@@ -794,7 +801,8 @@
       // data.json stays clean for everyone who doesn't use this
       ...(item.querySelector('.website-qr').checked ? { qr: true } : {}),
       ...(item.querySelector('.website-qr').checked && item.querySelector('.website-qr-caption').value.trim()
-        ? { qrCaption: item.querySelector('.website-qr-caption').value.trim() } : {})
+        ? { qrCaption: item.querySelector('.website-qr-caption').value.trim() } : {}),
+      ...(item.querySelector('.website-qr').checked && item.querySelector('.website-qr-only').checked ? { qrOnly: true } : {})
     })).filter(w => w.url);
 
     const gallery = [...document.querySelectorAll('#galleryList .repeat-item')].map(item => ({
