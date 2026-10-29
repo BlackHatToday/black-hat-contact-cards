@@ -68,6 +68,11 @@
     {
       "label": "NCAA Eligibility Center",
       "url": "https://web3.ncaa.org/ecwr3/"
+    },
+    {
+      "label": "Reading Internships",
+      "url": "https://www.readingsd.org/o/rhs-college-and-career-center/page/internshipswork-study",
+      "qr": true
     }
   ],
   "gallery": [
@@ -97,6 +102,8 @@
     }
   ],
   "listings": [],
+  "isRealtor": false,
+  "trialExpires": "",
   "calendlyUrl": "",
   "bookingLabel": "Book a Time",
   "address": "",
