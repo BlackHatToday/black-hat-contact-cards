@@ -49,7 +49,7 @@
   "gallery": [
     {
       "photo": "photo1.jpg",
-      "caption": ""
+      "caption": "Hi!"
     },
     {
       "photo": "photo2.jpg",
@@ -57,7 +57,7 @@
     },
     {
       "photo": "photo3.jpg",
-      "caption": ""
+      "caption": "Nap Time"
     },
     {
       "photo": "photo4.jpg",
@@ -65,7 +65,7 @@
     },
     {
       "photo": "photo5.jpg",
-      "caption": ""
+      "caption": "Is it Monday already?"
     },
     {
       "photo": "photo6.jpg",
@@ -73,7 +73,7 @@
     },
     {
       "photo": "photo7.jpg",
-      "caption": ""
+      "caption": "I love my family!"
     }
   ],
   "listings": [],
