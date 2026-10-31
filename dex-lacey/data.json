@@ -41,11 +41,44 @@
     }
   ],
   "websites": [],
+  "gallery": [
+    {
+      "photo": "photo1.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo2.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo3.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo4.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo5.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo6.jpg",
+      "caption": ""
+    },
+    {
+      "photo": "photo7.jpg",
+      "caption": ""
+    }
+  ],
   "listings": [],
+  "isRealtor": false,
+  "trialExpires": "",
   "calendlyUrl": "",
   "bookingLabel": "Book a Time",
   "address": "",
   "photoFile": "photo.jpg",
   "accessToken": "69vc9ayg",
+  "brand": "",
   "showQR": true
 }
