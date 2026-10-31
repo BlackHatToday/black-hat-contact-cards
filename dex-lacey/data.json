@@ -2,10 +2,10 @@
   "prefix": "",
   "firstName": "Dex",
   "lastName": "Lacey",
-  "title": "Security Professional",
+  "title": "Security Professional ( 126 lbs )",
   "org": "Mo Tea LLC",
   "tagline": "Very friendly but also very firm.",
-  "about": "",
+  "about": "The Presa Canario is a Spanish breed of large dog of mastiff or catch dog type. It originates in the Spanish autonomous community of the Canary Islands, and is found mostly in the islands of Gran Canaria and Tenerife.  It was formerly known as the Dogo Canario. It was traditionally used as a guard dog, as a herding dog for both sheep and cattle, and for dog-fighting, which was legal in Spain until 1936 and may have continued clandestinely thereafter.",
   "experience": [],
   "skills": [],
   "social": {
@@ -40,7 +40,12 @@
       "address": "LaceyDex.DOG@GMail.com"
     }
   ],
-  "websites": [],
+  "websites": [
+    {
+      "label": "Website",
+      "url": "https://en.wikipedia.org/wiki/Presa_Canario"
+    }
+  ],
   "gallery": [
     {
       "photo": "photo1.jpg",
