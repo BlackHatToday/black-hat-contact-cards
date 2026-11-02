@@ -29,11 +29,14 @@
   "websites": [
     {
       "label": "NCAA Eligibility Center",
-      "url": "https://web3.ncaa.org/ecwr3/"
+      "url": "https://web3.ncaa.org/ecwr3/",
+      "qr": true
     }
   ],
   "gallery": [],
   "listings": [],
+  "isRealtor": false,
+  "trialExpires": "",
   "calendlyUrl": "",
   "bookingLabel": "Book a Time",
   "address": "",
