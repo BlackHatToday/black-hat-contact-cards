@@ -174,6 +174,8 @@
     // shares should always point at the correct domain regardless.
     const selfUrl = `${PROJECT_BASE_URL}${basePath()}`;
     document.getElementById('qrSection').style.display = 'block';
+    // Heading is set here (not in the template) so every existing card gets it.
+    try { const h = document.querySelector('#qrSection .section-label span'); if (h) h.textContent = 'Scan to open listing'; } catch (e) {}
     /* global QRCode */
     new QRCode(document.getElementById('qrcode'), {
       text: selfUrl, width: 180, height: 180,
@@ -390,6 +392,29 @@
     }
   }
 
+  // Anonymous open counter — same behavior as in app.js (see the comment
+  // there). Counts the listing's folder path as the card name.
+  function trackOpen() {
+    try {
+      const host = window.location.hostname;
+      if (!host || host === 'localhost' || host === '127.0.0.1') return; // testing
+      if (localStorage.getItem('bh_owner') === '1') return;             // Boris opted this browser out (stats.html)
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('action')) return;
+      const card = basePath().replace(/^\/+|\/+$/g, '').toLowerCase();
+      if (!card) return;
+      const sessionKey = 'bh_tap_' + card;
+      if (sessionStorage.getItem(sessionKey)) return;
+      sessionStorage.setItem(sessionKey, '1');
+      const body = JSON.stringify({ card, src: params.has('t') ? 'tag' : 'link' });
+      if (navigator.sendBeacon) {
+        navigator.sendBeacon('/api/tap', new Blob([body], { type: 'text/plain' }));
+      } else {
+        fetch('/api/tap', { method: 'POST', body, keepalive: true, headers: { 'Content-Type': 'text/plain' } }).catch(() => {});
+      }
+    } catch (e) { /* counting is best-effort; never surface an error */ }
+  }
+
   try {
     const data = await loadData();
     await applyBrandTheme(data);
@@ -407,6 +432,7 @@
     renderOriginalListing(data);
     renderEditListingLink(data);
     renderQR(data);
+    setTimeout(trackOpen, 0); // last, and deferred — only counts listings that actually rendered
   } catch (err) {
     document.querySelector('.page').innerHTML = `
       <div class="load-error">

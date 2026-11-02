@@ -637,24 +637,25 @@ body.quick-share-mode #quickShareIntro{
   }
   body.print-link-qr #qrPrintSheet{
     display:flex !important; flex-direction:column; align-items:center; justify-content:center;
-    text-align:center; min-height:9in; padding:0.4in; color:#14171c; background:#ffffff;
+    text-align:center; padding:0.9in 0.4in 0.3in; color:#14171c; background:#ffffff;
+    break-inside:avoid; page-break-inside:avoid; overflow:hidden;
   }
   #qrPrintSheet .qr-print-title{
     font-family:var(--font-display); font-weight:700; font-size:30px; line-height:1.2; margin-bottom:6px;
   }
   #qrPrintSheet .qr-print-label{
     font-family:'IBM Plex Mono', monospace; font-size:14px; letter-spacing:0.14em;
-    text-transform:uppercase; color:#555b66; margin-bottom:26px;
+    text-transform:uppercase; color:#555b66; margin-bottom:18px;
   }
   #qrPrintSheet .qr-print-code{
-    width:3.4in; height:3.4in; padding:0.25in; background:#ffffff; box-sizing:content-box;
+    width:min(3.4in, 38vh); height:min(3.4in, 38vh); padding:0.2in; background:#ffffff; box-sizing:content-box;
   }
   #qrPrintSheet .qr-print-code canvas,
   #qrPrintSheet .qr-print-code img{
     display:block; width:100% !important; height:100% !important;
   }
   #qrPrintSheet .qr-print-hint{
-    font-family:var(--font-display); font-size:18px; margin-top:22px; max-width:5.5in;
+    font-family:var(--font-display); font-size:18px; margin-top:16px; max-width:5.5in;
   }
   #qrPrintSheet .qr-print-url{
     font-family:'IBM Plex Mono', monospace; font-size:14px; color:#555b66;

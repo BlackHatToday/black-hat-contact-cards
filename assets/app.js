@@ -923,6 +923,8 @@
     // should always point at the correct domain regardless.
     const selfUrl = `${PROJECT_BASE_URL}${basePath()}`;
     document.getElementById('qrSection').style.display = 'block';
+    // Heading is set here (not in the template) so every existing card gets it.
+    try { const h = document.querySelector('#qrSection .section-label span'); if (h) h.textContent = 'Scan to open profile'; } catch (e) {}
     /* global QRCode */
     new QRCode(document.getElementById('qrcode'), {
       text: selfUrl, width: 180, height: 180,
