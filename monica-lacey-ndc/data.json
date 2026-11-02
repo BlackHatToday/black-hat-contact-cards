@@ -28,6 +28,10 @@
   "emails": [],
   "websites": [
     {
+      "label": "Example Document For Sharing",
+      "url": "https://docs.google.com/spreadsheets/d/1Fpu_lNAjHNxiKDHeLtELNCQMAtvj11AI/edit?usp=drive_link&ouid=104820609494065550078&rtpof=true&sd=true"
+    },
+    {
       "label": "NCAA Eligibility Center",
       "url": "https://web3.ncaa.org/ecwr3/",
       "qr": true
