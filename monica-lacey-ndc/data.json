@@ -31,6 +31,18 @@
       "label": "NCAA Eligibility Center",
       "url": "https://web3.ncaa.org/ecwr3/",
       "qr": true
+    },
+    {
+      "label": "NCAA - Reading High Core Courses (Add School Code: 394170)",
+      "url": "https://web3.ncaa.org/hsportal/exec/hsAction?hsActionSubmit=getHsCoreCoursesData&hsCode=394170"
+    },
+    {
+      "label": "Initial-Eligibility Standards",
+      "url": "https://s3.amazonaws.com/fs.ncaa.org/Docs/eligibility_center/Student_Resources/IE_Brochure.pdf"
+    },
+    {
+      "label": "NCAA Recruiting - Learn how the recruiting process works and what steps may apply as you connect with NCAA School:",
+      "url": "https://www.ncaa.org/eligibility-center/recruiting/#recruiting-calendars"
     }
   ],
   "gallery": [],
