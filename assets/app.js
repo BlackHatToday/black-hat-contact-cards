@@ -479,8 +479,7 @@
     if (d.address) rows.push({ icon: 'location', label: 'Address', value: d.address, href: `https://maps.google.com/?q=${encodeURIComponent(d.address)}` });
     if (d.website) rows.push({ icon: 'website', label: 'Website', value: 'View Site', href: d.website }); // legacy single-website support
     // siteIndex marks which row came from which "websites" entry, so a link
-    // (kept for tagging rows; the Contact-box row is never removed)
-    // (see renderLinkQrs) — only after its code has actually been drawn.
+    // (see renderLinkQrs) — its plain row is removed only after its QR block has actually been drawn.
     (d.websites || []).forEach((w, i) => rows.push({ icon: 'website', label: w.label || 'Website', value: w.label ? '' : 'View Site', href: w.url, siteIndex: i }));
     document.getElementById('fieldsEl').innerHTML = rows.map(r => `
       <a class="field" href="${r.href}" target="_blank" rel="noopener" ${r.phoneChoice ? `data-phone-choice="${r.phoneChoice}"` : ''} ${r.siteIndex !== undefined ? `data-site-index="${r.siteIndex}"` : ''}>
@@ -576,6 +575,21 @@
         block.append(codeLink, text);
         section.append(heading, block);
         parent.insertBefore(section, scanSection || null);
+
+        // The link now lives in its QR block (label as heading, code opens
+        // it), so its plain Contact-box row is removed to avoid showing it
+        // twice. Done only now, after the block is on the page, so a link can
+        // never disappear without its code appearing. (Save to Contacts reads
+        // the data, not these rows, so the saved contact still has the URL.)
+        const row = document.querySelector(`#fieldsEl [data-site-index="${index}"]`);
+        if (row) row.remove();
+        // A Contact box left completely empty would show as a hollow outline.
+        const fieldsEl = document.getElementById('fieldsEl');
+        const bookBtn = document.getElementById('bookBtn');
+        if (fieldsEl && !fieldsEl.children.length && (!bookBtn || bookBtn.style.display === 'none')) {
+          const contactSection = fieldsEl.closest('section');
+          if (contactSection) contactSection.style.display = 'none';
+        }
        } catch (err) {
         console.error('Could not draw a website QR code:', err);
        }

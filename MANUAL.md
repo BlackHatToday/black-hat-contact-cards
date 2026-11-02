@@ -350,6 +350,8 @@ This works because someone who doesn't already control the real person's existin
 
 ## 21. Showing a Website Link as a QR Code on a Card
 
+**Owner-only and not advertised (decision, 2026-10-31).** This is something you apply for a client who asks; don't mention it in pricing, flyers, demos or forms. Clients cannot turn it on themselves: the options live only in `generator.html` (or `data.json`), and are deliberately absent from the Contact / Support / Updates form and the intake forms. If a client asks why the form has no QR options, that's why. Their update emails list websites as label and link only, so always edit from the existing `data.json` in the generator (Load, change, Save) and never rebuild a card from the email text, or the QR settings are lost.
+
 Use this when a client wants a link (a registration form, a shop, a menu) to appear on their card as a scannable, tappable, printable QR code, sitting on the page like the "Scan" section. Person cards only; property cards don't have it yet.
 
 **To turn it on for one link:**
@@ -359,12 +361,12 @@ Use this when a client wants a link (a registration form, a shop, a menu) to app
 4. Optional: tick **"Also show the web address under the code."** By default the address text (e.g. moteajar.com) is hidden.
 5. Save, then push (§9). Or edit `data.json` directly: add `"qr": true`, and optionally `"qrCaption": "..."` and `"qrShowUrl": true` to that website entry.
 
-**What the visitor sees:** the link's own label stays in the Contact box as always, and also heads a QR block above the Scan section. Tapping the code opens the link; "Print this QR code" prints a one-page sheet with the code, the label and the caption.
+**What the visitor sees:** the link's own label heads a QR block above the Scan section, and that link's plain row is automatically removed from the Contact box so it isn't shown twice (changed 2026-11-02; Save to Contacts still includes the URL). If a QR link was the only thing in the Contact box, the box hides. If a code ever fails to draw, the plain row stays, so the link is never lost. Tapping the code opens the link; "Print this QR code" prints a one-page sheet with the code, the label and the caption.
 
 **Limits and habits:**
 - Maximum 3 QR blocks per card.
 - Use a short link where possible (e.g. `forms.gle/...`). Very long links produce a denser code that's harder to scan.
-- Only `generator.html` or hand-editing `data.json` can turn this on. The intake form and message-to-json do not offer it.
+- Only `generator.html` or hand-editing `data.json` can turn this on. The Contact / Support / Updates form, the intake forms and message-to-json do not offer it, on purpose.
 - It needs the current `assets/app.js` and `assets/style.css` pushed; no template change is needed.
 - An old `"qrOnly": true` in a `data.json` (an earlier option, since removed) is ignored and can be deleted.
 - The tap counter (when set up) does not count taps on these codes.
