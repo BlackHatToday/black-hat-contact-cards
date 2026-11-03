@@ -65,6 +65,14 @@
     {
       "photo": "photo1.jpg",
       "caption": "Reading School District"
+    },
+    {
+      "photo": "photo2.jpg",
+      "caption": "NCAA"
+    },
+    {
+      "photo": "photo3.jpg",
+      "caption": "Key Details"
     }
   ],
   "listings": [],
