@@ -34,7 +34,12 @@
       "number": "(610) 371-5705"
     }
   ],
-  "emails": [],
+  "emails": [
+    {
+      "type": "Work",
+      "address": "LaceyM@Readingsd.org"
+    }
+  ],
   "websites": [
     {
       "label": "NCAA Worksheet (Make a copy first)",
@@ -65,7 +70,7 @@
   "trialExpires": "",
   "calendlyUrl": "",
   "bookingLabel": "Book a Time",
-  "address": "The Student Services, Suite Room 363, Office 373 ",
+  "address": "Student Services Suite, Room 363, Office 373 ",
   "photoFile": "photo.jpg",
   "accessToken": "5c4hd6wv",
   "brand": "biz-monica-lacey-ncaa",
