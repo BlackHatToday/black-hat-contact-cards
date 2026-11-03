@@ -470,11 +470,13 @@
     // than guessing. Other labels (Home, Other) still dial directly.
     (d.phones || []).forEach(p => {
       const cleanNumber = String(p.number).replace(/[^+\d]/g, '');
-      const showChoice = /^(mobile|cell|work)$/i.test((p.type || '').trim());
       // Optional extension ("ext" in data.json): shown after the number and
       // dialed after a short pause (a comma in a tel: link). Digits only, so
-      // it is safe to place in the page. Texting never includes the extension.
+      // it is safe to place in the page.
       const ext = String(p.ext || '').replace(/\D/g, '').slice(0, 8);
+      // A number with an extension is a desk/office line, so there is no
+      // Call-or-Text choice: it just dials (a text can't reach an extension).
+      const showChoice = !ext && /^(mobile|cell|work)$/i.test((p.type || '').trim());
       rows.push({
         icon: 'phone', label: p.type || 'Phone', value: ext ? `${p.number} ext. ${ext}` : p.number,
         href: showChoice ? '#' : `tel:${cleanNumber}${ext ? ',' + ext : ''}`,
