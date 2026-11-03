@@ -61,7 +61,12 @@
       "url": "https://www.ncaa.org/eligibility-center/recruiting/#recruiting-calendars"
     }
   ],
-  "gallery": [],
+  "gallery": [
+    {
+      "photo": "photo1.jpg",
+      "caption": "Reading School District"
+    }
+  ],
   "listings": [],
   "isRealtor": false,
   "trialExpires": "",
