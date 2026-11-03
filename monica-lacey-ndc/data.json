@@ -1,13 +1,17 @@
 {
   "prefix": "",
-  "firstName": "Monica",
+  "firstName": "Mrs.",
   "lastName": "Lacey",
-  "title": "NCAA District Coordinator",
+  "title": "",
   "org": "",
   "tagline": "",
-  "about": "",
+  "about": "- RSD NCAA Coordinator  - Athletic Academic  Success Coach - RHS School Counselor",
   "experience": [],
-  "skills": [],
+  "skills": [
+    "RSD NCAA Coordinator",
+    "Athletic Academic  Success Coach",
+    "RHS School Counselor"
+  ],
   "social": {
     "instagram": "",
     "tiktok": "",
@@ -24,17 +28,23 @@
   },
   "paymentSectionLabel": "Payment",
   "notes": "",
-  "phones": [],
+  "phones": [
+    {
+      "type": "Work",
+      "number": "(610) 371-5705"
+    }
+  ],
   "emails": [],
   "websites": [
     {
-      "label": "Example Document For Sharing",
+      "label": "NCAA Worksheet (Make a copy first)",
       "url": "https://docs.google.com/spreadsheets/d/1Fpu_lNAjHNxiKDHeLtELNCQMAtvj11AI/edit?usp=drive_link&ouid=104820609494065550078&rtpof=true&sd=true"
     },
     {
       "label": "NCAA Eligibility Center",
       "url": "https://web3.ncaa.org/ecwr3/",
-      "qr": true
+      "qr": true,
+      "qrCaption": "Tap this code to open the link to register for the NCAA Clearinghouse."
     },
     {
       "label": "NCAA - Reading High Core Courses (School Code: 394170)",
@@ -55,7 +65,7 @@
   "trialExpires": "",
   "calendlyUrl": "",
   "bookingLabel": "Book a Time",
-  "address": "",
+  "address": "Located in the Student Services Suite Room 363, Office 373. ",
   "photoFile": "photo.jpg",
   "accessToken": "5c4hd6wv",
   "brand": "biz-monica-lacey-ncaa",
