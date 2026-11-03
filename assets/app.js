@@ -332,15 +332,17 @@
     const fieldsEl = document.getElementById('fieldsEl');
     if (!overlay || !fieldsEl) return;
     let activeNumber = '';
+    let activeExt = '';
     fieldsEl.addEventListener('click', (e) => {
       const row = e.target.closest('[data-phone-choice]');
       if (!row) return;
       e.preventDefault();
       activeNumber = row.dataset.phoneChoice;
+      activeExt = row.dataset.phoneExt || '';
       overlay.classList.add('open');
     });
     document.getElementById('phoneChoiceCallBtn').addEventListener('click', () => {
-      window.location.href = `tel:${activeNumber}`;
+      window.location.href = `tel:${activeNumber}${activeExt ? ',' + activeExt : ''}`;
       overlay.classList.remove('open');
     });
     document.getElementById('phoneChoiceTextBtn').addEventListener('click', () => {
@@ -469,10 +471,15 @@
     (d.phones || []).forEach(p => {
       const cleanNumber = String(p.number).replace(/[^+\d]/g, '');
       const showChoice = /^(mobile|cell|work)$/i.test((p.type || '').trim());
+      // Optional extension ("ext" in data.json): shown after the number and
+      // dialed after a short pause (a comma in a tel: link). Digits only, so
+      // it is safe to place in the page. Texting never includes the extension.
+      const ext = String(p.ext || '').replace(/\D/g, '').slice(0, 8);
       rows.push({
-        icon: 'phone', label: p.type || 'Phone', value: p.number,
-        href: showChoice ? '#' : `tel:${cleanNumber}`,
-        phoneChoice: showChoice ? cleanNumber : ''
+        icon: 'phone', label: p.type || 'Phone', value: ext ? `${p.number} ext. ${ext}` : p.number,
+        href: showChoice ? '#' : `tel:${cleanNumber}${ext ? ',' + ext : ''}`,
+        phoneChoice: showChoice ? cleanNumber : '',
+        phoneExt: showChoice ? ext : ''
       });
     });
     (d.emails || []).forEach(e => rows.push({ icon: 'email', label: e.type || 'Email', value: e.address, href: `mailto:${e.address}` }));
@@ -482,7 +489,7 @@
     // (see renderLinkQrs) — its plain row is removed only after its QR block has actually been drawn.
     (d.websites || []).forEach((w, i) => rows.push({ icon: 'website', label: w.label || 'Website', value: w.label ? '' : 'View Site', href: w.url, siteIndex: i }));
     document.getElementById('fieldsEl').innerHTML = rows.map(r => `
-      <a class="field" href="${r.href}" target="_blank" rel="noopener" ${r.phoneChoice ? `data-phone-choice="${r.phoneChoice}"` : ''} ${r.siteIndex !== undefined ? `data-site-index="${r.siteIndex}"` : ''}>
+      <a class="field" href="${r.href}" target="_blank" rel="noopener" ${r.phoneChoice ? `data-phone-choice="${r.phoneChoice}"` : ''} ${r.phoneExt ? `data-phone-ext="${r.phoneExt}"` : ''} ${r.siteIndex !== undefined ? `data-site-index="${r.siteIndex}"` : ''}>
         <span class="icon">${ICONS[r.icon]}</span>
         <span class="meta"><div class="${r.value ? 'label' : 'value'}">${r.label}</div>${r.value ? `<div class="value">${r.value}</div>` : ''}</span>
       </a>
@@ -937,7 +944,7 @@
     const lines = ['BEGIN:VCARD', 'VERSION:3.0', `N:${d.lastName};${d.firstName};;${d.prefix || ''};`, `FN:${[d.prefix, d.firstName, d.lastName].filter(Boolean).join(' ')}`];
     if (d.org) lines.push(`ORG:${d.org}`);
     if (d.title) lines.push(`TITLE:${d.title}`);
-    (d.phones || []).forEach(p => lines.push(`TEL;TYPE=${(p.type || 'CELL').toUpperCase()}:${p.number}`));
+    (d.phones || []).forEach(p => { const ext = String(p.ext || '').replace(/\D/g, ''); lines.push(`TEL;TYPE=${(p.type || 'CELL').toUpperCase()}:${p.number}${ext ? ',' + ext : ''}`); });
     (d.emails || []).forEach(e => lines.push(`EMAIL:${e.address}`));
     if (d.address) lines.push(`ADR;TYPE=HOME:;;${d.address.replace(/,/g, '\\,')};;;;`);
     if (d.website) lines.push(`URL:${d.website}`); // legacy single-website support

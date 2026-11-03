@@ -584,11 +584,14 @@
       <div>
         <label>Phone number</label>
         <input type="tel" class="phone-number field-content" placeholder="(555) 123-4567" inputmode="tel">
+        <label style="margin-top:8px;">Extension (optional)</label>
+        <input type="text" class="phone-ext field-content" placeholder="e.g. 123" inputmode="numeric" maxlength="8">
       </div>
     `);
     row.querySelector('.phone-number').addEventListener('input', formatPhoneInput);
     if (prefill.type) row.querySelector('.phone-type').value = prefill.type;
     if (prefill.number) row.querySelector('.phone-number').value = prefill.number;
+    if (prefill.ext) row.querySelector('.phone-ext').value = prefill.ext;
     return row;
   }
 
@@ -776,7 +779,8 @@
   function collectData() {
     const phones = [...document.querySelectorAll('#phoneList .repeat-item')].map(item => ({
       type: item.querySelector('.phone-type').value || 'Mobile',
-      number: item.querySelector('.phone-number').value
+      number: item.querySelector('.phone-number').value,
+      ...(item.querySelector('.phone-ext').value.replace(/\D/g, '') ? { ext: item.querySelector('.phone-ext').value.replace(/\D/g, '') } : {})
     })).filter(p => p.number);
 
     const emails = [...document.querySelectorAll('#emailList .repeat-item')].map(item => ({
@@ -882,7 +886,7 @@
     else roleLine = d.title || d.org || '';
 
     const fieldRows = [];
-    d.phones.forEach(p => p.number && fieldRows.push({ label: p.type, value: p.number }));
+    d.phones.forEach(p => p.number && fieldRows.push({ label: p.type, value: p.number + (p.ext ? ' ext. ' + p.ext : '') }));
     d.emails.forEach(e => e.address && fieldRows.push({ label: e.type, value: e.address }));
     if (d.address) fieldRows.push({ label: 'Address', value: d.address });
     d.websites.forEach(w => w.url && fieldRows.push({ label: w.label, value: w.url.replace(/^https?:\/\//,'') }));

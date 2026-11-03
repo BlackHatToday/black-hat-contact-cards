@@ -335,7 +335,8 @@ section{ padding: 0 28px; margin-top: 8px; }
 }
 .field .value{
   font-family:'IBM Plex Mono', monospace; font-size:14px; color:var(--parchment);
-  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  /* Long text wraps onto extra lines instead of being cut off with "…". */
+  white-space:normal; overflow-wrap:anywhere; line-height:1.35;
 }
 
 /* ---- book-a-time button ---- */
