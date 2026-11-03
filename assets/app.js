@@ -81,10 +81,38 @@
     }
   }
 
+  // Keeps a heading on one line by shrinking its font a pixel at a time (down
+  // to minPx) until it fits its box, and re-checking when the screen is
+  // resized or the page's fonts finish loading. If it still doesn't fit at
+  // minPx it is allowed to wrap rather than shrink further. Fully guarded:
+  // on any problem the heading simply keeps its normal size.
+  function fitSingleLine(el, minPx) {
+    try {
+      if (!el) return;
+      const run = () => {
+        try {
+          el.style.fontSize = '';
+          el.style.whiteSpace = 'nowrap';
+          let size = parseFloat(getComputedStyle(el).fontSize);
+          while (el.scrollWidth > el.clientWidth + 0.5 && size > minPx) {
+            size -= 1;
+            el.style.fontSize = size + 'px';
+          }
+          if (el.scrollWidth > el.clientWidth + 0.5) el.style.whiteSpace = 'normal';
+        } catch (e) { /* leave the heading as it is */ }
+      };
+      run();
+      window.addEventListener('resize', run);
+      window.addEventListener('load', run);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(run);
+    } catch (e) { /* best-effort only */ }
+  }
+
   function renderIdentity(d) {
     const fullName = [d.prefix, d.firstName, d.lastName].filter(Boolean).join(' ');
     document.title = `${d.firstName} ${d.lastName}`.trim();
     document.getElementById('nameEl').textContent = fullName;
+    fitSingleLine(document.getElementById('nameEl'), 18);
 
     // Names the owner-tools column after the card owner (initials), so a
     // visitor reads it as "not mine to use" at a glance rather than a
@@ -994,9 +1022,23 @@
   }
   function computeThemeFromBackground(bgHex) {
     const isLight = relativeLuminance(bgHex) > 0.4;
+    const text = isLight ? '#1a1a1a' : '#ede6d6';
+    // The fixed gray for secondary text can be unreadable on a mid-tone or
+    // colored background (e.g. a cool gray on red). Keep it when it already
+    // reads (4.5:1), otherwise use the main text color softened toward the
+    // background just far enough to stay readable — same hue family as the page.
+    let muted = isLight ? '#5a5a55' : '#8b93a1';
+    if (contrastRatio(muted, bgHex) < 4.5) {
+      const tr = hexToRgb(text), br = hexToRgb(bgHex);
+      muted = text;
+      for (let t = 0.4; t >= 0; t -= 0.05) {
+        const cand = rgbToHex(tr.map((v, i) => v * (1 - t) + br[i] * t));
+        if (contrastRatio(cand, bgHex) >= 4.5) { muted = cand; break; }
+      }
+    }
     return {
-      text: isLight ? '#1a1a1a' : '#ede6d6',
-      muted: isLight ? '#5a5a55' : '#8b93a1',
+      text,
+      muted,
       surface: adjustBrightness(bgHex, isLight ? -18 : 14),
       surface2: adjustBrightness(bgHex, isLight ? -30 : 24),
       line: adjustBrightness(bgHex, isLight ? -45 : 32),

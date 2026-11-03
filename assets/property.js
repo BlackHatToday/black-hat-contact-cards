@@ -285,9 +285,23 @@
   }
   function computeThemeFromBackground(bgHex) {
     const isLight = relativeLuminance(bgHex) > 0.4;
+    const text = isLight ? '#1a1a1a' : '#ede6d6';
+    // The fixed gray for secondary text can be unreadable on a mid-tone or
+    // colored background (e.g. a cool gray on red). Keep it when it already
+    // reads (4.5:1), otherwise use the main text color softened toward the
+    // background just far enough to stay readable — same hue family as the page.
+    let muted = isLight ? '#5a5a55' : '#8b93a1';
+    if (contrastRatio(muted, bgHex) < 4.5) {
+      const tr = hexToRgb(text), br = hexToRgb(bgHex);
+      muted = text;
+      for (let t = 0.4; t >= 0; t -= 0.05) {
+        const cand = rgbToHex(tr.map((v, i) => v * (1 - t) + br[i] * t));
+        if (contrastRatio(cand, bgHex) >= 4.5) { muted = cand; break; }
+      }
+    }
     return {
-      text: isLight ? '#1a1a1a' : '#ede6d6',
-      muted: isLight ? '#5a5a55' : '#8b93a1',
+      text,
+      muted,
       surface: adjustBrightness(bgHex, isLight ? -18 : 14),
       surface2: adjustBrightness(bgHex, isLight ? -30 : 24),
       line: adjustBrightness(bgHex, isLight ? -45 : 32),
