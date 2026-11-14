@@ -1,11 +1,11 @@
 {
   "prefix": "",
   "firstName": "Destinne",
-  "lastName": "Parker-Stewart",
-  "title": "Therapist, LCSW",
-  "org": "",
+  "lastName": "Parker-Stewart  LCSW",
+  "title": "Therapist",
+  "org": "Child & Family Mental Wellness, LLC",
   "tagline": "",
-  "about": "I offer therapy in-person or online via video. I'm available late afternoon and evenings.  I specialize in Anxiety, Relationship Issues and Family Conflict.",
+  "about": "Destinne Parker-Stewart is a Licensed Clinical Social Worker and the owner of Child & Family Mental Wellness. With over 20 years of experience in the social work field, she is passionate about empowering individuals and strengthening families by creating safe, supportive environments that encourage healing, growth, and success.",
   "experience": [],
   "skills": [],
   "social": {
@@ -17,9 +17,9 @@
     "youtube": ""
   },
   "payments": {
-    "cashapp": "$DestinnePS",
+    "cashapp": "",
     "venmo": "",
-    "paypal": "",
+    "paypal": "CFMentalWellness",
     "zelle": ""
   },
   "paymentSectionLabel": "Payment",
@@ -27,68 +27,49 @@
   "phones": [
     {
       "type": "Work",
-      "number": "(484) 749-0424"
+      "number": "(610) 609-7462"
     }
   ],
-  "emails": [],
-  "websites": [
+  "emails": [
     {
-      "label": "Our Services",
-      "url": "https://blackhatcards.community/dps-our-services.html"
-    },
+      "type": "Personal",
+      "address": "childfamilymentalwellness@proton.me"
+    }
+  ],
+  "websites": [
     {
       "label": "Link Tree",
       "url": "https://linktr.ee/childfamilymentalwellness"
     },
     {
-      "label": "Psychology Today",
-      "url": "https://www.psychologytoday.com/us/therapists/destinne-parker-stewart-reading-pa/962073"
-    },
-    {
-      "label": "Child & Family Mental Wellness",
-      "url": "https://childandfamilymentalwellness.com/"
+      "label": "Facebook",
+      "url": "https://www.facebook.com/share/1JX5KQFoPD/?mibextid=wwXIfr"
     }
   ],
   "gallery": [
     {
-      "photo": "photo7.jpg",
-      "caption": "Back To School"
-    },
-    {
-      "photo": "photo6.jpg",
-      "caption": "Supporting Families"
-    },
-    {
-      "photo": "photo5.jpg",
-      "caption": ""
-    },
-    {
-      "photo": "photo8.jpg",
-      "caption": "I'm Excited To Announce!"
-    },
-    {
       "photo": "photo1.jpg",
-      "caption": ""
+      "caption": "Empowering Family Wellness Flyer"
     },
     {
       "photo": "photo2.jpg",
-      "caption": ""
+      "caption": "FAQ"
     },
     {
       "photo": "photo3.jpg",
-      "caption": ""
+      "caption": "Excited to Announce ..."
     },
     {
       "photo": "photo4.jpg",
-      "caption": ""
+      "caption": "About your therapist!"
     }
   ],
   "listings": [],
   "isRealtor": false,
   "trialExpires": "",
-  "calendlyUrl": "",
+  "calendlyUrl": "https://cfmw.sessionshealth.com/",
   "bookingLabel": "Book a Time",
-  "address": "",
+  "address": "50 N 5th Street Reading Pa 19601",
   "photoFile": "photo.jpg",
   "accessToken": "arqgz77z",
   "brand": "biz-destinne-parker-stewart",
