@@ -1,6 +1,6 @@
 {
   "prefix": "Pastor",
-  "firstName": "Keith",
+  "firstName": "Patrick K.",
   "lastName": "Jackson",
   "title": "",
   "org": "Mount Zion United Holiness Church",
@@ -65,6 +65,7 @@
   ],
   "listings": [],
   "isRealtor": false,
+  "trialExpires": "",
   "calendlyUrl": "",
   "bookingLabel": "Book a Time",
   "address": "209 Orange Street  Oxford  NC  27565",
