@@ -34,7 +34,7 @@
   "emails": [
     {
       "type": "Work",
-      "address": "LaceyM@Readingsd.org"
+      "address": "laceym@readingsd.org"
     }
   ],
   "websites": [
@@ -49,20 +49,8 @@
       "qrCaption": "Tap this code to open the link to register for the NCAA Clearinghouse."
     },
     {
-      "label": "NCAA - Reading High Core Courses (School Code: 394170)",
-      "url": "https://web3.ncaa.org/hsportal/exec/hsAction?hsActionSubmit=getHsCoreCoursesData&hsCode=394170"
-    },
-    {
-      "label": "Initial-Eligibility Standards",
-      "url": "https://s3.amazonaws.com/fs.ncaa.org/Docs/eligibility_center/Student_Resources/IE_Brochure.pdf"
-    },
-    {
       "label": "NCAA Recruiting - Learn how the recruiting process works and what steps may apply as you connect with NCAA School:",
       "url": "https://www.ncaa.org/eligibility-center/recruiting/#recruiting-calendars"
-    },
-    {
-      "label": "Recruiting Link:",
-      "url": "https://s3.amazonaws.com/fs.ncaa.org/Docs/eligibility_center/Presentations/Initial_Eligibility_PSA.pdf"
     },
     {
       "label": "RHS NCAA APPROVED COURSES:",
@@ -86,7 +74,7 @@
     },
     {
       "label": "RHS SCHOLARSHIP LINK",
-      "url": "https://www.commonapp.org/"
+      "url": "https://protect.checkpoint.com/v2/r01/___https://docs.google.com/forms/d/1WbVDMtQW6fRZwO2otHOu6pbtjJXdQFUXijDHTPmD-fc/edit___.YzJ1OnJlYWRpbmdzY2hvb2xkaXN0cmljdDpjOm86MDdmMmZkNDdjMWZlZjI2ODg4N2RjMTgwODg4ZWViZGU6NzplODFjOmM2MGQ2ODk0ZDkxODdiMDJmOTYwOWUwNmNkNzY5ZmQ4NzdiZDY4MjU2ZWFkYzZmYjIzY2Q3NWI0OWE5NTQxNzE6aDpUOkY"
     },
     {
       "label": "NCAA ELIGIBILITY CENTER LINK",
