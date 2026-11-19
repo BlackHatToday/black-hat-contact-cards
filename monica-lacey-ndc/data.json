@@ -57,6 +57,10 @@
       "url": "https://www.ncaa.org/eligibility-center/"
     },
     {
+      "label": "RHS NCAA APPROVED COURSES:",
+      "url": "https://web3.ncaa.org/hsportal/exec/hsAction?hsActionSubmit=getHsCoreCoursesData&hsCode=394170"
+    },
+    {
       "label": "CAREER CENTER - ROOM 359",
       "url": "https://sites.google.com/readingsd.org/college-and-career-center/home?pli=1&authuser=0"
     },
@@ -73,23 +77,19 @@
       "url": "https://protect.checkpoint.com/v2/r01/___https://docs.google.com/forms/d/1WbVDMtQW6fRZwO2otHOu6pbtjJXdQFUXijDHTPmD-fc/edit___.YzJ1OnJlYWRpbmdzY2hvb2xkaXN0cmljdDpjOm86MDdmMmZkNDdjMWZlZjI2ODg4N2RjMTgwODg4ZWViZGU6NzplODFjOmM2MGQ2ODk0ZDkxODdiMDJmOTYwOWUwNmNkNzY5ZmQ4NzdiZDY4MjU2ZWFkYzZmYjIzY2Q3NWI0OWE5NTQxNzE6aDpUOkY"
     },
     {
-      "label": "COMMON APPLICATION LINK",
-      "url": "https://www.commonapp.org/"
-    },
-    {
-      "label": "RHS NCAA APPROVED COURSES:",
-      "url": "https://web3.ncaa.org/hsportal/exec/hsAction?hsActionSubmit=getHsCoreCoursesData&hsCode=394170"
-    },
-    {
       "label": "INITIAL-ELIGIBILY FLYER:",
       "url": "https://s3.amazonaws.com/fs.ncaa.org/Docs/eligibility_center/Student_Resources/IE_Brochure.pdf"
     },
     {
-      "label": "ACT",
+      "label": "COMMON APPLICATION LINK",
+      "url": "https://www.commonapp.org/"
+    },
+    {
+      "label": "ACT Registration Link",
       "url": "https://www.act.org/content/act/en/register-for-the-act.html?utm_medium=paidsearch&utm_source=google&utm_campaign=fy25q2-spring+summer-national---paid-digital-k12-b2c&utm_content=dc_1725-internal-paid-012925-mr037378-&utm_term=act%20registration%20dates%202026&utm_campaign=Google%7CSearch%7CIntent%7CB2C%7CCPC%7CJune+ACT+2023%7C4/3/2023-5/19/2023%7CDesktop&utm_source=adwords&utm_medium=ppc&hsa_acc=5799955628&hsa_cam=22343159433&hsa_grp=185066976388&hsa_ad=798134242545&hsa_src=g&hsa_tgt=kwd-2643960185432&hsa_kw=act%20registration%20dates%202026&hsa_mt=e&hsa_net=adwords&hsa_ver=3&gad_source=1&gad_campaignid=22343159433&gbraid=0AAAAADmzUEzJI0Yk3cG941R8bAFBq_aei"
     },
     {
-      "label": "SAT - COLLEGE BOARD",
+      "label": "SAT Registration Link",
       "url": "https://satsuite.collegeboard.org/sat/dates-deadlines?ef_id=Cj0KCQiAk_DXBhCoARIsAHE-omPqhr5VtVAiIdMuiDiPcKF4dyoajBPxJS0VsGiyiILmlXN_1FNB5vkaAlW1EALw_wcB:G:s&s_kwcid=AL!4330!3!686853399572!e!!g!!college%20board!20924334928!166035249028&gad_source=1&gad_campaignid=20924334928&gbraid=0AAAAAD-SkkyxG3FHcG87AL5ciyCPae_zm&gclid=Cj0KCQiAk_DXBhCoARIsAHE-omPqhr5VtVAiIdMuiDiPcKF4dyoajBPxJS0VsGiyiILmlXN_1FNB5vkaAlW1EALw_wcB"
     }
   ],
