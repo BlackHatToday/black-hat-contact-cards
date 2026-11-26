@@ -1,0 +1,55 @@
+{
+  "prefix": "",
+  "firstName": "Xavier",
+  "lastName": "Davis",
+  "title": "American Income Life Insurance Agent",
+  "org": "Globe Life",
+  "tagline": "Child Safe Kit Manager · AIL Plus Manager",
+  "about": "American Income Life Insurance Agent serving Pennsylvania, Maryland and Maine.",
+  "experience": [],
+  "skills": [
+    "Life Insurance",
+    "Child Safe Kit",
+    "AIL Plus"
+  ],
+  "social": {
+    "instagram": "",
+    "tiktok": "",
+    "facebook": "",
+    "linkedin": "",
+    "twitter": "",
+    "youtube": ""
+  },
+  "payments": {
+    "cashapp": "",
+    "venmo": "",
+    "paypal": "",
+    "zelle": ""
+  },
+  "paymentSectionLabel": "Payment",
+  "notes": "Licensed in PA, MD, ME · NPN #: 22367736",
+  "phones": [
+    {
+      "type": "Mobile",
+      "number": "484-638-3565"
+    }
+  ],
+  "emails": [
+    {
+      "type": "Email",
+      "address": "xdavis.ailife@outlook.com"
+    }
+  ],
+  "websites": [],
+  "gallery": [],
+  "listings": [],
+  "isRealtor": false,
+  "trialExpires": "",
+  "calendlyUrl": "",
+  "bookingLabel": "Book a Time",
+  "address": "",
+  "photoFile": "photo.jpg",
+  "accessToken": "4p1020gj",
+  "brand": "biz-xavier-davis",
+  "showQR": true
+}
