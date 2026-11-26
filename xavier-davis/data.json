@@ -13,9 +13,9 @@
     "AIL Plus"
   ],
   "social": {
-    "instagram": "",
+    "instagram": "xavierrdaviss",
     "tiktok": "",
-    "facebook": "",
+    "facebook": "xavier307264",
     "linkedin": "",
     "twitter": "",
     "youtube": ""
@@ -40,7 +40,16 @@
       "address": "xdavis.ailife@outlook.com"
     }
   ],
-  "websites": [],
+  "websites": [
+    {
+      "label": "Life Insurance Appointment Request Form",
+      "url": "https://docs.google.com/forms/d/e/1FAIpQLSfGRSYyx65ZXZQ0SN3ZfcYQlQYr-IzcbjzAzvDS9hG1KmUcRw/viewform"
+    },
+    {
+      "label": "Product Information",
+      "url": "https://www.facebook.com/story.php?story_fbid=2614442995647161&id=100012444583001&mibextid=wwXIfr&rdid=yOA843czNF7Xdbow#"
+    }
+  ],
   "gallery": [],
   "listings": [],
   "isRealtor": false,
