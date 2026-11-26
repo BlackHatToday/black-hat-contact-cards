@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Card Stats</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap');
+  :root{
+    --ink:#000000; --surface:#1c2129; --surface-2:#242a34;
+    --copper:#b8763f; --copper-soft:#c98549; --parchment:#ede6d6;
+    --muted:#8b93a1; --line:#2e3542; --bad:#e66767;
+    /* Chart series — validated as a pair against the dark surface
+       (CVD and normal-vision separation both pass). */
+    --series-tag:#3987e5;   /* physical tag taps */
+    --series-link:#d95926;  /* shared link / QR opens */
+  }
+  *{ box-sizing:border-box; }
+  body{ background:var(--ink); color:var(--parchment); font-family:'IBM Plex Sans', sans-serif; margin:0; padding:32px 16px 70px; }
+  .wrap{ max-width:760px; margin:0 auto; }
+  h1{ font-family:'Space Grotesk', sans-serif; font-size:24px; margin:0 0 8px; }
+  h2{ font-family:'Space Grotesk', sans-serif; font-size:18px; margin:0; }
+  .sub{ color:var(--muted); font-size:13.5px; line-height:1.6; margin:0 0 22px; }
+  .panel{ background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:16px 18px; margin-bottom:16px; }
+  label{ font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:6px; }
+  input[type=password], select{
+    width:100%; padding:12px 14px; background:var(--ink); border:1px solid var(--line); border-radius:10px;
+    color:var(--parchment); font-family:'IBM Plex Mono', monospace; font-size:14px;
+  }
+  .row{ display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end; }
+  .row > div{ flex:1; min-width:160px; }
+  button{ font-family:'Space Grotesk', sans-serif; cursor:pointer; }
+  .btn-primary{ padding:12px 22px; background:var(--copper); color:var(--ink); border:none; border-radius:10px; font-weight:700; font-size:15px; }
+  .btn-primary:hover{ background:var(--copper-soft); }
+  .btn-ghost{ padding:8px 14px; background:transparent; color:var(--muted); border:1px solid var(--line); border-radius:8px; font-family:'IBM Plex Mono', monospace; font-size:12.5px; }
+  .btn-ghost:hover, .btn-ghost[aria-pressed=true]{ border-color:var(--copper); color:var(--copper-soft); }
+  .msg{ font-size:13.5px; line-height:1.6; margin-top:12px; min-height:1em; }
+  .msg.err{ color:var(--bad); }
+  .hidden{ display:none !important; }
+
+  table{ width:100%; border-collapse:collapse; font-size:14px; }
+  th{ text-align:left; font-family:'IBM Plex Mono', monospace; font-weight:500; font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); padding:8px 10px; border-bottom:1px solid var(--line); }
+  td{ padding:11px 10px; border-bottom:1px solid var(--line); }
+  th.num, td.num{ text-align:right; font-family:'IBM Plex Mono', monospace; font-variant-numeric:tabular-nums; }
+  tr:last-child td{ border-bottom:none; }
+  td .card-link{ background:none; border:none; padding:0; color:var(--copper-soft); font-family:'IBM Plex Mono', monospace; font-size:13.5px; text-align:left; text-decoration:underline; text-underline-offset:3px; }
+  .muted{ color:var(--muted); }
+
+  .detail-head{ display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:14px; }
+  .totals{ display:flex; gap:22px; flex-wrap:wrap; margin-bottom:16px; }
+  .total .n{ font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:28px; line-height:1.1; font-variant-numeric:tabular-nums; }
+  .total .l{ font-size:12.5px; color:var(--muted); margin-top:2px; }
+  .legend{ display:flex; gap:18px; flex-wrap:wrap; font-size:13px; margin:0 0 6px; }
+  .legend span{ display:inline-flex; align-items:center; gap:7px; }
+  .swatch{ width:10px; height:10px; border-radius:3px; display:inline-block; }
+  .controls{ display:flex; gap:8px; flex-wrap:wrap; }
+
+  .chart-box{ position:relative; }
+  svg.chart{ width:100%; height:auto; display:block; }
+  svg.chart text{ fill:var(--muted); font-family:'IBM Plex Mono', monospace; font-size:10.5px; }
+  .tip{
+    position:absolute; pointer-events:none; background:var(--ink); border:1px solid var(--line); border-radius:10px;
+    padding:9px 12px; font-size:12.5px; line-height:1.55; white-space:nowrap; z-index:5; box-shadow:0 6px 20px rgba(0,0,0,.5);
+  }
+  .tip b{ display:block; font-family:'Space Grotesk', sans-serif; margin-bottom:3px; }
+  .tip .k{ display:inline-block; width:8px; height:8px; border-radius:2px; margin-right:6px; }
+
+  label.optout{ display:flex; gap:10px; align-items:flex-start; font-family:'IBM Plex Sans', sans-serif; font-size:13px; line-height:1.55; letter-spacing:normal; text-transform:none; color:var(--muted); margin:0; }
+  @media (max-width:520px){ #overviewTable th:nth-child(5), #overviewTable td:nth-child(5){ display:none; } }
+  .optout input{ margin-top:3px; accent-color:var(--copper); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Card Stats</h1>
+  <p class="sub">How many times each card has been opened, by day. Counts are anonymous daily totals — the card page reports "this card was opened," and nothing about the visitor is stored. "Tag taps" are opens that came through a physical tag's link (it carries the card's access token); "link / QR" are all other opens.</p>
+
+  <div class="panel" id="loginPanel">
+    <div class="row">
+      <div style="flex:2">
+        <label for="pw">Stats password</label>
+        <input type="password" id="pw" autocomplete="current-password" placeholder="The STATS_PASSWORD set in Vercel">
+      </div>
+      <div>
+        <label for="range">Window</label>
+        <select id="range">
+          <option value="7">Last 7 days</option>
+          <option value="30" selected>Last 30 days</option>
+          <option value="90">Last 90 days</option>
+          <option value="365">Last 12 months</option>
+        </select>
+      </div>
+      <div style="flex:0 0 auto"><button class="btn-primary" id="loadBtn">Load stats</button></div>
+    </div>
+    <p class="msg" id="loginMsg" role="status"></p>
+  </div>
+
+  <div class="panel hidden" id="overviewPanel">
+    <div class="detail-head"><h2 id="overviewTitle">All cards</h2></div>
+    <table id="overviewTable">
+      <thead><tr><th>Card</th><th class="num">Tag taps</th><th class="num">Link / QR</th><th class="num">Total</th><th class="num">Last opened</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <p class="msg muted hidden" id="emptyMsg">No opens recorded yet. Counts appear here once cards are opened on the live site.</p>
+  </div>
+
+  <div class="panel hidden" id="detailPanel">
+    <div class="detail-head">
+      <h2 id="detailTitle"></h2>
+      <div class="controls" role="group" aria-label="Group by">
+        <button class="btn-ghost" data-gran="day" aria-pressed="false">Day</button>
+        <button class="btn-ghost" data-gran="week" aria-pressed="false">Week</button>
+        <button class="btn-ghost" data-gran="month" aria-pressed="false">Month</button>
+        <button class="btn-ghost" id="tableToggle" aria-pressed="false">Table</button>
+      </div>
+    </div>
+    <div class="totals" id="detailTotals"></div>
+    <div class="legend" aria-hidden="true">
+      <span><i class="swatch" style="background:var(--series-tag)"></i>Tag taps</span>
+      <span><i class="swatch" style="background:var(--series-link)"></i>Link / QR opens</span>
+    </div>
+    <div class="chart-box" id="chartBox"><div class="tip hidden" id="tip" role="tooltip"></div></div>
+    <div class="hidden" id="tableView" style="margin-top:14px">
+      <table><thead><tr><th>Period</th><th class="num">Tag taps</th><th class="num">Link / QR</th><th class="num">Total</th></tr></thead><tbody id="tableBody"></tbody></table>
+    </div>
+  </div>
+
+  <div class="panel">
+    <label class="optout">
+      <input type="checkbox" id="optout">
+      <span>Don't count my own visits in <b>this browser</b>. Turn this on in each browser/phone you use to check cards, so testing doesn't inflate the numbers. (Saved only in this browser.)</span>
+    </label>
+  </div>
+</div>
+
+<script>
+(function () {
+  const $ = id => document.getElementById(id);
+  const state = { days: 30, card: null, series: [], gran: 'day' };
+
+  // ---------- small helpers ----------
+  const nf = new Intl.NumberFormat('en-US');
+  function fmtDate(iso, opts) {
+    const [y, m, d] = iso.split('-').map(Number);
+    return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString('en-US', Object.assign({ timeZone: 'UTC' }, opts));
+  }
+  function weekStart(iso) {
+    const [y, m, d] = iso.split('-').map(Number);
+    const dt = new Date(Date.UTC(y, m - 1, d));
+    dt.setUTCDate(dt.getUTCDate() - ((dt.getUTCDay() + 6) % 7)); // Monday
+    return dt.toISOString().slice(0, 10);
+  }
+  function el(tag, props, text) {
+    const e = document.createElement(tag);
+    if (props) Object.keys(props).forEach(k => e.setAttribute(k, props[k]));
+    if (text != null) e.textContent = text;
+    return e;
+  }
+  function svgEl(tag, attrs) {
+    const e = document.createElementNS('http://www.w3.org/2000/svg', tag);
+    Object.keys(attrs || {}).forEach(k => e.setAttribute(k, attrs[k]));
+    return e;
+  }
+
+  // ---------- API ----------
+  async function api(path) {
+    const res = await fetch(path, { headers: { 'x-stats-password': $('pw').value } });
+    if (res.status === 401) throw new Error('That password was not accepted.');
+    if (!res.ok) throw new Error('The stats service returned an error (' + res.status + '). Is the Redis store connected in Vercel?');
+    return res.json();
+  }
+  function setMsg(text, isErr) { const m = $('loginMsg'); m.textContent = text || ''; m.className = 'msg' + (isErr ? ' err' : ''); }
+
+  // ---------- overview ----------
+  async function loadOverview() {
+    setMsg('Loading…');
+    state.days = parseInt($('range').value, 10);
+    try {
+      const data = await api('/api/stats?days=' + state.days);
+      try { sessionStorage.setItem('bh_stats_pw', $('pw').value); } catch (e) {}
+      setMsg('');
+      renderOverview(data);
+    } catch (err) { setMsg(err.message, true); }
+  }
+  function renderOverview(data) {
+    $('overviewPanel').classList.remove('hidden');
+    $('detailPanel').classList.add('hidden');
+    $('overviewTitle').textContent = 'All cards — last ' + data.days + ' days';
+    const body = $('overviewTable').querySelector('tbody');
+    body.textContent = '';
+    $('emptyMsg').classList.toggle('hidden', data.cards.length > 0);
+    $('overviewTable').classList.toggle('hidden', data.cards.length === 0);
+    data.cards.forEach(c => {
+      const tr = el('tr');
+      const td = el('td');
+      const btn = el('button', { class: 'card-link', type: 'button' }, c.card);
+      btn.addEventListener('click', () => openCard(c.card));
+      td.appendChild(btn);
+      tr.appendChild(td);
+      [c.tag, c.link, c.all].forEach(n => tr.appendChild(el('td', { class: 'num' }, nf.format(n))));
+      tr.appendChild(el('td', { class: 'num muted' }, c.lastOpened ? fmtDate(c.lastOpened, { month: 'short', day: 'numeric', year: 'numeric' }) : '—'));
+      body.appendChild(tr);
+    });
+  }
+
+  // ---------- one card ----------
+  async function openCard(card) {
+    setMsg('Loading…');
+    try {
+      const data = await api('/api/stats?card=' + encodeURIComponent(card) + '&days=' + state.days);
+      setMsg('');
+      state.card = card;
+      state.series = data.series;
+      state.gran = state.days <= 31 ? 'day' : state.days <= 120 ? 'week' : 'month';
+      $('detailPanel').classList.remove('hidden');
+      $('detailTitle').textContent = card;
+      renderTotals(data.totals);
+      renderDetail();
+      $('detailPanel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (err) { setMsg(err.message, true); }
+  }
+  function renderTotals(t) {
+    const box = $('detailTotals');
+    box.textContent = '';
+    [[t.all, 'Total opens'], [t.tag, 'Tag taps'], [t.link, 'Link / QR opens']].forEach(([n, l]) => {
+      const d = el('div', { class: 'total' });
+      d.appendChild(el('div', { class: 'n' }, nf.format(n)));
+      d.appendChild(el('div', { class: 'l' }, l + ' · last ' + state.days + ' days'));
+      box.appendChild(d);
+    });
+  }
+
+  function aggregate(series, gran) {
+    if (gran === 'day') return series.map(d => ({ label: fmtDate(d.date, { month: 'short', day: 'numeric' }), tag: d.tag, link: d.link }));
+    const map = new Map();
+    series.forEach(d => {
+      const key = gran === 'week' ? weekStart(d.date) : d.date.slice(0, 7) + '-01';
+      const cur = map.get(key) || { key, tag: 0, link: 0 };
+      cur.tag += d.tag; cur.link += d.link;
+      map.set(key, cur);
+    });
+    return Array.from(map.values()).map(b => ({
+      label: gran === 'week' ? 'Week of ' + fmtDate(b.key, { month: 'short', day: 'numeric' }) : fmtDate(b.key, { month: 'long', year: 'numeric' }),
+      tag: b.tag, link: b.link
+    }));
+  }
+
+  function renderDetail() {
+    document.querySelectorAll('[data-gran]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.gran === state.gran)));
+    const buckets = aggregate(state.series, state.gran);
+    drawChart(buckets);
+    const tb = $('tableBody');
+    tb.textContent = '';
+    buckets.slice().reverse().forEach(b => {
+      const tr = el('tr');
+      tr.appendChild(el('td', null, b.label));
+      [b.tag, b.link, b.tag + b.link].forEach(n => tr.appendChild(el('td', { class: 'num' }, nf.format(n))));
+      tb.appendChild(tr);
+    });
+  }
+
+  // Rounded top corners only (data-end), square at the baseline.
+  function topRounded(x, y, w, h, r) {
+    r = Math.max(0, Math.min(r, w / 2, h));
+    return 'M' + x + ',' + (y + h) + ' V' + (y + r) + ' Q' + x + ',' + y + ' ' + (x + r) + ',' + y +
+           ' H' + (x + w - r) + ' Q' + (x + w) + ',' + y + ' ' + (x + w) + ',' + (y + r) + ' V' + (y + h) + ' Z';
+  }
+  function niceMax(v) {
+    if (v <= 4) return 4;
+    const pow = Math.pow(10, Math.floor(Math.log10(v)));
+    const m = [1, 2, 2.5, 5, 10].find(s => s * pow >= v) * pow;
+    return Math.ceil(m / 4) * 4 === m ? m : Math.ceil(m / 4) * 4;
+  }
+
+  function drawChart(buckets) {
+    const box = $('chartBox');
+    box.querySelectorAll('svg').forEach(s => s.remove());
+    const W = 720, H = 260, m = { l: 38, r: 8, t: 10, b: 28 };
+    const pw = W - m.l - m.r, ph = H - m.t - m.b;
+    const maxV = niceMax(Math.max(1, ...buckets.map(b => b.tag + b.link)));
+    const y = v => m.t + ph - (v / maxV) * ph;
+    const svg = svgEl('svg', { class: 'chart', viewBox: '0 0 ' + W + ' ' + H, role: 'img',
+      'aria-label': 'Opens per ' + state.gran + ' for ' + state.card + '. A table view is available.' });
+
+    // recessive grid + y labels
+    for (let i = 0; i <= 4; i++) {
+      const v = (maxV / 4) * i, yy = y(v);
+      svg.appendChild(svgEl('line', { x1: m.l, x2: W - m.r, y1: yy, y2: yy, stroke: '#2e3542', 'stroke-width': i === 0 ? 1 : 0.6 }));
+      const t = svgEl('text', { x: m.l - 6, y: yy + 3.5, 'text-anchor': 'end' });
+      t.textContent = Number.isInteger(v) ? v : v.toFixed(1);
+      svg.appendChild(t);
+    }
+
+    const n = buckets.length, slot = pw / n;
+    const gap = Math.min(4, Math.max(2, slot * 0.18));
+    const bw = Math.max(1.5, slot - gap);
+    const labelEvery = Math.ceil(n / 7);
+    const SEG_GAP = 2; // 2px surface gap between stacked fills
+
+    buckets.forEach((b, i) => {
+      const x = m.l + i * slot + gap / 2;
+      const hTag = (b.tag / maxV) * ph, hLink = (b.link / maxV) * ph;
+      const gapPx = hTag > 0 && hLink > 0 ? SEG_GAP : 0;
+      if (b.tag > 0) {
+        const topIsTag = b.link === 0;
+        const p = svgEl('path', { fill: 'var(--series-tag)',
+          d: topIsTag ? topRounded(x, y(b.tag), bw, hTag, 4) : 'M' + x + ',' + (m.t + ph) + ' V' + (m.t + ph - hTag) + ' H' + (x + bw) + ' V' + (m.t + ph) + ' Z' });
+        svg.appendChild(p);
+      }
+      if (b.link > 0) {
+        const base = m.t + ph - hTag - gapPx;
+        const hh = Math.max(0, hLink - gapPx);
+        svg.appendChild(svgEl('path', { fill: 'var(--series-link)', d: topRounded(x, base - hh, bw, hh, 4) }));
+      }
+      if (i % labelEvery === 0) {
+        const t = svgEl('text', { x: x + bw / 2, y: H - 8, 'text-anchor': 'middle' });
+        t.textContent = state.gran === 'day' ? b.label : state.gran === 'week' ? b.label.replace('Week of ', '') : b.label.split(' ')[0].slice(0, 3);
+        svg.appendChild(t);
+      }
+      // full-height transparent hit target — bigger than the mark itself
+      const hit = svgEl('rect', { x: m.l + i * slot, y: m.t, width: slot, height: ph, fill: 'transparent' });
+      hit.addEventListener('mouseenter', () => showTip(b, svg, m.l + i * slot + slot / 2, y(b.tag + b.link), W, H));
+      hit.addEventListener('mousemove', () => showTip(b, svg, m.l + i * slot + slot / 2, y(b.tag + b.link), W, H));
+      hit.addEventListener('mouseleave', hideTip);
+      svg.appendChild(hit);
+    });
+    box.insertBefore(svg, box.firstChild);
+  }
+
+  function showTip(b, svg, cx, cy, W, H) {
+    const tip = $('tip');
+    tip.textContent = '';
+    tip.appendChild(el('b', null, b.label));
+    [['var(--series-tag)', 'Tag taps', b.tag], ['var(--series-link)', 'Link / QR', b.link]].forEach(([c, l, v]) => {
+      const row = el('div');
+      const k = el('span', { class: 'k' }); k.style.background = c;
+      row.appendChild(k); row.appendChild(document.createTextNode(l + ': ' + nf.format(v)));
+      tip.appendChild(row);
+    });
+    tip.appendChild(el('div', { class: 'muted' }, 'Total: ' + nf.format(b.tag + b.link)));
+    tip.classList.remove('hidden');
+    const scale = svg.getBoundingClientRect().width / W;
+    const left = Math.min(Math.max(cx * scale - tip.offsetWidth / 2, 0), svg.getBoundingClientRect().width - tip.offsetWidth);
+    tip.style.left = left + 'px';
+    tip.style.top = Math.max(cy * scale - tip.offsetHeight - 8, 0) + 'px';
+  }
+  function hideTip() { $('tip').classList.add('hidden'); }
+
+  // ---------- wiring ----------
+  $('loadBtn').addEventListener('click', loadOverview);
+  $('pw').addEventListener('keydown', e => { if (e.key === 'Enter') loadOverview(); });
+  document.querySelectorAll('[data-gran]').forEach(b => b.addEventListener('click', () => { state.gran = b.dataset.gran; renderDetail(); }));
+  $('tableToggle').addEventListener('click', () => {
+    const on = $('tableView').classList.toggle('hidden') === false;
+    $('tableToggle').setAttribute('aria-pressed', String(on));
+  });
+  window.addEventListener('resize', hideTip);
+
+  // owner opt-out (read by assets/app.js and assets/property.js)
+  try { $('optout').checked = localStorage.getItem('bh_owner') === '1'; } catch (e) {}
+  $('optout').addEventListener('change', e => {
+    try { e.target.checked ? localStorage.setItem('bh_owner', '1') : localStorage.removeItem('bh_owner'); } catch (err) {}
+  });
+
+  // remember the password for this tab only
+  try { const saved = sessionStorage.getItem('bh_stats_pw'); if (saved) { $('pw').value = saved; loadOverview(); } } catch (e) {}
+})();
+</script>
+</body>
+</html>
