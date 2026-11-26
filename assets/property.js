@@ -62,6 +62,7 @@
   function renderDescription(d) {
     if (!d.description) return;
     document.getElementById('descriptionText').textContent = d.description;
+    document.getElementById('descriptionText').style.whiteSpace = 'pre-line'; // keep the agent's line breaks / paragraphs
     document.getElementById('descriptionSection').style.display = 'block';
   }
 
@@ -167,6 +168,46 @@
     });
   }
 
+
+  // "Share this listing" button — opens the phone's own share sheet (Quick Share,
+  // AirDrop/NameDrop, Messages...) with the link. Falls back to copying the link.
+  // Added by script so every existing card gets it; set "showShare": false in
+  // data.json to hide it. Fully self-guarded: can never break the page.
+  function addShareButton(d, title) {
+    try {
+      if (d.showShare === false) return;
+      const box = document.querySelector('#qrSection .qr-block .text');
+      if (!box || box.querySelector('.share-card-btn')) return;
+      const url = `${PROJECT_BASE_URL}${basePath()}`;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'share-card-btn';
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg><span>Share this listing</span>';
+      const status = document.createElement('div');
+      status.className = 'share-card-status';
+      status.setAttribute('aria-live', 'polite');
+      btn.addEventListener('click', async () => {
+        status.textContent = '';
+        if (navigator.share) {
+          try { await navigator.share({ title: title, text: title, url: url }); return; }
+          catch (e) { if (e && e.name === 'AbortError') return; }
+        }
+        let ok = false;
+        try { await navigator.clipboard.writeText(url); ok = true; } catch (e) {}
+        if (!ok) {
+          try {
+            const t = document.createElement('textarea');
+            t.value = url; t.style.position = 'fixed'; t.style.opacity = '0';
+            document.body.appendChild(t); t.select();
+            ok = document.execCommand('copy'); document.body.removeChild(t);
+          } catch (e) {}
+        }
+        status.textContent = ok ? 'Link copied — paste it into a message.' : url;
+      });
+      box.append(btn, status);
+    } catch (e) {}
+  }
+
   function renderQR(d) {
     if (d.showQR === false) return;
     // Uses the canonical domain, not window.location — a visitor could be
@@ -182,6 +223,7 @@
       colorDark: '#14171c', colorLight: '#ede6d6',
       correctLevel: QRCode.CorrectLevel.M
     });
+    addShareButton(d, (document.title || 'Listing'));
   }
 
   function wireDownloadPdf() {
