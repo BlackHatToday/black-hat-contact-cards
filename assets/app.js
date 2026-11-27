@@ -514,7 +514,7 @@
       });
     });
     (d.emails || []).forEach(e => rows.push({ icon: 'email', label: e.type || 'Email', value: e.address, href: `mailto:${e.address}` }));
-    if (d.address) rows.push({ icon: 'location', label: 'Address', value: d.address, href: `https://maps.google.com/?q=${encodeURIComponent(d.address)}` });
+    if (d.address) rows.push({ icon: 'location', label: 'Physical Address', value: d.address, href: `https://maps.google.com/?q=${encodeURIComponent(d.address)}` });
     // P.O. Box / mailing address: shown as plain information (a P.O. Box has no
     // street location, so there is no maps link). Optional — hidden when blank.
     if (d.mailingAddress && String(d.mailingAddress).trim()) rows.push({ icon: 'mailbox', label: 'Mailing Address', value: String(d.mailingAddress).trim(), plain: true });

@@ -373,7 +373,7 @@
 
     <fieldset>
       <legend>Address (optional)</legend>
-      <label>Physical / mailing address</label>
+      <label>Physical address</label>
       <input type="text" id="address" placeholder="123 Main St, Anytown, ST 12345">
       <div class="hint">Shown as a tappable row that opens directions. Leave blank to hide it.</div>
       <label>P.O. Box / mailing address</label>
@@ -892,7 +892,7 @@
     const fieldRows = [];
     d.phones.forEach(p => p.number && fieldRows.push({ label: p.type, value: p.number + (p.ext ? ' ext. ' + p.ext : '') }));
     d.emails.forEach(e => e.address && fieldRows.push({ label: e.type, value: e.address }));
-    if (d.address) fieldRows.push({ label: 'Address', value: d.address });
+    if (d.address) fieldRows.push({ label: 'Physical Address', value: d.address });
     if (d.mailingAddress) fieldRows.push({ label: 'Mailing Address', value: d.mailingAddress });
     d.websites.forEach(w => w.url && fieldRows.push({ label: w.label, value: w.url.replace(/^https?:\/\//,'') }));
 
