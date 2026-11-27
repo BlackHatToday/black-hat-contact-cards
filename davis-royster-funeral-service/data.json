@@ -23,7 +23,8 @@
     "zelle": ""
   },
   "paymentSectionLabel": "Payment",
-  "notes": "Mailing address: P.O. Box 2943, Henderson, NC 27536\nFax: (252) 492-6998",
+  "listings": [],
+  "notes": "Fax: (252) 492-6998",
   "phones": [
     {
       "type": "Work Landline",
@@ -42,31 +43,18 @@
       "url": "https://www.davis-royster.com"
     },
     {
-      "label": "Where To Begin",
-      "url": "https://www.davis-royster.com/services/where-to-begin"
-    },
-    {
-      "label": "Plan Ahead",
-      "url": "https://www.davis-royster.com/preplan/why-plan-ahead"
-    },
-    {
-      "label": "Companion Memorials",
-      "url": "https://www.davis-royster.com/companion-memorials/companion-memorials"
-    },
-    {
-      "label": "Contact Us",
-      "url": "https://www.davis-royster.com/contact/contact-us"
+      "label": "Obituaries",
+      "url": "https://www.davis-royster.com/obituaries/obituary-listings?page=1",
+      "qr": true,
+      "qrCaption": "Scan to view obituaries, or tap the code."
     }
   ],
-  "gallery": [],
-  "listings": [],
-  "isRealtor": false,
-  "trialExpires": "",
   "calendlyUrl": "",
   "bookingLabel": "Book a Time",
   "address": "926 S. Garnett Street, Henderson, NC 27536",
   "photoFile": "photo.jpg",
   "accessToken": "tjiyyege",
   "brand": "biz-davis-royster-funeral-service",
-  "showQR": true
+  "showQR": true,
+  "mailingAddress": "P.O. Box 2943, Henderson, NC 27536"
 }
