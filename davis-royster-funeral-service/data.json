@@ -23,11 +23,15 @@
     "zelle": ""
   },
   "paymentSectionLabel": "Payment",
-  "notes": "Fax: (252) 492-6998",
+  "notes": "",
   "phones": [
     {
       "type": "Work Landline",
       "number": "(252) 492-6911"
+    },
+    {
+      "type": "Fax",
+      "number": "(252) 492-6998"
     }
   ],
   "emails": [

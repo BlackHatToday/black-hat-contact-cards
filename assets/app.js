@@ -506,7 +506,10 @@
       // A number with an extension is a desk/office line, so there is no
       // Call-or-Text choice: it just dials (a text can't reach an extension).
       const showChoice = !ext && /^(mobile|cell|work)$/i.test((p.type || '').trim());
+      // A fax number is shown as plain information (dialing a fax line is no use to a visitor).
+      const isFax = /fax/i.test(p.type || '');
       rows.push({
+        plain: isFax,
         icon: 'phone', label: p.type || 'Phone', value: ext ? `${p.number} ext. ${ext}` : p.number,
         href: showChoice ? '#' : `tel:${cleanNumber}${ext ? ',' + ext : ''}`,
         phoneChoice: showChoice ? cleanNumber : '',
@@ -766,7 +769,8 @@
 
   function renderShareBack(d) {
     const ownerEmail = (d.emails && d.emails[0] && d.emails[0].address) || '';
-    const ownerPhone = (d.phones && d.phones[0] && d.phones[0].number) || '';
+    // First real phone number — never a fax line, which can't receive a text or call.
+    const ownerPhone = ((d.phones || []).find(p => p && p.number && !/fax/i.test(p.type || '')) || {}).number || '';
     if (!ownerEmail && !ownerPhone) return; // nothing to send this to at all
 
     const btn = document.getElementById('shareBackBtn');
@@ -843,7 +847,8 @@
     const overlay = document.getElementById('scanVisitorModalOverlay');
     if (!btn || !overlay) return;
 
-    const ownerPhone = (d.phones && d.phones[0] && d.phones[0].number) || '';
+    // First real phone number — never a fax line, which can't receive a text or call.
+    const ownerPhone = ((d.phones || []).find(p => p && p.number && !/fax/i.test(p.type || '')) || {}).number || '';
     const ownerEmail = (d.emails && d.emails[0] && d.emails[0].address) || '';
     if (!ownerPhone && !ownerEmail) return; // nothing to send TO — stay hidden
 
