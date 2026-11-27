@@ -1,0 +1,72 @@
+{
+  "prefix": "",
+  "firstName": "Davis-Royster",
+  "lastName": "Funeral Service",
+  "title": "",
+  "org": "",
+  "tagline": "To serve this present age by God's grace",
+  "about": "",
+  "experience": [],
+  "skills": [],
+  "social": {
+    "instagram": "",
+    "tiktok": "",
+    "facebook": "",
+    "linkedin": "",
+    "twitter": "",
+    "youtube": ""
+  },
+  "payments": {
+    "cashapp": "",
+    "venmo": "",
+    "paypal": "",
+    "zelle": ""
+  },
+  "paymentSectionLabel": "Payment",
+  "notes": "Mailing address: P.O. Box 2943, Henderson, NC 27536\nFax: (252) 492-6998",
+  "phones": [
+    {
+      "type": "Work Landline",
+      "number": "(252) 492-6911"
+    }
+  ],
+  "emails": [
+    {
+      "type": "Work",
+      "address": "davisroyster252@yahoo.com"
+    }
+  ],
+  "websites": [
+    {
+      "label": "Website",
+      "url": "https://www.davis-royster.com"
+    },
+    {
+      "label": "Where To Begin",
+      "url": "https://www.davis-royster.com/services/where-to-begin"
+    },
+    {
+      "label": "Plan Ahead",
+      "url": "https://www.davis-royster.com/preplan/why-plan-ahead"
+    },
+    {
+      "label": "Contact Us",
+      "url": "https://www.davis-royster.com/contact/contact-us"
+    },
+    {
+      "label": "Companion Memorials",
+      "url": "https://www.davis-royster.com/companion-memorials/companion-memorials"
+    }
+  ],
+  "gallery": [],
+  "listings": [],
+  "isRealtor": false,
+  "trialExpires": "",
+  "calendlyUrl": "",
+  "bookingLabel": "Book a Time",
+  "address": "926 S. Garnett Street, Henderson, NC 27536",
+  "photoFile": "photo.jpg",
+  "accessToken": "tjiyyege",
+  "brand": "biz-davis-royster-funeral-service",
+  "showQR": true
+}
