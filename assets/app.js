@@ -12,6 +12,7 @@
     website: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20 15 15 0 0 1 0-20z"/></svg>',
     payment: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5c0-1.4 1.1-2.5 2.5-2.5s2.5 1.1 2.5 2.5c0 3-5 2-5 5 0 1.4 1.1 2.5 2.5 2.5s2.5-1.1 2.5-2.5"/></svg>',
     location: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>',
+    mailbox: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 17a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-5a6 6 0 0 1 6-6h8a6 6 0 0 1 6 6z"/><path d="M15 19V9"/><path d="M9 6V3h3"/></svg>',
     home: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg>'
   };
 
@@ -514,11 +515,19 @@
     });
     (d.emails || []).forEach(e => rows.push({ icon: 'email', label: e.type || 'Email', value: e.address, href: `mailto:${e.address}` }));
     if (d.address) rows.push({ icon: 'location', label: 'Address', value: d.address, href: `https://maps.google.com/?q=${encodeURIComponent(d.address)}` });
+    // P.O. Box / mailing address: shown as plain information (a P.O. Box has no
+    // street location, so there is no maps link). Optional — hidden when blank.
+    if (d.mailingAddress && String(d.mailingAddress).trim()) rows.push({ icon: 'mailbox', label: 'Mailing Address', value: String(d.mailingAddress).trim(), plain: true });
     if (d.website) rows.push({ icon: 'website', label: 'Website', value: 'View Site', href: d.website }); // legacy single-website support
     // siteIndex marks which row came from which "websites" entry, so a link
     // (see renderLinkQrs) — its plain row is removed only after its QR block has actually been drawn.
     (d.websites || []).forEach((w, i) => rows.push({ icon: 'website', label: w.label || 'Website', value: w.label ? '' : 'View Site', href: w.url, siteIndex: i }));
-    document.getElementById('fieldsEl').innerHTML = rows.map(r => `
+    document.getElementById('fieldsEl').innerHTML = rows.map(r => r.plain ? `
+      <div class="field" style="cursor:default;">
+        <span class="icon">${ICONS[r.icon]}</span>
+        <span class="meta"><div class="label">${r.label}</div><div class="value">${r.value}</div></span>
+      </div>
+    ` : `
       <a class="field" href="${r.href}" target="_blank" rel="noopener" ${r.phoneChoice ? `data-phone-choice="${r.phoneChoice}"` : ''} ${r.phoneExt ? `data-phone-ext="${r.phoneExt}"` : ''} ${r.siteIndex !== undefined ? `data-site-index="${r.siteIndex}"` : ''}>
         <span class="icon">${ICONS[r.icon]}</span>
         <span class="meta"><div class="${r.value ? 'label' : 'value'}">${r.label}</div>${r.value ? `<div class="value">${r.value}</div>` : ''}</span>
@@ -946,7 +955,7 @@
       title: d.title, org: d.org, tagline: d.tagline, about: d.about,
       experience: d.experience, skills: d.skills, social: d.social,
       payments: d.payments, notes: d.notes, phones: d.phones, emails: d.emails,
-      websites: d.websites, address: d.address, calendlyUrl: d.calendlyUrl,
+      websites: d.websites, address: d.address, mailingAddress: d.mailingAddress, calendlyUrl: d.calendlyUrl,
       _tokenStatus: tokenStatus
     };
     const encoded = encodeURIComponent(JSON.stringify(trimmed));
@@ -1015,9 +1024,12 @@
     const lines = ['BEGIN:VCARD', 'VERSION:3.0', `N:${d.lastName};${d.firstName};;${d.prefix || ''};`, `FN:${[d.prefix, d.firstName, d.lastName].filter(Boolean).join(' ')}`];
     if (d.org) lines.push(`ORG:${d.org}`);
     if (d.title) lines.push(`TITLE:${d.title}`);
-    (d.phones || []).forEach(p => { const ext = String(p.ext || '').replace(/\D/g, ''); lines.push(`TEL;TYPE=${(p.type || 'CELL').toUpperCase()}:${p.number}${ext ? ',' + ext : ''}`); });
+    (d.phones || []).forEach(p => { const ext = String(p.ext || '').replace(/\D/g, ''); // "Work Landline" is our own label; phones only understand standard types, so it is saved as a plain Work number.
+      const vType = /landline/i.test(p.type || '') ? 'WORK' : (p.type || 'CELL').toUpperCase();
+      lines.push(`TEL;TYPE=${vType}:${p.number}${ext ? ',' + ext : ''}`); });
     (d.emails || []).forEach(e => lines.push(`EMAIL:${e.address}`));
     if (d.address) lines.push(`ADR;TYPE=HOME:;;${d.address.replace(/,/g, '\\,')};;;;`);
+    if (d.mailingAddress && String(d.mailingAddress).trim()) lines.push(`ADR;TYPE=POSTAL:;;${String(d.mailingAddress).trim().replace(/,/g, '\\,')};;;;`);
     if (d.website) lines.push(`URL:${d.website}`); // legacy single-website support
     (d.websites || []).forEach(w => lines.push(`URL:${w.url}`));
     if (d.notes) lines.push(`NOTE:${d.notes.replace(/\n/g, '\\n')}`);

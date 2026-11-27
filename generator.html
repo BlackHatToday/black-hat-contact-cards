@@ -376,6 +376,9 @@
       <label>Physical / mailing address</label>
       <input type="text" id="address" placeholder="123 Main St, Anytown, ST 12345">
       <div class="hint">Shown as a tappable row that opens directions. Leave blank to hide it.</div>
+      <label>P.O. Box / mailing address</label>
+      <input type="text" id="mailingAddress" placeholder="P.O. Box 123, Anytown, ST 12345">
+      <div class="hint">Shown as plain information, not a directions link. Use it for a P.O. Box, or a mailing address that differs from the physical one. Leave blank to hide it.</div>
     </fieldset>
 
     <fieldset>
@@ -853,6 +856,7 @@
       calendlyUrl: document.getElementById('calendlyUrl').value,
       bookingLabel: document.getElementById('bookingLabel').value || 'Book a Time',
       address: document.getElementById('address').value,
+      mailingAddress: document.getElementById('mailingAddress').value,
       photoFile: document.getElementById('photoFile').value || 'photo.jpg',
       accessToken: document.getElementById('accessToken').value,
       brand: document.getElementById('brand').value,
@@ -889,6 +893,7 @@
     d.phones.forEach(p => p.number && fieldRows.push({ label: p.type, value: p.number + (p.ext ? ' ext. ' + p.ext : '') }));
     d.emails.forEach(e => e.address && fieldRows.push({ label: e.type, value: e.address }));
     if (d.address) fieldRows.push({ label: 'Address', value: d.address });
+    if (d.mailingAddress) fieldRows.push({ label: 'Mailing Address', value: d.mailingAddress });
     d.websites.forEach(w => w.url && fieldRows.push({ label: w.label, value: w.url.replace(/^https?:\/\//,'') }));
 
     const paymentRows = Object.entries(d.payments || {})
@@ -1058,6 +1063,7 @@
     setVal('calendlyUrl', d.calendlyUrl);
     setVal('bookingLabel', d.bookingLabel || 'Book a Time');
     setVal('address', d.address);
+    setVal('mailingAddress', d.mailingAddress);
     setVal('photoFile', d.photoFile || 'photo.jpg');
     setVal('accessToken', d.accessToken || generateToken());
     setVal('brand', d.brand);
@@ -1163,7 +1169,7 @@
     document.getElementById('scanStatus').textContent = '';
     // Simple text/select fields, back to blank or their default
     ['prefix', 'firstName', 'lastName', 'title', 'org', 'tagline', 'about',
-     'notes', 'calendlyUrl', 'address', 'skills', 'folderName', 'tagUrl', 'brand'].forEach(id => setVal(id, ''));
+     'notes', 'calendlyUrl', 'address', 'mailingAddress', 'skills', 'folderName', 'tagUrl', 'brand'].forEach(id => setVal(id, ''));
     setVal('photoFile', 'photo.jpg');
     setVal('paymentSectionLabel', 'Payment');
     setVal('bookingLabel', 'Book a Time');

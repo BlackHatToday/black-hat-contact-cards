@@ -90,7 +90,7 @@
       prefix: '', firstName: '', lastName: '', title: '', org: '', tagline: '',
       about: '', experience: [], skills: [], social: {}, payments: {},
       paymentSectionLabel: 'Payment', listings: [], notes: '', phones: [], emails: [],
-      websites: [], calendlyUrl: '', bookingLabel: 'Book a Time', address: '',
+      websites: [], calendlyUrl: '', bookingLabel: 'Book a Time', address: '', mailingAddress: '',
       photoFile: 'photo.jpg', accessToken: '', brand: '', showQR: true
     };
     const meta = { cardType: '', paymentTiming: '', verified: '', supportMessage: '' };
@@ -170,6 +170,8 @@
         }
       } else if (line.startsWith('Address: ')) {
         data.address = line.slice('Address: '.length); i++;
+      } else if (line.startsWith('Mailing address / P.O. Box: ')) {
+        data.mailingAddress = line.slice('Mailing address / P.O. Box: '.length); i++;
       } else if (line === 'Websites:') {
         i++;
         while (i < lines.length && lines[i].startsWith('  ')) {
