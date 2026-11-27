@@ -50,12 +50,12 @@
       "url": "https://www.davis-royster.com/preplan/why-plan-ahead"
     },
     {
-      "label": "Contact Us",
-      "url": "https://www.davis-royster.com/contact/contact-us"
-    },
-    {
       "label": "Companion Memorials",
       "url": "https://www.davis-royster.com/companion-memorials/companion-memorials"
+    },
+    {
+      "label": "Contact Us",
+      "url": "https://www.davis-royster.com/contact/contact-us"
     }
   ],
   "gallery": [],
