@@ -20,8 +20,8 @@ button{font:inherit;border-radius:8px;border:0;padding:10px 16px;cursor:pointer;
 <div id="app" hidden>
  <div class="top"><div class="big" id="count"></div><div id="age"></div><p><button id="refresh">Refresh</button></p></div>
  <div id="list"></div>
- <div class="top"><b>Turn on editing for a card</b><p>Type the card's folder name (the part of its web address after blackhatcards.community/).</p>
-  <p><input id="card" placeholder="folder-name"> <button id="en">Create edit link</button></p><div id="enout"></div></div>
+ <div class="top"><b>Turn on editing for a card</b><p>Type one or more card folder names (the part of the web address after blackhatcards.community/), one per line. Each link lasts 15 days.</p>
+  <p><textarea id="card" rows="4" placeholder="folder-name&#10;another-folder-name" style="width:100%;padding:10px;border-radius:8px;border:1px solid #3a3a46;background:#16161b;color:#eee;font:inherit"></textarea></p><p><button id="en">Create edit links</button></p><div id="enout"></div></div>
 </div>
 <script>
 (function(){
@@ -52,7 +52,10 @@ function load(){api('GET').then(function(j){
 function alert2(parent,m){parent.appendChild(el('div','msg e',m))}
 $('in').onclick=function(){pw=$('pw').value;load()};$('pw').onkeydown=function(e){if(e.key==='Enter')$('in').click()};
 $('refresh').onclick=load;
-$('en').onclick=function(){var c=$('card').value.trim().toLowerCase(),o=$('enout');o.innerHTML='';if(!c)return;
- api('POST',{action:'enable',card:c}).then(function(j){o.appendChild(el('div','msg','Done. Send this private link to the client (it is shown only once):'));o.appendChild(el('code','',j.link))}).catch(function(e){o.appendChild(el('div','msg e',e.message))})};
+$('en').onclick=function(){var cs=$('card').value.split(/[\s,]+/).filter(Boolean),o=$('enout');o.innerHTML='';if(!cs.length)return;
+ api('POST',{action:'enable',cards:cs}).then(function(j){o.appendChild(el('div','msg','Done. Copy these now — each link is shown only once.'));
+  j.results.forEach(function(r){var b=el('div','f');b.appendChild(el('b','',r.card));
+   if(r.error)b.appendChild(el('div','msg e',r.error));else{b.appendChild(el('code','',r.link));b.appendChild(el('div','',' Good until '+new Date(r.expires).toLocaleDateString()))}o.appendChild(b)})})
+ .catch(function(e){o.appendChild(el('div','msg e',e.message))})};
 })();
 </script></main></body></html>

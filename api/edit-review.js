@@ -4,13 +4,14 @@
 // GET                     -> { waiting, oldestTs, requests:[{id,card,ts,changes,current,high}] }
 // POST {action:"approve", id}  -> writes the change to the card's data.json on GitHub (Vercel redeploys)
 // POST {action:"reject",  id}  -> discards the request
-// POST {action:"enable",  card}-> turns on self-editing for a card; returns the private edit link ONCE
+// POST {action:"enable",  card | cards:[...]} -> turns on self-editing (links last 15 days); returns each private link ONCE
 
 const crypto = require('crypto');
 const { redis, dayKey } = require('./_lib/redis');
 const gh = require('./_lib/github');
 const ce = require('./_lib/cardedit');
 
+const LINK_DAYS = 15;
 const SLUG_RE = /^[a-z0-9][a-z0-9_-]{0,60}$/;
 const sha256 = s => crypto.createHash('sha256').update(String(s)).digest();
 
@@ -69,14 +70,23 @@ module.exports = async function handler(req, res) {
     if (!b) return res.status(400).json({ error: 'Bad request' });
 
     if (b.action === 'enable') {
-      const card = String(b.card || '').toLowerCase();
-      if (!SLUG_RE.test(card)) return res.status(400).json({ error: 'Card folder name looks wrong' });
-      const f = await gh.getFile(`${card}/data.json`);
-      if (!f) return res.status(404).json({ error: 'No card with that folder name' });
-      const key = crypto.randomBytes(16).toString('hex');
-      const data = Object.assign({}, f.data, { selfEdit: true, editKeyHash: sha256(key).toString('hex') });
-      await gh.putFile(`${card}/data.json`, data, f.sha, `Turn on self-editing for ${card}`);
-      return res.status(200).json({ ok: true, link: `https://blackhatcards.community/edit.html?c=${card}&k=${key}` });
+      // one card (b.card) or several (b.cards, up to 25). Each link lasts LINK_DAYS days.
+      const names = (Array.isArray(b.cards) ? b.cards : [b.card]).map(c => String(c || '').trim().toLowerCase()).filter(Boolean);
+      if (!names.length || names.length > 25) return res.status(400).json({ error: 'Give between 1 and 25 card folder names' });
+      const expires = Date.now() + LINK_DAYS * 86400000;
+      const results = [];
+      for (const card of Array.from(new Set(names))) {
+        if (!SLUG_RE.test(card)) { results.push({ card, error: 'Folder name looks wrong' }); continue; }
+        try {
+          const f = await gh.getFile(`${card}/data.json`);
+          if (!f) { results.push({ card, error: 'No card with that folder name' }); continue; }
+          const key = crypto.randomBytes(16).toString('hex');
+          const data = Object.assign({}, f.data, { selfEdit: true, editKeyHash: sha256(key).toString('hex'), editKeyExpires: expires });
+          await gh.putFile(`${card}/data.json`, data, f.sha, `Turn on self-editing for ${card} (link good for ${LINK_DAYS} days)`);
+          results.push({ card, link: `https://blackhatcards.community/edit.html?c=${card}&k=${key}`, expires });
+        } catch (e) { results.push({ card, error: e.message || 'Failed' }); }
+      }
+      return res.status(200).json({ ok: true, results });
     }
 
     if (b.action === 'approve' || b.action === 'reject') {

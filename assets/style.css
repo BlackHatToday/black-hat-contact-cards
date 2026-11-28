@@ -538,6 +538,7 @@ footer{
 }
 .features-btn:hover{ background:var(--surface); border-color:var(--copper); color:var(--parchment); }
 .features-btn svg{ width:17px; height:17px; }
+a.features-btn{ text-decoration:none; }
 .features-new{
   font-style:normal; font-family:'IBM Plex Mono', monospace; font-size:10px; font-weight:600;
   letter-spacing:.08em; text-transform:uppercase; background:var(--copper); color:var(--ink);

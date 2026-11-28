@@ -1064,6 +1064,31 @@
     } catch (e) {}
   }
 
+  // "Edit my info" button: shown only on a device where the client has opened
+  // their private edit link, while that link is still valid. The key itself is
+  // never on the public page — it lives only in this browser's local storage.
+  async function addEditButton(d) {
+    try {
+      if (d.selfEdit !== true || !d.editKeyHash) return;
+      if (d.editKeyExpires && Date.now() > Number(d.editKeyExpires)) return;
+      const slug = (window.location.pathname.split('/').filter(Boolean)[0] || '').toLowerCase();
+      if (!/^[a-z0-9][a-z0-9_-]{0,60}$/.test(slug)) return;
+      let key = '';
+      try { key = (JSON.parse(localStorage.getItem('bhc_edit_' + slug) || '{}').k) || ''; } catch (e) {}
+      if (!key || !(window.crypto && crypto.subtle)) return;
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(key));
+      const hex = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+      if (hex !== d.editKeyHash) return;
+      const anchor = document.getElementById('statusEl');
+      if (!anchor || document.getElementById('editInfoBtn')) return;
+      const a = document.createElement('a');
+      a.id = 'editInfoBtn'; a.className = 'features-btn';
+      a.href = '/edit.html?c=' + encodeURIComponent(slug) + '&k=' + encodeURIComponent(key);
+      a.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/></svg><span>Edit my info</span>';
+      anchor.parentNode.insertBefore(a, anchor);
+    } catch (e) {}
+  }
+
   function renderQR(d) {
     if (d.showQR === false) return;
     // Uses the canonical domain, not window.location — a visitor could be
@@ -1359,6 +1384,7 @@
     renderShareBack(data);
     wireScanVisitorCard(data);
     renderEditMyInfoLink(data);
+    addEditButton(data);
     addFeaturesButton(data);
     setTimeout(trackOpen, 0); // last, and deferred — only counts cards that actually rendered
   } catch (err) {

@@ -44,6 +44,10 @@ module.exports = async function handler(req, res) {
   try { file = await gh.getFile(`${card}/data.json`); } catch (e) { return res.status(502).json({ error: 'Could not check your card right now. Please try again in a few minutes.' }); }
   if (!file || file.data.selfEdit !== true || !keyOk(b.key, file.data.editKeyHash)) return denied();
 
+  if (file.data.editKeyExpires && Date.now() > Number(file.data.editKeyExpires)) {
+    return res.status(403).json({ error: 'This edit link has expired. Please ask us for a new one.' });
+  }
+
   try {
     const { changes, errors } = ce.cleanChanges(b.changes, file.data);
     if (errors.length) return res.status(400).json({ error: errors.join(' ') });
