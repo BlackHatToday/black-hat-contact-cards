@@ -1007,6 +1007,63 @@
     } catch (e) {}
   }
 
+  // ---- "What your card can do" ----------------------------------------------
+  // ONE list for every card. To announce a new feature, add a line here and push
+  // app.js — every card shows it. "added" (YYYY-MM-DD) puts a "New" tag on the
+  // line for 60 days. data.json: "showFeatures": false hides the button;
+  // "featuresVideo": false hides just the video. Fully self-guarded.
+  const FEATURES_VIDEO = '/assets/card-tour.mp4';
+  const FEATURES = [
+    { title: 'Share with a tap', text: 'Tap your card to any phone and your page opens — no app needed. Your QR code works the same way for anyone nearby.' },
+    { title: 'Save to Contacts', text: 'One tap adds you to someone\'s phone with every number, email and address already filled in.' },
+    { title: 'Call or Text choice', text: 'Tapping a mobile number lets the visitor choose to call or text.' },
+    { title: 'Share Your Info', text: 'Visitors can send you their name and number in seconds — nothing to type back and forth.', },
+    { title: 'Collect Info and Scan a Card', text: 'Collect Info shows a code others scan to send you their details. Scan a Card saves someone else\'s Black Hat Card.' },
+    { title: 'Share this card', text: 'Sends your card link by text, email or the phone\'s own share menu.', added: '2026-11-01' },
+    { title: 'Refer a Friend', text: 'Text, email or copy a link so a friend can request their own Black Hat Card.' },
+    { title: 'P.O. Box and fax', text: 'A mailing address or fax number can be shown on your card and saved to contacts.', added: '2026-11-27' },
+    { title: 'Save as PDF', text: 'Keep or print a copy of your card.' },
+    { title: 'QR code for any link', text: 'Any website on your card can have its own QR code to scan or print.' },
+    { title: 'Change your info anytime', text: 'Use "Contact / Support / Updates" at the bottom of your card — your page and tag stay the same.' }
+  ];
+
+  function addFeaturesButton(d) {
+    try {
+      if (d.showFeatures === false) return;
+      const anchor = document.getElementById('statusEl');
+      if (!anchor || document.getElementById('featuresBtn')) return;
+      const isNew = f => {
+        if (!f.added) return false;
+        const days = (Date.now() - new Date(f.added + 'T00:00:00').getTime()) / 86400000;
+        return days >= 0 && days <= 60;
+      };
+      const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+      const btn = document.createElement('button');
+      btn.type = 'button'; btn.id = 'featuresBtn'; btn.className = 'features-btn';
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span>What your card can do</span>' + (FEATURES.some(isNew) ? '<em class="features-new">New</em>' : '');
+      const showVideo = d.featuresVideo !== false && FEATURES_VIDEO;
+      const overlay = document.createElement('div');
+      overlay.className = 'qr-modal-overlay features-overlay';
+      overlay.innerHTML = '<div class="features-modal" role="dialog" aria-modal="true" aria-label="What your card can do">' +
+        '<div class="features-title">What your card can do</div>' +
+        (showVideo ? '<video class="features-video" controls playsinline preload="none"></video>' : '') +
+        '<ul class="features-list">' + FEATURES.map(f => '<li><strong>' + esc(f.title) + (isNew(f) ? ' <em class="features-new">New</em>' : '') + '</strong><span>' + esc(f.text) + '</span></li>').join('') + '</ul>' +
+        '<button type="button" class="qr-modal-close features-close">Close</button></div>';
+      document.body.appendChild(overlay);
+      const video = overlay.querySelector('.features-video');
+      if (video) {
+        video.addEventListener('error', () => { video.style.display = 'none'; }, true);
+        video.setAttribute('src', FEATURES_VIDEO);
+      }
+      const close = () => { overlay.classList.remove('open'); if (video) { try { video.pause(); } catch (e) {} } };
+      btn.addEventListener('click', () => overlay.classList.add('open'));
+      overlay.querySelector('.features-close').addEventListener('click', close);
+      overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+      anchor.parentNode.insertBefore(btn, anchor);
+    } catch (e) {}
+  }
+
   function renderQR(d) {
     if (d.showQR === false) return;
     // Uses the canonical domain, not window.location — a visitor could be
@@ -1302,6 +1359,7 @@
     renderShareBack(data);
     wireScanVisitorCard(data);
     renderEditMyInfoLink(data);
+    addFeaturesButton(data);
     setTimeout(trackOpen, 0); // last, and deferred — only counts cards that actually rendered
   } catch (err) {
     document.querySelector('.page').innerHTML = `

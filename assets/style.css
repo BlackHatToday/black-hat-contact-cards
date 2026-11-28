@@ -527,6 +527,35 @@ footer{
 .share-btn:hover{ background: var(--surface); border-color: var(--copper); color: var(--parchment); }
 .share-btn svg{ width:17px; height:17px; }
 
+
+/* ---- "What your card can do" button and pop-up ---- */
+.features-btn{
+  display:flex; align-items:center; justify-content:center; gap:10px; width:100%;
+  margin-top:14px; padding:15px 20px; background:transparent; color:var(--muted);
+  border:1px solid var(--line); border-radius:14px; cursor:pointer;
+  font-family:var(--font-display); font-weight:600; font-size:14.5px;
+  transition:background .15s ease, border-color .15s ease, color .15s ease;
+}
+.features-btn:hover{ background:var(--surface); border-color:var(--copper); color:var(--parchment); }
+.features-btn svg{ width:17px; height:17px; }
+.features-new{
+  font-style:normal; font-family:'IBM Plex Mono', monospace; font-size:10px; font-weight:600;
+  letter-spacing:.08em; text-transform:uppercase; background:var(--copper); color:var(--ink);
+  padding:2px 7px; border-radius:20px; vertical-align:middle;
+}
+.features-modal{
+  background:var(--surface); border:1px solid var(--line); border-radius:16px;
+  padding:24px 22px; max-width:420px; width:100%; max-height:88vh; overflow-y:auto; -webkit-overflow-scrolling:touch;
+}
+.features-title{ font-family:var(--font-display); font-weight:700; font-size:19px; color:var(--parchment); margin-bottom:14px; text-align:center; }
+.features-video{ display:block; width:100%; max-height:50vh; border-radius:10px; background:#000; margin-bottom:16px; }
+.features-list{ list-style:none; margin:0 0 18px; padding:0; }
+.features-list li{ padding:11px 0; border-top:1px solid var(--line); }
+.features-list li:first-child{ border-top:none; }
+.features-list strong{ display:block; font-family:var(--font-display); font-size:14.5px; color:var(--parchment); margin-bottom:3px; }
+.features-list span{ display:block; font-size:13px; line-height:1.5; color:var(--muted); }
+body.quick-share-mode .features-btn{ display:none !important; }
+
 /* ---- share-back overlay ---- */
 .overlay{
   display:none; position:fixed; inset:0; background: rgba(10,11,14,0.85);
@@ -620,6 +649,7 @@ body.quick-share-mode #quickShareIntro{
   #updateRequestLink,
   #editMyInfoLink,
   #pdfSaveBtn,
+  .features-btn,
   .qr-modal-overlay,
   .refer-modal-overlay,
   .link-qr-print{
