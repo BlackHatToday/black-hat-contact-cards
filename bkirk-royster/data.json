@@ -86,14 +86,6 @@
     {
       "label": "Monica Lacey",
       "url": "https://blackhatcards.community/monica-lacey"
-    },
-    {
-      "label": "June Lewis",
-      "url": "https://blackhatcards.community/june-lewis"
-    },
-    {
-      "label": "Pastor Jackson",
-      "url": "https://blackhatcards.community/keith-jackson"
     }
   ],
   "gallery": [],
@@ -106,5 +98,7 @@
   "photoFile": "photo.jpg",
   "accessToken": "7t9irvcj",
   "brand": "solo-bkirk-royster",
-  "showQR": true
+  "showQR": true,
+  "selfEdit": true,
+  "editKeyHash": "4a1860585c044ae01bfc38b9666278c40aff570c188096c6ba2a16b688bb5641"
 }
