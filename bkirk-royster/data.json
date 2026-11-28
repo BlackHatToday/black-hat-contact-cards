@@ -100,5 +100,6 @@
   "brand": "solo-bkirk-royster",
   "showQR": true,
   "selfEdit": true,
-  "editKeyHash": "4a1860585c044ae01bfc38b9666278c40aff570c188096c6ba2a16b688bb5641"
+  "editKeyHash": "fc0fe2019eb194f586bd820b4b63f5e20095f85542f34abc14bd7ce0e3b66e2c",
+  "editKeyExpires": 1797133531867
 }
