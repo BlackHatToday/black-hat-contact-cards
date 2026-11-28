@@ -70,6 +70,14 @@
       "url": "https://moteajar.com/",
       "qr": true,
       "qrCaption": "Get Some Mo Tea!"
+    },
+    {
+      "label": "Voice Over with Friday",
+      "url": "https://blackhatcards.community/mo-tea-how-to-use-test-friday.html"
+    },
+    {
+      "label": "Voice Over with James",
+      "url": "https://blackhatcards.community/mo-tea-how-to-use-test-james.html"
     }
   ],
   "gallery": [
@@ -108,6 +116,7 @@
   "calendlyUrl": "",
   "bookingLabel": "Book a Time",
   "address": "",
+  "mailingAddress": "",
   "photoFile": "photo.jpg",
   "accessToken": "f5svcpga",
   "brand": "solo-monica-mo-tea",
