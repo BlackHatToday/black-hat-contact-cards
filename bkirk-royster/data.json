@@ -106,5 +106,7 @@
   "photoFile": "photo.jpg",
   "accessToken": "7t9irvcj",
   "brand": "solo-bkirk-royster",
-  "showQR": true
+  "showQR": true,
+  "selfEdit": true,
+  "editKeyHash": "2c9ff8087a62cc271ebe46d4b791f0958129a424e10ad73e2761ceaeceb84da8"
 }
