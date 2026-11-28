@@ -10,7 +10,8 @@ const { redis, dayKey } = require('./_lib/redis');
 const gh = require('./_lib/github');
 const ce = require('./_lib/cardedit');
 
-const SLUG_RE = /^[a-z0-9][a-z0-9_-]{0,60}$/;
+// a card folder, optionally inside up to two parent folders (e.g. the-real-estate-co/angela-hanks)
+const SLUG_RE = /^[a-z0-9][a-z0-9_-]{0,60}(\/[a-z0-9][a-z0-9_-]{0,60}){0,2}$/;
 const ALLOWED_ORIGIN = /^https:\/\/((www\.)?blackhatcards\.community|[a-z0-9-]+\.vercel\.app)$/i;
 const MAX_PER_DAY = 5;      // submissions per card per day
 const MAX_PENDING = 3;      // requests waiting at once, per card
@@ -42,7 +43,7 @@ module.exports = async function handler(req, res) {
 
   let file;
   try { file = await gh.getFile(`${card}/data.json`); } catch (e) { return res.status(502).json({ error: 'Could not check your card right now. Please try again in a few minutes.' }); }
-  if (!file || file.data.selfEdit !== true || !keyOk(b.key, file.data.editKeyHash)) return denied();
+  if (!file || ce.isProperty(file.data) || file.data.selfEdit !== true || !keyOk(b.key, file.data.editKeyHash)) return denied();
 
   if (file.data.editKeyExpires && Date.now() > Number(file.data.editKeyExpires)) {
     return res.status(403).json({ error: 'This edit link has expired. Please ask us for a new one.' });

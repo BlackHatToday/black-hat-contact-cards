@@ -12,7 +12,7 @@ const gh = require('./_lib/github');
 const ce = require('./_lib/cardedit');
 
 const LINK_DAYS = 15;
-const SLUG_RE = /^[a-z0-9][a-z0-9_-]{0,60}$/;
+const SLUG_RE = /^[a-z0-9][a-z0-9_-]{0,60}(\/[a-z0-9][a-z0-9_-]{0,60}){0,2}$/;
 const sha256 = s => crypto.createHash('sha256').update(String(s)).digest();
 
 function passOk(given) {
@@ -80,6 +80,7 @@ module.exports = async function handler(req, res) {
         try {
           const f = await gh.getFile(`${card}/data.json`);
           if (!f) { results.push({ card, error: 'No card with that folder name' }); continue; }
+          if (ce.isProperty(f.data)) { results.push({ card, error: 'Property cards cannot use self-editing' }); continue; }
           const key = crypto.randomBytes(16).toString('hex');
           const data = Object.assign({}, f.data, { selfEdit: true, editKeyHash: sha256(key).toString('hex'), editKeyExpires: expires });
           await gh.putFile(`${card}/data.json`, data, f.sha, `Turn on self-editing for ${card} (link good for ${LINK_DAYS} days)`);

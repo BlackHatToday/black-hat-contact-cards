@@ -1071,8 +1071,8 @@
     try {
       if (d.selfEdit !== true || !d.editKeyHash) return;
       if (d.editKeyExpires && Date.now() > Number(d.editKeyExpires)) return;
-      const slug = (window.location.pathname.split('/').filter(Boolean)[0] || '').toLowerCase();
-      if (!/^[a-z0-9][a-z0-9_-]{0,60}$/.test(slug)) return;
+      const slug = window.location.pathname.split('/').filter(Boolean).join('/').toLowerCase().replace(/\/index\.html$/, '');
+      if (!/^[a-z0-9][a-z0-9_-]{0,60}(\/[a-z0-9][a-z0-9_-]{0,60}){0,2}$/.test(slug)) return;
       let key = '';
       try { key = (JSON.parse(localStorage.getItem('bhc_edit_' + slug) || '{}').k) || ''; } catch (e) {}
       if (!key || !(window.crypto && crypto.subtle)) return;

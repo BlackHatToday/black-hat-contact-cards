@@ -80,7 +80,7 @@ function collect(){
  return c}
 $('addPhone').onclick=function(){addPhone()};$('addEmail').onclick=function(){addEmail()};$('addWeb').onclick=function(){addWeb()};$('addExp').onclick=function(){addExp()};
 function show(msg,cls){$('out').innerHTML='';$('out').appendChild(el('div',{className:'msg '+cls,textContent:msg}))}
-if(!/^[a-z0-9][a-z0-9_-]{0,60}$/.test(card)||!key){$('status').textContent='This edit link is incomplete. Please use the full link you were given.';return}
+if(!/^[a-z0-9][a-z0-9_-]{0,60}(\/[a-z0-9][a-z0-9_-]{0,60}){0,2}$/.test(card)||!key){$('status').textContent='This edit link is incomplete. Please use the full link you were given.';return}
 try{localStorage.setItem('bhc_edit_'+card,JSON.stringify({k:key}))}catch(e){}
 fetch('/'+card+'/data.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){
  d=j;$('status').remove();$('f').hidden=false;fill()}).catch(function(){$('status').textContent='Could not load your card. Please check the link.'});
