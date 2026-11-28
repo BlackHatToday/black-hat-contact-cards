@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Update my card — Black Hat Cards</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0f0f12;color:#eee;font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:640px;margin:0 auto;padding:20px 16px 80px}h1{font-size:1.4rem;margin:.2em 0}
+.note{background:#1b1b22;border:1px solid #33333f;border-radius:10px;padding:12px 14px;margin:14px 0;font-size:.92rem;color:#cfcfd8}
+fieldset{border:1px solid #2c2c36;border-radius:12px;margin:18px 0;padding:12px 14px}
+legend{padding:0 6px;font-weight:600}.care{font-size:.8rem;color:#e8b04a;font-weight:400}
+label{display:block;font-size:.85rem;color:#aaa;margin:10px 0 4px}
+input,textarea,select{width:100%;padding:10px;border-radius:8px;border:1px solid #3a3a46;background:#16161b;color:#eee;font:inherit}
+textarea{min-height:90px}.row{display:flex;gap:8px;margin-bottom:8px}.row>*{flex:1}.row .sm{flex:0 0 120px}.row .x{flex:0 0 44px}
+button{font:inherit;border-radius:8px;border:0;padding:10px 14px;cursor:pointer}
+.add{background:#26262f;color:#ddd;margin-top:4px}.x{background:#3a2226;color:#f2a3ad}
+#send{width:100%;background:#d4af37;color:#111;font-weight:700;padding:14px;font-size:1.05rem;margin-top:10px}
+#send:disabled{opacity:.5}.msg{padding:12px;border-radius:10px;margin-top:14px}.err{background:#3a2226;color:#f7b8c0}.ok{background:#1e3a28;color:#b8f0c8}
+.exp{border:1px dashed #3a3a46;border-radius:10px;padding:10px;margin-bottom:10px}
+</style></head><body><main>
+<h1>Update my card</h1>
+<div class="note">Change what you like and press <b>Send for review</b>. Nothing changes on your card right away — your changes are checked first, usually within <b>2 business days</b>, and then your card updates by itself.</div>
+<div id="status">Loading your card…</div>
+<form id="f" hidden>
+ <fieldset><legend>About you</legend>
+  <label>Tagline</label><input id="tagline" maxlength="140">
+  <label>About</label><textarea id="about" maxlength="1200"></textarea>
+  <label>Job title</label><input id="title" maxlength="100">
+  <label>Organization</label><input id="org" maxlength="100">
+  <label>Skills (separate with commas)</label><input id="skills">
+ </fieldset>
+ <fieldset><legend>Experience</legend><div id="exp"></div><button type="button" class="add" id="addExp">+ Add experience</button></fieldset>
+ <fieldset><legend>Phone numbers <span class="care">· checked extra carefully</span></legend><div id="phones"></div><button type="button" class="add" id="addPhone">+ Add phone</button></fieldset>
+ <fieldset><legend>Email addresses <span class="care">· checked extra carefully</span></legend><div id="emails"></div><button type="button" class="add" id="addEmail">+ Add email</button></fieldset>
+ <fieldset><legend>Website links <span class="care">· checked extra carefully</span></legend><div id="webs"></div><button type="button" class="add" id="addWeb">+ Add link</button></fieldset>
+ <fieldset><legend>Social links</legend><div id="social"></div></fieldset>
+ <fieldset><legend>Payment handles <span class="care">· checked extra carefully</span></legend><div id="pay"></div></fieldset>
+ <fieldset><legend>Addresses &amp; booking</legend>
+  <label>Physical address</label><input id="address" maxlength="200">
+  <label>Mailing address / P.O. Box</label><input id="mailingAddress" maxlength="200">
+  <label>Booking link <span class="care">· checked extra carefully</span></label><input id="calendlyUrl" maxlength="300" inputmode="url">
+  <label>Booking button label</label><input id="bookingLabel" maxlength="60">
+  <label>Notes</label><textarea id="notes" maxlength="500"></textarea>
+ </fieldset>
+ <div id="out"></div>
+ <button id="send" type="submit">Send for review</button>
+</form>
+<script>
+(function(){
+var q=new URLSearchParams(location.search),card=(q.get('c')||'').toLowerCase(),key=q.get('k')||'',d={};
+var PT=['Mobile','Work','Work Landline','Home','Fax','Other'],SOC=['instagram','tiktok','facebook','linkedin','twitter','youtube'],PAY=['cashapp','venmo','paypal','zelle'];
+var $=function(i){return document.getElementById(i)};
+function el(t,a,c){var e=document.createElement(t);for(var k in a)e[k]=a[k];(c||[]).forEach(function(x){e.appendChild(x)});return e}
+function inp(ph,val,max,cls){return el('input',{placeholder:ph,value:val||'',maxLength:max||200,className:cls||''})}
+function rm(row){var b=el('button',{type:'button',className:'x',textContent:'✕',title:'Remove'});b.onclick=function(){row.remove()};return b}
+function sel(val){var s=el('select',{className:'sm'});PT.forEach(function(t){s.appendChild(el('option',{textContent:t,selected:t===val}))});return s}
+function addPhone(p){p=p||{type:'Mobile'};var r=el('div',{className:'row'});r.dataset.k='phone';
+ r.appendChild(sel(p.type));r.appendChild(inp('Number',p.number,25));r.appendChild(inp('Ext.',p.ext,6,'sm'));r.appendChild(rm(r));$('phones').appendChild(r)}
+function addEmail(e){e=e||{};var r=el('div',{className:'row'});r.appendChild(inp('Label (Work, Home…)',e.type||'Work',30,'sm'));r.appendChild(inp('Email address',e.address,120));r.appendChild(rm(r));$('emails').appendChild(r)}
+function addWeb(w){w=w||{};var r=el('div',{className:'row'});r.appendChild(inp('Label',w.label,60,'sm'));r.appendChild(inp('https://…',w.url,300));r.appendChild(rm(r));$('webs').appendChild(r)}
+function addExp(x){x=x||{};var r=el('div',{className:'exp'});
+ r.appendChild(inp('Role',x.role,100));r.appendChild(inp('Company',x.company,100));r.appendChild(inp('Period (e.g. 2019–2023)',x.period,60));
+ var t=el('textarea',{placeholder:'Description',value:x.description||'',maxLength:400});r.appendChild(t);
+ var b=el('button',{type:'button',className:'x',textContent:'Remove this experience'});b.onclick=function(){r.remove()};r.appendChild(b);$('exp').appendChild(r)}
+function fill(){
+ ['tagline','about','title','org','address','mailingAddress','calendlyUrl','bookingLabel','notes'].forEach(function(k){$(k).value=d[k]||''});
+ $('skills').value=(d.skills||[]).join(', ');
+ (d.phones||[]).forEach(addPhone);(d.emails||[]).forEach(addEmail);(d.websites||[]).forEach(addWeb);(d.experience||[]).forEach(addExp);
+ SOC.forEach(function(k){var l=el('label',{textContent:k[0].toUpperCase()+k.slice(1)}),i=inp('Link or @name',(d.social||{})[k],200);i.id='soc_'+k;$('social').appendChild(l);$('social').appendChild(i)});
+ PAY.forEach(function(k){var l=el('label',{textContent:k==='cashapp'?'Cash App':k[0].toUpperCase()+k.slice(1)}),i=inp('Handle',(d.payments||{})[k],120);i.id='pay_'+k;$('pay').appendChild(l);$('pay').appendChild(i)});
+}
+function collect(){
+ var c={};['tagline','about','title','org','address','mailingAddress','calendlyUrl','bookingLabel','notes'].forEach(function(k){c[k]=$(k).value});
+ c.skills=$('skills').value.split(',').map(function(s){return s.trim()}).filter(Boolean);
+ c.phones=[].map.call($('phones').children,function(r){var i=r.querySelectorAll('input,select');return{type:i[0].value,number:i[1].value,ext:i[2].value}}).filter(function(p){return p.number.trim()});
+ c.emails=[].map.call($('emails').children,function(r){var i=r.querySelectorAll('input');return{type:i[0].value,address:i[1].value}}).filter(function(e){return e.address.trim()});
+ c.websites=[].map.call($('webs').children,function(r){var i=r.querySelectorAll('input');return{label:i[0].value,url:i[1].value}}).filter(function(w){return w.url.trim()});
+ c.experience=[].map.call($('exp').children,function(r){var i=r.querySelectorAll('input,textarea');return{role:i[0].value,company:i[1].value,period:i[2].value,description:i[3].value}});
+ c.social={};SOC.forEach(function(k){c.social[k]=$('soc_'+k).value});
+ c.payments={};PAY.forEach(function(k){c.payments[k]=$('pay_'+k).value});
+ return c}
+$('addPhone').onclick=function(){addPhone()};$('addEmail').onclick=function(){addEmail()};$('addWeb').onclick=function(){addWeb()};$('addExp').onclick=function(){addExp()};
+function show(msg,cls){$('out').innerHTML='';$('out').appendChild(el('div',{className:'msg '+cls,textContent:msg}))}
+if(!/^[a-z0-9][a-z0-9_-]{0,60}$/.test(card)||!key){$('status').textContent='This edit link is incomplete. Please use the full link you were given.';return}
+fetch('/'+card+'/data.json',{cache:'no-store'}).then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){
+ d=j;$('status').remove();$('f').hidden=false;fill()}).catch(function(){$('status').textContent='Could not load your card. Please check the link.'});
+$('f').onsubmit=function(ev){ev.preventDefault();var b=$('send');b.disabled=true;b.textContent='Sending…';
+ fetch('/api/edit-submit',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({card:card,key:key,changes:collect()})})
+ .then(function(r){return r.json().then(function(j){return{ok:r.ok,j:j}})}).then(function(x){
+  if(x.ok){show('Thank you! Your changes were sent for review. They are usually checked within 2 business days, and your card will update on its own.','ok');b.textContent='Sent';}
+  else{show(x.j.error||'Something went wrong.','err');b.disabled=false;b.textContent='Send for review'}})
+ .catch(function(){show('No connection. Please try again.','err');b.disabled=false;b.textContent='Send for review'})};
+})();
+</script></main></body></html>

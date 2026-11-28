@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow"><title>Review edits — Black Hat Cards</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#0f0f12;color:#eee;font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:760px;margin:0 auto;padding:20px 16px 80px}h1{font-size:1.4rem}
+input{padding:10px;border-radius:8px;border:1px solid #3a3a46;background:#16161b;color:#eee;font:inherit}
+button{font:inherit;border-radius:8px;border:0;padding:10px 16px;cursor:pointer;background:#26262f;color:#eee}
+.go{background:#d4af37;color:#111;font-weight:700}.ap{background:#2b6b3f}.rj{background:#6b2b33}
+.top{background:#1b1b22;border:1px solid #33333f;border-radius:12px;padding:14px;margin:14px 0}.big{font-size:1.6rem;font-weight:700}
+.late{color:#f08a8a;font-weight:700}.req{border:1px solid #33333f;border-radius:12px;padding:14px;margin:14px 0;background:#15151a}
+.hc{display:inline-block;background:#5a4410;color:#ffd77a;font-size:.75rem;padding:2px 8px;border-radius:99px;margin-left:6px}
+.f{margin:10px 0}.f b{display:block;font-size:.85rem;color:#aaa}.old{background:#3a2226;padding:6px 8px;border-radius:6px;white-space:pre-wrap;word-break:break-word;margin-top:4px}
+.new{background:#1e3a28;padding:6px 8px;border-radius:6px;white-space:pre-wrap;word-break:break-word;margin-top:4px}
+.msg{padding:10px;border-radius:8px;margin:10px 0;background:#1e3a28}.msg.e{background:#3a2226}code{word-break:break-all}
+</style></head><body><main>
+<h1>Review client edits</h1>
+<div id="login"><p><input id="pw" type="password" placeholder="Review password" autocomplete="current-password"> <button class="go" id="in">Open</button></p></div>
+<div id="app" hidden>
+ <div class="top"><div class="big" id="count"></div><div id="age"></div><p><button id="refresh">Refresh</button></p></div>
+ <div id="list"></div>
+ <div class="top"><b>Turn on editing for a card</b><p>Type the card's folder name (the part of its web address after blackhatcards.community/).</p>
+  <p><input id="card" placeholder="folder-name"> <button id="en">Create edit link</button></p><div id="enout"></div></div>
+</div>
+<script>
+(function(){
+var pw='',$=function(i){return document.getElementById(i)};
+function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!==undefined)e.textContent=x;return e}
+function api(method,body){return fetch('/api/edit-review',{method:method,headers:{'Content-Type':'application/json','x-review-password':pw},body:body?JSON.stringify(body):undefined}).then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error(j.error||'Error');return j})})}
+function fmt(k,v){
+ if(v===undefined||v===null||v==='')return '(empty)';
+ if(Array.isArray(v))return v.length?v.map(function(i){return typeof i==='object'?Object.keys(i).map(function(k){return i[k]}).filter(Boolean).join(' · '):i}).join('\n'):'(empty)';
+ if(typeof v==='object')return Object.keys(v).filter(function(k){return v[k]}).map(function(k){return k+': '+v[k]}).join('\n')||'(empty)';
+ return String(v)}
+// business days between two timestamps (Mon–Fri)
+function bdays(from,to){var n=0,d=new Date(from);d.setHours(0,0,0,0);var end=new Date(to);end.setHours(0,0,0,0);while(d<end){d.setDate(d.getDate()+1);var w=d.getDay();if(w>0&&w<6)n++}return n}
+function load(){api('GET').then(function(j){
+ $('login').hidden=true;$('app').hidden=false;
+ $('count').textContent=j.waiting?j.waiting+' waiting for review':'Nothing waiting 🎉';
+ var a=$('age');a.className='';
+ if(j.oldestTs){var n=bdays(j.oldestTs,Date.now());a.textContent='Oldest has waited '+n+' business day'+(n===1?'':'s')+(n>=2?' — past the 2-day promise':'');if(n>=2)a.className='late'}else a.textContent='';
+ var L=$('list');L.innerHTML='';
+ j.requests.forEach(function(r){
+  var box=el('div','req'),h=el('div','',''),t=el('b','',r.card);h.appendChild(t);if(r.high)h.appendChild(el('span','hc','check carefully'));
+  h.appendChild(el('div','',new Date(r.ts).toLocaleString()));box.appendChild(h);
+  Object.keys(r.changes).forEach(function(k){var f=el('div','f');f.appendChild(el('b','',k));f.appendChild(el('div','old',fmt(k,r.current[k])));f.appendChild(el('div','new',fmt(k,r.changes[k])));box.appendChild(f)});
+  var ok=el('button','ap','Approve & publish'),no=el('button','rj','Reject');no.style.marginLeft='8px';
+  function act(a){ok.disabled=no.disabled=true;api('POST',{action:a,id:r.id}).then(function(){box.remove();load()}).catch(function(e){alert2(box,e.message);ok.disabled=no.disabled=false})}
+  ok.onclick=function(){act('approve')};no.onclick=function(){act('reject')};box.appendChild(ok);box.appendChild(no);L.appendChild(box)});
+ }).catch(function(e){$('login').hidden=false;$('app').hidden=true;$('login').appendChild(el('div','msg e',e.message))})}
+function alert2(parent,m){parent.appendChild(el('div','msg e',m))}
+$('in').onclick=function(){pw=$('pw').value;load()};$('pw').onkeydown=function(e){if(e.key==='Enter')$('in').click()};
+$('refresh').onclick=load;
+$('en').onclick=function(){var c=$('card').value.trim().toLowerCase(),o=$('enout');o.innerHTML='';if(!c)return;
+ api('POST',{action:'enable',card:c}).then(function(j){o.appendChild(el('div','msg','Done. Send this private link to the client (it is shown only once):'));o.appendChild(el('code','',j.link))}).catch(function(e){o.appendChild(el('div','msg e',e.message))})};
+})();
+</script></main></body></html>
